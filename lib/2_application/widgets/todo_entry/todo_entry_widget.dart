@@ -13,8 +13,8 @@ import 'package:todo_app/2_application/widgets/todo_entry/view_states/todo_entry
 import 'package:todo_app/2_application/widgets/todo_entry/view_states/todo_entry_loaded.dart';
 import 'package:todo_app/2_application/widgets/todo_entry/view_states/todo_entry_loading.dart';
 
-class ToDoEntryWidgetProvider extends StatelessWidget {
-  const ToDoEntryWidgetProvider({
+class ToDoEntryItemProvider extends StatelessWidget {
+  const ToDoEntryItemProvider({
     super.key,
     required this.collectionId,
     required this.entryId,
@@ -42,14 +42,14 @@ class ToDoEntryWidgetProvider extends StatelessWidget {
         ),
       )..fetch(),
 
-      child: ToDoEntryWidget(),
+      child: ToDoEntryItem(),
       );
   }
 }
 
 
-class ToDoEntryWidget extends StatelessWidget {
-  const ToDoEntryWidget({
+class ToDoEntryItem extends StatelessWidget {
+  const ToDoEntryItem({
     super.key,
 
   });
