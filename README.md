@@ -1,6 +1,8 @@
 # flutter_todo  project 
 
-##   $${\color{cyan}Add Widget for one ToDo Entry Item}$$
+
+
+##  Task_T06   - Add Widget for one ToDo Entry Item
 
 1.  Add a widget to display one $${\color{green}ToDoEntry}$$ Item
 2.  Add a Cubit to load one entry item
