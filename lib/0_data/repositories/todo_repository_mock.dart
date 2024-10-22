@@ -58,7 +58,7 @@ class ToDoRepositoryMock implements ToDoRepository {
       return Future.delayed(
         const Duration(milliseconds: 200),
         () => Right(selectedEntryItem),
-        //  ()  => Left(ServerFailure()),
+       // ()  => Left(ServerFailure()),
       );
     } on Exception catch (e) {
       return Future.value(Left(ServerFailure(stackTrace: e.toString())));
@@ -77,9 +77,10 @@ class ToDoRepositoryMock implements ToDoRepository {
         toDoEntries[index].copyWith(isDone: !entryToUpdate.isDone);
     toDoEntries[index] = updatedEntry;
 
-    return Future.delayed(
+    /* return Future.delayed(
         const Duration(milliseconds: 100), () => Right(updatedEntry));
-    // return Future.delayed(const Duration(milliseconds: 100), () => Left(ServerFailure()));
+     */
+    return Future.delayed(const Duration(milliseconds: 100), () => Left(ServerFailure()));
   }
 
   @override

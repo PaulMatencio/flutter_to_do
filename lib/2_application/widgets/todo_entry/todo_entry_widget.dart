@@ -1,6 +1,9 @@
 
 
-
+/*
+//!      Use  the course <lib/components/to_entry_item/to_entry_item.dart> version  instead  of this one
+//!       which is my homework
+ */
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

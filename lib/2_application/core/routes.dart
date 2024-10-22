@@ -44,7 +44,6 @@ final routes = GoRouter(
       name: ToDoDetailPage.pageConfig.name,
       path: '$_basePath/overview/:collectionId',
       builder:(context,  state) {
-        print(state.pathParameters);
         return
         Scaffold(
           appBar: AppBar(

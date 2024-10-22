@@ -1,0 +1,65 @@
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_app/1_domain/entities/todo_entry.dart';
+import 'package:todo_app/1_domain/entities/unique_id.dart';
+import 'package:todo_app/1_domain/use_cases/load_todo_entry.dart';
+import 'package:todo_app/1_domain/use_cases/update_todo_entry.dart';
+import 'package:todo_app/core/use_case.dart';
+
+part 'todo_entry_item_cubit_state.dart';
+
+class ToDoEntryItemCubit extends Cubit<ToDoEntryItemState> {
+  ToDoEntryItemCubit({
+    required this.loadToDoEntry, //! useCase LoadToDoEntry claas
+    required this.entryId,
+    required this.collectionId,
+    required this.uploadToDoEntry,    //!  useCase UpdateToDoEntry
+  }) : super(ToDoEntryItemLoadingState()); //! initial state
+
+  final EntryId entryId;
+  final CollectionId collectionId;
+  final LoadToDoEntry loadToDoEntry;
+  final UpdateToDoEntry uploadToDoEntry;
+
+  Future<void> fetch() async {
+    try {
+      final entry = await loadToDoEntry.call(
+        ToDoEntryIdsParam(
+          collectionId: collectionId,
+          entryId: entryId,
+        ),
+      );
+
+      return entry.fold(
+        (left) => emit(ToDoEntryItemErrorState()),
+        (right) => emit(ToDoEntryItemLoadedState(toDoEntry: right)),
+      );
+    } on Exception {
+      emit(ToDoEntryItemErrorState());
+    }
+  }
+
+  Future<void> update() async {
+    try {
+      if (state is ToDoEntryItemLoadedState) {
+        final currentEntry = (state as ToDoEntryItemLoadedState).toDoEntry;
+
+        final entryToUpdate = currentEntry.copyWith(isDone: !currentEntry.isDone);
+
+        final updatedEntry = await uploadToDoEntry.call(ToDoEntryParams(
+          collectionId: collectionId,
+          entry: entryToUpdate,
+        ));
+
+        return updatedEntry.fold(
+          (left) => emit(ToDoEntryItemErrorState(stackTrace: 'Could not update item')),
+          (right) => emit(
+            ToDoEntryItemLoadedState(toDoEntry: right),
+          ),
+        );
+      }
+    } on Exception {
+      emit(ToDoEntryItemErrorState());
+    }
+  }
+}

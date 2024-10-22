@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/1_domain/entities/unique_id.dart';
-import 'package:todo_app/1_domain/use_cases/load_todo_entry.dart';
-import 'package:todo_app/2_application/widgets/todo_entry/bloc/todo_entry_cubit.dart';
-import 'package:todo_app/2_application/widgets/todo_entry/todo_entry_widget.dart';
+import 'package:todo_app/2_application/components/todo_entry_item/todo_entry_item.dart';
+//! import 'package:todo_app/2_application/widgets/todo_entry/todo_entry_widget.dart';
 
 class ToDoDetailLoaded extends StatelessWidget {
   const ToDoDetailLoaded({
