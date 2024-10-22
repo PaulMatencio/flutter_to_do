@@ -9,3 +9,8 @@
 3.  Add error/loading and loaded view states for this entry
 4.  Add this entry into our $${\color{green}ToDoDetailLoaded}$$
 5.  Add a UseCase and implement it in your $${\color{green}ToDoEntry}$$  Widget to update the entry if it is done or not
+
+
+##  Task_T07   -  Improve ToDoEntryItemLoading 
+- The $${\color{greem}CircularProgessIndicator}$$ looks ugly, so replace it with a better  loading state.
+- ideas: Shimmer Loading ?? 
