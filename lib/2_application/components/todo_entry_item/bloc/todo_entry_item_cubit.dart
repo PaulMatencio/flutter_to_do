@@ -22,6 +22,7 @@ class ToDoEntryItemCubit extends Cubit<ToDoEntryItemState> {
   final UpdateToDoEntry uploadToDoEntry;
 
   Future<void> fetch() async {
+
     try {
       final entry = await loadToDoEntry.call(
         ToDoEntryIdsParam(
@@ -29,8 +30,7 @@ class ToDoEntryItemCubit extends Cubit<ToDoEntryItemState> {
           entryId: entryId,
         ),
       );
-
-      return entry.fold(
+       entry.fold(
         (left) => emit(ToDoEntryItemErrorState()),
         (right) => emit(ToDoEntryItemLoadedState(toDoEntry: right)),
       );
@@ -43,23 +43,21 @@ class ToDoEntryItemCubit extends Cubit<ToDoEntryItemState> {
     try {
       if (state is ToDoEntryItemLoadedState) {
         final currentEntry = (state as ToDoEntryItemLoadedState).toDoEntry;
-
         final entryToUpdate = currentEntry.copyWith(isDone: !currentEntry.isDone);
-
         final updatedEntry = await uploadToDoEntry.call(ToDoEntryParams(
           collectionId: collectionId,
           entry: entryToUpdate,
         ));
 
-        return updatedEntry.fold(
-          (left) => emit(ToDoEntryItemErrorState(stackTrace: 'Could not update item')),
+        updatedEntry.fold(
+          (left) => emit(ToDoEntryItemErrorState(stackTrace: 'Could not update item',)),
           (right) => emit(
             ToDoEntryItemLoadedState(toDoEntry: right),
           ),
         );
       }
     } on Exception {
-      emit(ToDoEntryItemErrorState());
+      emit(ToDoEntryItemErrorState(stackTrace: 'Could not update item',));
     }
   }
 }

@@ -15,8 +15,10 @@ class ToDoDetailCubit extends Cubit<ToDoDetailCubitState> {
   final LoadToDoEntryIdsForCollection loadToDoEntryIdsForCollection;
 
 
-  //!  fetch is called by todo_overview_loaded,dart when you
-  //!  click on the entry of the collection list
+  //
+  // fetch is called by todo_overview_loaded.dart when you
+  //  click on the entry of the collection list
+
   Future<void> fetch() async {
     emit(ToDoDetailCubitLoadingState());
     if (collectionId  != null ) {

@@ -25,26 +25,30 @@ class ToDoEntryItemProvider extends StatelessWidget {
       create: (context) => ToDoEntryItemCubit(
           collectionId: collectionId,
           entryId: entryId,
-
           loadToDoEntry: LoadToDoEntry(
             toDoRepository: RepositoryProvider.of<ToDoRepository>(context),
           ),
-
           uploadToDoEntry: UpdateToDoEntry(
             toDoRepository: RepositoryProvider.of<ToDoRepository>(context),
-
           ))
-        ..fetch(),   //!    on loading  -> fetch
-      child: const ToDoEntryItem(),
+        ..fetch(), //!
+      child: ToDoEntryItem(
+        collectionId: collectionId,
+        entryId: entryId,
+      ),
     );
   }
 }
 
 class ToDoEntryItem extends StatelessWidget {
-  const ToDoEntryItem({super.key});
+  const ToDoEntryItem(
+      {super.key, required this.collectionId, required this.entryId});
 
+  final CollectionId collectionId;
+  final EntryId entryId;
   @override
   Widget build(BuildContext context) {
+    final todoEntryItemCubit = context.read<ToDoEntryItemCubit>();
     return BlocBuilder<ToDoEntryItemCubit, ToDoEntryItemState>(
       builder: (context, state) {
         if (state is ToDoEntryItemLoadingState) {
@@ -52,13 +56,15 @@ class ToDoEntryItem extends StatelessWidget {
         } else if (state is ToDoEntryItemLoadedState) {
           return ToDoEntryItemLoaded(
             entryItem: state.toDoEntry,
-            //!   onChanged ->  update()
-            onChanged: (value) => context.read<ToDoEntryItemCubit>().update(),
+            onChanged: (value) => todoEntryItemCubit.update(),
           );
-        } else  if (state is ToDoEntryItemErrorState){
-          return  ToDoEntryItemError(stackTrace: state.stackTrace);
-        }  else {
-          return ToDoEntryItemError();
+        } else if (state is ToDoEntryItemErrorState) {
+          return ToDoEntryItemError(
+            stackTrace: state.stackTrace,
+            onReload: () => todoEntryItemCubit.fetch(),
+          );
+        } else {
+          return SizedBox();
         }
       },
     );

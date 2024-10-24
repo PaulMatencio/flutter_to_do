@@ -54,12 +54,20 @@ class ToDoRepositoryMock implements ToDoRepository {
       final selectedEntryItem = toDoEntries.firstWhere(
         (element) => element.id == entryId,
       );
-
-      return Future.delayed(
-        const Duration(milliseconds: 200),
-        () => Right(selectedEntryItem),
-       // ()  => Left(ServerFailure()),
-      );
+      // ------------------------------------------------------
+      //   change to 20 to test reload when item error
+      //    and select collection id 2
+      //  ----------------------------------------------------
+      if (entryId.value ==  '20') {
+        return Future.delayed(
+            Duration(milliseconds: 300), () => Left(ServerFailure()));
+      } else {
+        return Future.delayed(
+          const Duration(milliseconds: 200),
+          () => Right(selectedEntryItem),
+          // ()  => Left(ServerFailure()),
+        );
+      }
     } on Exception catch (e) {
       return Future.value(Left(ServerFailure(stackTrace: e.toString())));
     }
@@ -77,10 +85,10 @@ class ToDoRepositoryMock implements ToDoRepository {
         toDoEntries[index].copyWith(isDone: !entryToUpdate.isDone);
     toDoEntries[index] = updatedEntry;
 
-    /* return Future.delayed(
+    return Future.delayed(
         const Duration(milliseconds: 100), () => Right(updatedEntry));
-     */
-    return Future.delayed(const Duration(milliseconds: 100), () => Left(ServerFailure()));
+
+    // return Future.delayed(const Duration(milliseconds: 100), () => Left(ServerFailure()));
   }
 
   @override
@@ -95,9 +103,9 @@ class ToDoRepositoryMock implements ToDoRepository {
           .map((entry) => entry.id)
           .toList();
       return Future.delayed(
-          const Duration(milliseconds: 300),
-          () => Right(entryIds),
-          //  ()=> Left(ServerFailure())
+        const Duration(milliseconds: 300),
+        () => Right(entryIds),
+        //  ()=> Left(ServerFailure())
       );
     } on Exception catch (e) {
       return Future.value(Left(ServerFailure(stackTrace: e.toString())));

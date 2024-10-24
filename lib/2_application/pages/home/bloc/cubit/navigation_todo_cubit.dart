@@ -6,6 +6,7 @@ import 'package:todo_app/1_domain/entities/unique_id.dart';
 part 'navigation_todo_cubit_state.dart';
 
 class NavigationToDoCubit extends Cubit<NavigationToDoCubitState> {
+
   NavigationToDoCubit() : super(const NavigationToDoCubitState());
 
   void selectedToDoCollectionChanged(CollectionId collectionId) {
@@ -13,6 +14,7 @@ class NavigationToDoCubit extends Cubit<NavigationToDoCubitState> {
   }
 
   void secondBodyHasChanged({required bool isSecondBodyDisplayed}) {
+    //  emit only when  not yet displayed
     if (state.isSecondBodyDisplayed != isSecondBodyDisplayed) {
       emit(NavigationToDoCubitState(
         isSecondBodyDisplayed: isSecondBodyDisplayed,

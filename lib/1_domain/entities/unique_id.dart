@@ -1,6 +1,7 @@
+import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
 
-class UniqueId {
+class UniqueId  extends Equatable {
 
   // UniqueId generative constructor
   const UniqueId._(this.value);
@@ -13,6 +14,9 @@ class UniqueId {
   factory UniqueId.fromUniqueString(String uniqueString) {
     return UniqueId._(uniqueString);
   }
+
+  @override
+  List<Object?>  get props =>  [value] ;
 }
 
 

@@ -13,7 +13,7 @@ class ToDoEntryItemErrorState extends ToDoEntryItemState {
   const ToDoEntryItemErrorState({this.stackTrace});
   final String ? stackTrace;
   @override
-  List<Object> get props => [stackTrace?? ''];
+  List<Object> get props => [stackTrace?? ''] ;
 }
 
 

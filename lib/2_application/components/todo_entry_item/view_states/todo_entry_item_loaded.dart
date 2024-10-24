@@ -18,10 +18,13 @@ class ToDoEntryItemLoaded extends StatelessWidget {
     /// Most widgets that use a checkbox will listen for the [onChanged] callback
     /// and rebuild the checkbox tile with a new [value] to update the visual
     /// appearance of the checkbox.
-    return CheckboxListTile(
-      title: Text(entryItem.description),
-      value: entryItem.isDone,
-      onChanged: onChanged,
+    return Card.outlined(
+      child: CheckboxListTile(
+        title: Text(entryItem.description),
+        activeColor: Colors.blueGrey,
+        value: entryItem.isDone,
+        onChanged: onChanged,
+      ),
     );
   }
 }

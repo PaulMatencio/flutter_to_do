@@ -1,8 +1,9 @@
 
 
+import 'package:equatable/equatable.dart';
 import 'package:todo_app/1_domain/entities/unique_id.dart';
 
-class ToDoEntry {
+class ToDoEntry{
   final String description;
   final bool isDone;
   final EntryId id;
@@ -11,7 +12,8 @@ class ToDoEntry {
     required this.id,
     required this.description,
     required this.isDone,
-  });
+  }
+  );
 
   factory ToDoEntry.empty() {
     return ToDoEntry(
@@ -31,5 +33,6 @@ class ToDoEntry {
       isDone: isDone ?? this.isDone,
     );
   }
+
 
 }
