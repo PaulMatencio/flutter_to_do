@@ -12,5 +12,12 @@
 
 
 ##  Task_T07   -  Improve ToDoEntryItemLoading 
+
 - The $${\color{greem}CircularProgessIndicator}$$ looks ugly, so replace it with a better  loading state.
 - ideas: Shimmer Loading ?? 
+
+
+##  Task_To8  Add a reload to ToDoEntryItemError
+
+- If we have a loading error for one item, we want to reload it after clicking on this item
+- Adjust the text to show this function to the user
