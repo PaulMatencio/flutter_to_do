@@ -4,36 +4,29 @@ import 'package:go_router/go_router.dart';
 import 'package:todo_app/1_domain/entities/unique_id.dart';
 import 'package:todo_app/1_domain/repositories/todo_repository.dart';
 import 'package:todo_app/1_domain/use_cases/create_todo_entry.dart';
+import 'package:todo_app/2_application/core/form_value.dart';
 import 'package:todo_app/2_application/core/page_config.dart';
 import 'package:todo_app/2_application/pages/create_todo_entry/bloc/cubit/create_todo_entry_page_cubit.dart';
 
 class CreateToDoEntryPageProvider extends StatelessWidget {
-
-  const CreateToDoEntryPageProvider({
-    super.key,
-    required this.collectionId
-  });
-  final CollectionId  collectionId;
+  const CreateToDoEntryPageProvider({super.key, required this.collectionId});
+  final CollectionId collectionId;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CreateToDoEntryPageCubit>(
-
-      create: (context) => CreateToDoEntryPageCubit(
-        collectionId: collectionId,
-        createToDoEntry: CreateToDoEntry(
-          toDoRepository: RepositoryProvider.of<ToDoRepository>(context),
-        ),
-
-      ),
-      child: CreateToDoEntryPage()
-      );
+        create: (context) => CreateToDoEntryPageCubit(
+              collectionId: collectionId,
+              createToDoEntry: CreateToDoEntry(
+                toDoRepository: RepositoryProvider.of<ToDoRepository>(context),
+              ),
+            ),
+        child: CreateToDoEntryPage());
   }
 }
 
 class CreateToDoEntryPage extends StatefulWidget {
   const CreateToDoEntryPage({super.key});
-
 
   static const pageConfig = PageConfig(
       icon: Icons.add_task_rounded,
@@ -45,17 +38,12 @@ class CreateToDoEntryPage extends StatefulWidget {
 }
 
 class _CreateToDoEntryPageState extends State<CreateToDoEntryPage> {
-
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Form(
         key: _formKey,
         child: Column(children: [
-          SizedBox(
-            height: 16,
-          ),
-          _CollectionIdField(),
           SizedBox(
             height: 16,
           ),
@@ -72,6 +60,7 @@ class _EntryDescriptionField extends StatelessWidget {
   const _EntryDescriptionField({
     super.key,
   });
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -88,44 +77,28 @@ class _EntryDescriptionField extends StatelessWidget {
           helperText: 'any non empty text',
         ),
         onChanged: (value) =>
-            context.read<CreateToDoEntryPageCubit>().descriptionChanged(value),
+            context.read<CreateToDoEntryPageCubit>().descriptionChanged(description: value),
         validator: (value) {
+          /*
           if (value != null && value.isNotEmpty) {
             return null;
           } else {
             return 'Please enter some description';
           }
-        });
-  }
-}
-
-class _CollectionIdField extends StatelessWidget {
-  const _CollectionIdField({
-    super.key,
-  });
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-        initialValue: '0',
-        decoration: InputDecoration(
-          icon: const Icon(Icons.color_lens),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(width: 1.0, color: Colors.black),
-          ),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(width: 1.0, color: Colors.white),
-          ),
-          labelText: 'Collection Id',
-          helperText: 'must be numeric',
-        ),
-        onChanged: (value) => context
-            .read<CreateToDoEntryPageCubit>()
-            .collectionIdChanged(CollectionId.fromUniqueString(value)),
-        validator: (value) {
-          if (value != null && value.isNotEmpty) {
-            return null;
-          } else {
-            return 'Please enter some description';
+           */
+          final currentValidationState = context
+                  .read<CreateToDoEntryPageCubit>()
+                  .state
+                  .description
+                  ?.validationStatus ??
+              ValidationStatus.pending;
+          switch (currentValidationState) {
+            case ValidationStatus.error:
+              return 'This field needs at least two characters to be valid';
+            case ValidationStatus.success:
+              return null;
+            case ValidationStatus.pending:
+              return  'This  field is empty';
           }
         });
   }
@@ -149,6 +122,6 @@ class _SubmissionButton extends StatelessWidget {
             context.pop();
           }
         },
-        child: Text('Save Entry'));
+        child: Text('Save entry'));
   }
 }

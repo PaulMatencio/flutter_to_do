@@ -117,7 +117,8 @@ class ToDoOverviewLoaded extends StatelessWidget {
                               .readToDoCollections();
                         }
                       }
-                    });
+                    }
+                    );
                   },
                   child: Icon(CreateToDoCollectionPage.pageConfig.icon),
                 ),

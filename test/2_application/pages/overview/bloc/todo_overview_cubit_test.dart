@@ -6,7 +6,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:either_dart/either.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:todo_app/2_application/pages/overview/bloc/todo_overview_cubit.dart';
+import 'package:todo_app/2_application/pages/overview/bloc/cubit/todo_overview_cubit.dart';
 import 'package:todo_app/core/use_case.dart';
 import 'package:todo_app/1_domain/entities/todo_collection.dart';
 import 'package:todo_app/1_domain/entities/todo_color.dart';
