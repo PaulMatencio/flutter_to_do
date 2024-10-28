@@ -21,3 +21,12 @@
 
 - If we have a loading error for one item, we want to reload it after clicking on this item
 - Adjust the text to show this function to the user
+
+
+##   Task_T09  create a ToDo Entry
+
+- Add a button to our ToDoDetailPage
+- If we click this button, we want to see a CreateToDoEntryPage
+- Add a form to be able to add new items
+- Add a validator for all field(s)
+- Add all files and functions that we can save an entry in our mockmode

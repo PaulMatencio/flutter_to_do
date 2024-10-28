@@ -7,7 +7,8 @@ import 'package:todo_app/core/use_case.dart';
 
 part 'create_todo_collection_page_state.dart';
 
-class CreateToDoCollectionPageCubit extends Cubit<CreateToDoCollectionPageState> {
+class CreateToDoCollectionPageCubit
+    extends Cubit<CreateToDoCollectionPageState> {
   CreateToDoCollectionPageCubit({
     required this.createToDoCollection,
   }) : super(const CreateToDoCollectionPageState());

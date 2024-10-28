@@ -4,7 +4,7 @@ import 'package:todo_app/1_domain/entities/unique_id.dart';
 import 'package:todo_app/1_domain/repositories/todo_repository.dart';
 import 'package:todo_app/1_domain/use_cases/load_todo_entry_ids_for_collection.dart';
 import 'package:todo_app/2_application/core/page_config.dart';
-import 'package:todo_app/2_application/pages/detail/bloc/todo_detail_cubit.dart';
+import 'package:todo_app/2_application/pages/detail/bloc/cubit/todo_detail_cubit.dart';
 import 'package:todo_app/2_application/pages/detail/view_states/todo_detail_error.dart';
 
 import 'package:todo_app/2_application/pages/detail/view_states/todo_detail_loaded.dart';

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/1_domain/use_cases/load_todo_collections.dart';
 import 'package:todo_app/2_application/core/page_config.dart';
-import 'package:todo_app/2_application/pages/overview/bloc/todo_overview_cubit.dart';
+import 'package:todo_app/2_application/pages/overview/bloc/cubit/todo_overview_cubit.dart';
 import 'package:todo_app/2_application/pages/overview/view_states/todo_overview_error.dart';
 import 'package:todo_app/2_application/pages/overview/view_states/todo_overview_loaded.dart';
 import 'package:todo_app/2_application/pages/overview/view_states/todo_overview_loading.dart';

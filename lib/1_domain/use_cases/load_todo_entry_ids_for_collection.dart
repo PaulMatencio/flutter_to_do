@@ -23,8 +23,7 @@ class LoadToDoEntryIdsForCollection implements UseCase<List<EntryId>, Collection
       );
 
       return loadedEntry.fold(
-            (left) {
-              return Left(left);},
+            (left) => Left(left),
             (right) => Right(right),
       );
     } on Exception catch (e) {

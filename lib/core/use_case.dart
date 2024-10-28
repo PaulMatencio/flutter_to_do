@@ -1,9 +1,12 @@
 import 'package:either_dart/either.dart';
 import 'package:equatable/equatable.dart';
+import 'package:todo_app/1_domain/entities/todo_collection.dart';
 import 'package:todo_app/1_domain/entities/todo_entry.dart';
 import 'package:todo_app/1_domain/failures/failures.dart';
 
 import '../1_domain/entities/unique_id.dart';
+
+
 
 // <Type>    ->   List<TodoCollection>
 abstract class UseCase<Type, Params> {
@@ -57,4 +60,16 @@ class ToDoEntryParams extends Params {
 
   @override
   List<Object> get props => [entry, collectionId];
+}
+
+
+class ToDoCollectionParams extends Params {
+  ToDoCollectionParams({
+    required this.collection
+  }) : super();
+
+  final ToDoCollection collection;
+
+  @override
+  List<Object> get props => [collection];
 }

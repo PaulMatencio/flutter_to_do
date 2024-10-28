@@ -22,4 +22,30 @@ class ToDoCollection {
       ),
     );
   }
+
+
+  ToDoCollection copyWith({
+    String? title,
+    ToDoColor ? color ,
+  }) {
+    return ToDoCollection(
+      id: id,
+      title: title ?? this.title,
+      color: color ?? this.color
+    );
+  }
+
+  ToDoCollection copyWithId({
+    required CollectionId id,
+    String? title,
+    ToDoColor ? color ,
+
+  }) {
+    return ToDoCollection(
+        id: id,
+        title: title ?? this.title,
+        color: color ?? this.color
+    );
+  }
+
 }

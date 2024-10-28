@@ -58,7 +58,7 @@ class ToDoRepositoryMock implements ToDoRepository {
       //   change to 20 to test reload when item error
       //    and select collection id 2
       //  ----------------------------------------------------
-      if (entryId.value ==  '20') {
+      if (entryId.value == '20') {
         return Future.delayed(
             Duration(milliseconds: 300), () => Left(ServerFailure()));
       } else {
@@ -98,10 +98,16 @@ class ToDoRepositoryMock implements ToDoRepository {
     try {
       final startIndex = int.parse(collectionId.value) * collectionNumber;
       final endIndex = startIndex + entriesPerCollection;
-      final entryIds = toDoEntries
-          .sublist(startIndex, endIndex)
-          .map((entry) => entry.id)
-          .toList();
+
+      List<EntryId> entryIds = [];
+
+      if (endIndex <=  toDoEntries.length) {
+        entryIds = toDoEntries
+            .sublist(startIndex, endIndex)
+            .map((entry) => entry.id)
+            .toList();
+      }
+
       return Future.delayed(
         const Duration(milliseconds: 300),
         () => Right(entryIds),
@@ -111,4 +117,66 @@ class ToDoRepositoryMock implements ToDoRepository {
       return Future.value(Left(ServerFailure(stackTrace: e.toString())));
     }
   }
+
+  /*
+  @override
+  Future<Either<Failure, bool>> createToDoEntry(_, ToDoEntry entry) {
+    toDoEntries.add(entry);
+    return Future.delayed(const Duration(milliseconds: 250), () => const Right(true));
+  }
+   */
+
+  @override
+  Future<Either<Failure, CollectionId>> createToDoCollection(
+      ToDoCollection todoCollection) {
+
+    CollectionId addCollection(ToDoCollection toDoCollection) {
+
+      final index = toDoCollections.length ;
+      final collectionId = CollectionId.fromUniqueString(index.toString());
+
+      toDoCollections.add(todoCollection.copyWithId(id: collectionId,
+          title:'${toDoCollection.title} ${collectionId.value}' ));
+      return collectionId;
+    }
+
+    try {
+      final collectionId = addCollection(todoCollection);
+      return Future.delayed(
+          Duration(milliseconds: 200), () => Right(collectionId)
+          //  () => Left(ServerFailure())
+          );
+    } on Exception catch (e) {
+      return Future.value(Left(ServerFailure(stackTrace: e.toString())));
+    }
+  }
+
+
+  @override
+  Future<Either<Failure, EntryId>> createToDoEntry(
+  {required CollectionId collectionId,required ToDoEntry  toDoEntry}) {
+
+    EntryId  addEntry(ToDoEntry toDoEntry) {
+      final index = toDoEntries.length ;
+      final entryId = EntryId.fromUniqueString(index.toString());
+      toDoEntries.add(toDoEntry.copyWithId(id: entryId,
+          description:'${toDoEntry.description} ${entryId.value}' ));
+      return  entryId;
+    }
+
+    try {
+      final entryId = addEntry(toDoEntry);
+      return Future.delayed(
+          Duration(milliseconds: 200), () => Right(entryId)
+        //  () => Left(ServerFailure())
+      );
+    } on Exception catch (e) {
+      return Future.value(Left(ServerFailure(stackTrace: e.toString())));
+    }
+  }
+
+
 }
+
+
+
