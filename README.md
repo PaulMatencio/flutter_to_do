@@ -39,5 +39,6 @@
 -  Rewrite the mockmode for this pupose.
 -  Following the recommendation, a callback  is used  to reload the Detail/Overview pages after items were added.
 -  Here is a screen shoot showing the new items after they were created 
-![alt screenshot] (https://github.com/PaulMatencio/flutter_to_do/blob/task_t10/todo_create_collection_and_entry.png?raw=true)
+![alt screenshot] (https://github.com/PaulMatencio/flutter_to_do/blob/task_t10/todo_create_collection_and_entry.png)
+                  
 
