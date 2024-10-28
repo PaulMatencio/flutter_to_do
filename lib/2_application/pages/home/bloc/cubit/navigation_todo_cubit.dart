@@ -9,10 +9,25 @@ class NavigationToDoCubit extends Cubit<NavigationToDoCubitState> {
 
   NavigationToDoCubit() : super(const NavigationToDoCubitState());
 
+
+  // ------------------------------------------------------------
+  //   change the  state of the collectionId to another id
+  //
+  //   This is  to  avoid rebuilding the overview page
+  //   everytime  you click on another item  of
+  //   overview page
+  //-----------------------------------------------------------------
   void selectedToDoCollectionChanged(CollectionId collectionId) {
     emit(NavigationToDoCubitState(selectedCollectionId: collectionId));
   }
 
+  //  ------------------------------------------------------------
+  //  - called in home_page.dart  secondaryBody  to  change the stat
+  //  when  BreakPoints change
+  //     if  Breakpoints.mediumAndUp  ->  true
+  //     otherwise false
+  // - referenced in route.dart
+  // -------------------------------------------------------------
   void secondBodyHasChanged({required bool isSecondBodyDisplayed}) {
     //  emit only when  not yet displayed
     if (state.isSecondBodyDisplayed != isSecondBodyDisplayed) {
