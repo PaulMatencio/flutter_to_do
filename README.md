@@ -20,6 +20,7 @@
 ##  Task_To8  Add a reload to ToDoEntryItemError
 
 - If we have a loading error for one item, we want to reload it after clicking on this item
+- Update the mock to simulate a few error  
 - Adjust the text to show this function to the user
 
 
@@ -30,3 +31,13 @@
 - Add a form to be able to add new items
 - Add a validator for all field(s)
 - Add all files and functions that we can save an entry in our mockmode
+
+
+### Task-T10 Reload ToDoDetailPage
+
+-  Reload all items from your ToDoDetailPage after a ToDoEntry Item was created
+-  Rewrite the mockmode for this pupose.
+-  Following the recommendation, a callback  is used  to reload the Detail/Overview pages after items were added.
+-  Here is a screen shoot showing the new items after they were created 
+![alt screenshot] (https://github.com/PaulMatencio/flutter_to_do/blob/task_10/todo_create_collection_and_entry.png?raw=true)
+
