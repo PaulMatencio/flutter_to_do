@@ -37,7 +37,7 @@
 
 -  Reload all items from your ToDoDetailPage after a ToDoEntry Item was created
 -  Rewrite the mockmode for this pupose.
--  Following the recommendation, a callback  is used  to reload the Detail/Overview pages after items were added.
+-  Following the recommendation, use a callback instead of a previous solution:<submit().then(reload)>  to reload the Detail/Overview pages after items were added .
 -  Here is a screen shoot showing the new items after they were created 
 ![alt screenshot] (https://github.com/PaulMatencio/flutter_to_do/blob/task_t10/todo_create_collection_and_entry.png)
                   
