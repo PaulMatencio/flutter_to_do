@@ -9,7 +9,6 @@ import 'package:todo_app/2_application/pages/detail/view_states/todo_detail_erro
 
 import 'package:todo_app/2_application/pages/detail/view_states/todo_detail_loaded.dart';
 import 'package:todo_app/2_application/pages/detail/view_states/todo_detail_loading.dart';
-import 'package:todo_app/2_application/pages/overview/view_states/todo_overview_loading.dart';
 
 
 

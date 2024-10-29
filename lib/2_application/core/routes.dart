@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/1_domain/entities/unique_id.dart';
 import 'package:todo_app/2_application/core/go_router_observer.dart';
-import 'package:todo_app/2_application/core/widgets/switch_button.dart';
 import 'package:todo_app/2_application/pages/create_todo_collection/create_todo_collection_page.dart';
 import 'package:todo_app/2_application/pages/create_todo_entry/create_todo_entry_page.dart';
 import 'package:todo_app/2_application/pages/dashboard/dashboard_page.dart';
@@ -78,7 +77,8 @@ final routes = GoRouter(
       name: CreateToDoEntryPage.pageConfig.name,
       path: '$_basePath/overview/${CreateToDoEntryPage.pageConfig.name}',
       builder: (context, state) {
-        final collectionId = state.extra as CollectionId;
+        // final collectionId = state.extra as CollectionId;
+        final castedExtras = state.extra as CreateToDoEntryPageExtra;
         return Scaffold(
           appBar: AppBar(
             title: const Text('create entry'),
@@ -97,7 +97,9 @@ final routes = GoRouter(
             ),
           ),
           body: SafeArea(
-              child: CreateToDoEntryPageProvider(collectionId: collectionId)),
+              child: CreateToDoEntryPageProvider(
+                  toDoEntryItemAddedCallback: castedExtras.toDoEntryItemAddedCallback,
+                  collectionId: castedExtras.collectionId)),
         );
       },
     ),

@@ -3,7 +3,6 @@ import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/1_domain/entities/todo_collection.dart';
 import 'package:go_router/go_router.dart';
-import 'package:todo_app/1_domain/entities/unique_id.dart';
 import 'package:todo_app/2_application/core/widgets/switch_button.dart';
 import 'package:todo_app/2_application/pages/create_todo_collection/create_todo_collection_page.dart';
 import 'package:todo_app/2_application/pages/dashboard/dashboard_page.dart';

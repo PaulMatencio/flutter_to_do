@@ -1,7 +1,6 @@
 
 
 import 'package:either_dart/either.dart';
-import 'package:todo_app/1_domain/entities/todo_entry.dart';
 import 'package:todo_app/1_domain/failures/failures.dart';
 import 'package:todo_app/1_domain/repositories/todo_repository.dart';
 import 'package:todo_app/core/use_case.dart';

@@ -42,22 +42,25 @@ class _CreateToDoCollectionPageState extends State<CreateToDoCollectionPage> {
   @override
   Widget build(BuildContext context) {
     final int maxColorIndex = ToDoColor.predefinedColors.length + 1;
-    return Form(
-        key: _formKey,
-        child: Column(children: [
-          SizedBox(
-            height: 16,
-          ),
-          _CollectionTitleField(),
-          SizedBox(
-            height: 16,
-          ),
-          _CollectionColorField(maxColorIndex: maxColorIndex),
-          SizedBox(
-            height: 16,
-          ),
-          _SubmissionButton(formKey: _formKey)
-        ]));
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Form(
+          key: _formKey,
+          child: Column(children: [
+            SizedBox(
+              height: 20,
+            ),
+            _CollectionTitleField(),
+            SizedBox(
+              height: 20,
+            ),
+            _CollectionColorField(maxColorIndex: maxColorIndex),
+            SizedBox(
+              height: 20,
+            ),
+            _SubmissionButton(formKey: _formKey,text:'save collection')
+          ])),
+    );
   }
 }
 
@@ -66,14 +69,21 @@ class _SubmissionButton extends StatelessWidget {
   const _SubmissionButton({
     super.key,
     required GlobalKey<FormState> formKey,
+    required this.text
   }) : _formKey = formKey;
 
   final GlobalKey<FormState> _formKey;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return ElevatedButton(
-
+        style: ButtonStyle(
+          backgroundColor: WidgetStatePropertyAll<Color>(theme.colorScheme.primary),
+          foregroundColor: WidgetStatePropertyAll<Color>(theme.colorScheme.inversePrimary),
+          textStyle: WidgetStatePropertyAll<TextStyle>(theme.textTheme.titleSmall!),
+        ),
         onPressed: () {
           final isValid = _formKey.currentState?.validate();
           if (isValid == true) {
