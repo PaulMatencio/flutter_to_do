@@ -73,6 +73,7 @@ class _SubmissionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
+
         onPressed: () {
           final isValid = _formKey.currentState?.validate();
           if (isValid == true) {
@@ -95,15 +96,16 @@ class _CollectionColorField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final  theme = Theme.of(context);
     return TextFormField(
         initialValue: '',
         decoration: InputDecoration(
           icon: const Icon(Icons.color_lens),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(width: 1.0, color: Colors.black),
+          enabledBorder:  OutlineInputBorder(
+            borderSide: BorderSide(width: 1.0,color:theme.colorScheme.primary),
           ),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(width: 1.0, color: Colors.white),
+          focusedBorder:  OutlineInputBorder(
+            borderSide: BorderSide(width: 1.0, color:theme.colorScheme.inversePrimary),
           ),
           labelText: 'color',
           helperText: 'should  be a number between 0 and $maxColorIndex',
@@ -133,15 +135,16 @@ class _CollectionTitleField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final  theme = Theme.of(context);
     return TextFormField(
         initialValue: '',
         decoration: InputDecoration(
           icon: const Icon(Icons.title_outlined),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(width: 1.0, color: Colors.black),
+          enabledBorder:  OutlineInputBorder(
+            borderSide: BorderSide(width: 1.0, color:theme.colorScheme.primary),
           ),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(width: 1.0, color: Colors.white),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(width: 1.0, color:theme.colorScheme.inversePrimary),
           ),
           labelText: 'Title',
           helperText: 'Title should not be empty',

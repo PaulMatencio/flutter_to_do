@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/1_domain/entities/unique_id.dart';
 import 'package:todo_app/2_application/core/go_router_observer.dart';
+import 'package:todo_app/2_application/core/widgets/switch_button.dart';
 import 'package:todo_app/2_application/pages/create_todo_collection/create_todo_collection_page.dart';
 import 'package:todo_app/2_application/pages/create_todo_entry/create_todo_entry_page.dart';
 import 'package:todo_app/2_application/pages/dashboard/dashboard_page.dart';
@@ -18,6 +19,7 @@ final GlobalKey<NavigatorState> _rootNavigatorKey =
 final GlobalKey<NavigatorState> _shellNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'shell');
 const String _basePath = '/home';
+
 
 final routes = GoRouter(
   navigatorKey: _rootNavigatorKey,
@@ -53,6 +55,7 @@ final routes = GoRouter(
       builder: (context, state) => Scaffold(
         appBar: AppBar(
           title: const Text('create collection'),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           leading: BackButton(
             onPressed: () {
               if (context.canPop()) {
@@ -79,6 +82,7 @@ final routes = GoRouter(
         return Scaffold(
           appBar: AppBar(
             title: const Text('create entry'),
+            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
             leading: BackButton(
               onPressed: () {
                 if (context.canPop()) {
@@ -101,6 +105,7 @@ final routes = GoRouter(
         name: ToDoDetailPage.pageConfig.name,
         path: '$_basePath/overview/:collectionId',
         builder: (context, state) {
+          final collectionId = state.pathParameters['collectionId'];
           return BlocListener<NavigationToDoCubit, NavigationToDoCubitState>(
               //  -------------------------------------------------------
               //  pop the  detail_page when the   second display  state
@@ -119,7 +124,8 @@ final routes = GoRouter(
               },
               child: Scaffold(
                 appBar: AppBar(
-                    title: const Text('details'),
+                    title: Text('details for collection $collectionId'),
+                    backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                     leading: BackButton(
                         onPressed: () => context.canPop()
                             ? context.pop()
@@ -129,7 +135,7 @@ final routes = GoRouter(
                                   }))),
                 body: ToDoDetailPageProvider(
                   collectionId: CollectionId.fromUniqueString(
-                      state.pathParameters['collectionId'] ?? ''),
+                      collectionId ?? ''),
                 ),
               ));
         }),

@@ -4,12 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/1_domain/entities/todo_collection.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/1_domain/entities/unique_id.dart';
+import 'package:todo_app/2_application/core/widgets/switch_button.dart';
 import 'package:todo_app/2_application/pages/create_todo_collection/create_todo_collection_page.dart';
 import 'package:todo_app/2_application/pages/dashboard/dashboard_page.dart';
 import 'package:todo_app/2_application/pages/detail/todo_detail_page.dart';
 import 'package:todo_app/2_application/pages/home/bloc/cubit/navigation_todo_cubit.dart';
 import 'package:todo_app/2_application/pages/home/home_page.dart';
 import 'package:todo_app/2_application/pages/overview/bloc/cubit/todo_overview_cubit.dart';
+import 'package:todo_app/2_application/pages/overview/overview_page.dart';
 
 class ToDoOverviewLoaded extends StatelessWidget {
   const ToDoOverviewLoaded({
@@ -21,11 +23,16 @@ class ToDoOverviewLoaded extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme =  Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: colorScheme.inversePrimary,
-          title: Center(child: Text('Overview')),
+          backgroundColor: colorScheme.primaryContainer,
+          title: Center(child: Text(OverviewPage.pageConfig.name,
+          style: theme.textTheme.titleMedium)),
+          actions:[
+            SwitchButton()
+          ],
           leading: BackButton(
               onPressed: () => context.canPop()
                   ? context.pop()

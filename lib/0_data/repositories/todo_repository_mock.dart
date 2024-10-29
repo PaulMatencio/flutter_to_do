@@ -14,18 +14,6 @@ final int entriesNumber = collectionNumber * entriesPerCollection;
 
 class ToDoRepositoryMock implements ToDoRepository {
 
-  /*
-  final List<ToDoEntry> toDoEntries = List.generate(
-    entriesNumber,
-    (index) => ToDoEntry(
-      id: EntryId.fromUniqueString(index.toString()),
-      description: 'description $index',
-      isDone: false,
-    ),
-  );
-
-   */
-
   final toDoCollections = List<ToDoCollection>.generate(
     collectionNumber,
     (index) => ToDoCollection(
@@ -100,15 +88,6 @@ class ToDoRepositoryMock implements ToDoRepository {
     required ToDoEntry toDoEntry,
   }) {
 
-    /*
-    final index =
-        toDoEntries.indexWhere((element) => element.id == toDoEntry.id);
-    final entryToUpdate = toDoEntries[index];
-    final updatedEntry =
-        toDoEntries[index].copyWith(isDone: !entryToUpdate.isDone);
-    toDoEntries[index] = updatedEntry;
-     */
-
     final index = toDoEntries1[collectionId]!
         .indexWhere((element) => element.id == toDoEntry.id);
     final entryToUpdate = toDoEntries1[collectionId]![index];
@@ -125,20 +104,6 @@ class ToDoRepositoryMock implements ToDoRepository {
   Future<Either<Failure, List<EntryId>>> readToDoEntryIds(
       CollectionId collectionId) {
     try {
-      /*
-      final startIndex = int.parse(collectionId.value) * collectionNumber;
-      final endIndex = startIndex + entriesPerCollection;
-
-      List<EntryId> entryIds = [];
-
-      if (endIndex <= toDoEntries.length) {
-        entryIds = toDoEntries
-            .sublist(startIndex, endIndex)
-            .map((entry) => entry.id)
-            .toList();
-      }
-
-       */
       List<EntryId> entryIds = [];
       if (toDoEntries1.containsKey(collectionId)) {
         final toDoEntries = toDoEntries1[collectionId];
@@ -160,27 +125,10 @@ class ToDoRepositoryMock implements ToDoRepository {
     }
   }
 
-  /*
-  @override
-  Future<Either<Failure, bool>> createToDoEntry(_, ToDoEntry entry) {
-    toDoEntries.add(entry);
-    return Future.delayed(const Duration(milliseconds: 250), () => const Right(true));
-  }
-   */
-
   @override
   Future<Either<Failure, CollectionId>> createToDoCollection(
       ToDoCollection todoCollection) {
-    /*
-    CollectionId addCollection(ToDoCollection toDoCollection) {
-      final index = toDoCollections.length;
-      final collectionId = CollectionId.fromUniqueString(index.toString());
 
-      toDoCollections.add(todoCollection.copyWithId(
-          id: collectionId,
-          title: '${toDoCollection.title} ${collectionId.value}'));
-
-      */
     CollectionId addCollection(ToDoCollection toDoCollection) {
       final index = toDoEntries1.length;
       final collectionId = CollectionId.fromUniqueString(index.toString());

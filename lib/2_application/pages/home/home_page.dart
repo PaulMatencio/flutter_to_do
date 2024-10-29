@@ -148,6 +148,7 @@ class DetailPageProvider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return BlocBuilder<NavigationToDoCubit, NavigationToDoCubitState>(
       builder: (context, state) {
         final selectedId = state.selectedCollectionId;
@@ -162,7 +163,7 @@ class DetailPageProvider extends StatelessWidget {
 
         if (selectedId == null) {
           //return const Placeholder();
-          return Container();
+          return Placeholder();
         }
 
         return Padding(
@@ -170,8 +171,9 @@ class DetailPageProvider extends StatelessWidget {
           child: Scaffold(
             appBar: AppBar(
               title: Center(
-                  child: Text('Details for collection ${selectedId.value}')),
-              backgroundColor: colorScheme.inversePrimary,
+                  child: Text('Details for collection ${selectedId.value}',
+                    style: theme.textTheme.titleMedium ,)),
+              backgroundColor: colorScheme.primaryContainer,
             ),
             body: Stack(children: [
               ToDoDetailPageProvider(
@@ -191,31 +193,7 @@ class DetailPageProvider extends StatelessWidget {
     );
   }
 }
-/*
-class CreateToDoEntryButton extends StatelessWidget {
-  const CreateToDoEntryButton({
-    super.key,
-  });
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: FloatingActionButton(
-          key: const Key('create-todo-entry'),
-          heroTag: 'create-todo-entry',
-          tooltip: 'add_new_entry',
-          onPressed: () {
-          },
-          child: Icon(Icons.add),
-        ),
-      ),
-    );
-  }
-}
-*/
 class CreateCollectionPageProvider extends StatelessWidget {
   const CreateCollectionPageProvider({
     super.key,

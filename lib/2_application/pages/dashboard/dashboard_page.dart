@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:todo_app/2_application/core/widgets/switch_button.dart';
 import 'package:todo_app/2_application/pages/home/home_page.dart';
 import 'package:todo_app/2_application/pages/settings/settings_page.dart';
 
@@ -15,20 +16,25 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     PageConfig pageConfig = SettingsPage().getPageConfig();
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
+        title: Text(pageConfig.name,
+        style: theme.textTheme.titleMedium,),
+        backgroundColor: theme.colorScheme.primaryContainer,
+        leading: ElevatedButton(
+        // onPressed: () => context.push('/home/${pageConfig.name}'),
+          onPressed: () => context.pushNamed(
+              HomePage.pageConfig.name,
+              pathParameters: {
+                'tab': pageConfig.name}
+          ),
+          child: Icon(pageConfig.icon)),
         actions: [
-          ElevatedButton(
-             // onPressed: () => context.push('/home/${pageConfig.name}'),
-              onPressed: () => context.pushNamed(
-               HomePage.pageConfig.name,
-               pathParameters: {
-                 'tab': pageConfig.name}
-              ),
-              child: Icon(pageConfig.icon))
+          SwitchButton()
         ],
       ),
-      body: Container(color: Colors.purpleAccent),
+      body: Container(color: theme.colorScheme.surfaceContainer),
     );
   }
   getPageConfig() => pageConfig;

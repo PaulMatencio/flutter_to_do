@@ -63,15 +63,16 @@ class _EntryDescriptionField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return TextFormField(
         initialValue: '',
         decoration: InputDecoration(
-          icon: const Icon(Icons.color_lens),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(width: 1.0, color: Colors.black),
+          icon: const Icon(Icons.description),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(width: 1.0, color:theme.colorScheme.primary)
           ),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(width: 1.0, color: Colors.white),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(width: 1.0, color: theme.colorScheme.inversePrimary),
           ),
           labelText: 'description',
           helperText: 'any non empty text',
@@ -112,9 +113,16 @@ class _SubmissionButton extends StatelessWidget {
 
   final GlobalKey<FormState> _formKey;
 
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return ElevatedButton(
+       style: ButtonStyle(
+         backgroundColor: WidgetStatePropertyAll<Color>(theme.colorScheme.primary),
+         foregroundColor: WidgetStatePropertyAll<Color>(theme.colorScheme.inversePrimary),
+         textStyle: WidgetStatePropertyAll<TextStyle>(theme.textTheme.titleSmall!),
+       ),
         onPressed: () {
           final isValid = _formKey.currentState?.validate();
           if (isValid == true) {
