@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:todo_app/1_domain/entities/todo_entry.dart';
@@ -39,16 +40,12 @@ class CreateToDoEntryPageCubit extends Cubit<CreateToDoEntryPageState> {
     );
   }
 
-
   Future<void> submit() async {
     final todoEntry = ToDoEntry.empty()
         .copyWith(description: state.description!.value, isDone: false);
     await createToDoEntry
-        .call(ToDoEntryParams(
-            entry: todoEntry, collectionId: collectionId))
-        .then((entryId) => entryId.fold(
-            (left) => null,
-            (right) => print('ToDoEntry id: ${right.value} is saved')));
+        .call(ToDoEntryParams(entry: todoEntry, collectionId: collectionId))
+        .then((entryId) => entryId.fold((left) => null, (right) => true));
   }
 
   /*

@@ -5,7 +5,7 @@ import 'package:todo_app/1_domain/failures/failures.dart';
 import 'package:todo_app/1_domain/repositories/todo_repository.dart';
 import 'package:todo_app/core/use_case.dart';
 
-class CreateToDoEntry implements UseCase<EntryId,ToDoEntryParams> {
+class CreateToDoEntry implements UseCase<bool,ToDoEntryParams> {
 
   CreateToDoEntry({
     required this.toDoRepository
@@ -15,7 +15,7 @@ class CreateToDoEntry implements UseCase<EntryId,ToDoEntryParams> {
   final ToDoRepository toDoRepository;
 
   @override
-  Future<Either<Failure, EntryId>> call(ToDoEntryParams params) async {
+  Future<Either<Failure, bool>> call(ToDoEntryParams params) async {
     try {
       final createToDoEntry =   await toDoRepository.createToDoEntry(
             collectionId: params.collectionId, toDoEntry: params.entry);

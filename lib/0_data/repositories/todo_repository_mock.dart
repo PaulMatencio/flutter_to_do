@@ -13,19 +13,8 @@ final int entriesPerCollection = 10;
 final int entriesNumber = collectionNumber * entriesPerCollection;
 
 class ToDoRepositoryMock implements ToDoRepository {
-
-  final toDoCollections = List<ToDoCollection>.generate(
-    collectionNumber,
-    (index) => ToDoCollection(
-      id: CollectionId.fromUniqueString(index.toString()),
-      title: 'title $index',
-      color: ToDoColor(
-        colorIndex: index % ToDoColor.predefinedColors.length,
-      ),
-    ),
-  );
-
-  final Map<CollectionId, List<ToDoEntry>> toDoEntries1 = generateToDoEntries();
+  final toDoCollections = generateToDoCollections();
+  final Map<CollectionId, List<ToDoEntry>> toDoEntries = generateToDoEntries();
 
   @override
   //!    @override readToDoCollections()
@@ -51,13 +40,13 @@ class ToDoRepositoryMock implements ToDoRepository {
         (element) => element.id == entryId,
       );
       */
-      final  ToDoEntry  selectedEntryItem;
-      if (toDoEntries1.containsKey(collectionId)) {
-        final toDoEntries = toDoEntries1[collectionId];
-        selectedEntryItem = toDoEntries!.firstWhere(
-              (element) => element.id == entryId,
+      final ToDoEntry selectedEntryItem;
+      if (toDoEntries.containsKey(collectionId)) {
+        final entries = toDoEntries[collectionId];
+        selectedEntryItem = entries!.firstWhere(
+          (element) => element.id == entryId,
         );
-      }  else {
+      } else {
         throw Exception('invalid collection id');
       }
 
@@ -67,7 +56,7 @@ class ToDoRepositoryMock implements ToDoRepository {
       //  ----------------------------------------------------
       Random rand = Random();
       int r = rand.nextInt(10);
-      if (['20','30'].contains(entryId.value)  &&  r.isEven) {
+      if (['20', '30'].contains(entryId.value) && r.isEven) {
         return Future.delayed(
             Duration(milliseconds: 300), () => Left(ServerFailure()));
       } else {
@@ -87,12 +76,11 @@ class ToDoRepositoryMock implements ToDoRepository {
     required CollectionId collectionId,
     required ToDoEntry toDoEntry,
   }) {
-
-    final index = toDoEntries1[collectionId]!
+    final index = toDoEntries[collectionId]!
         .indexWhere((element) => element.id == toDoEntry.id);
-    final entryToUpdate = toDoEntries1[collectionId]![index];
+    final entryToUpdate = toDoEntries[collectionId]![index];
     final updatedEntry = entryToUpdate.copyWith(isDone: !entryToUpdate.isDone);
-    toDoEntries1[collectionId]![index] = updatedEntry;
+    toDoEntries[collectionId]![index] = updatedEntry;
     return Future.delayed(
         const Duration(milliseconds: 100), () => Right(updatedEntry));
 
@@ -105,11 +93,10 @@ class ToDoRepositoryMock implements ToDoRepository {
       CollectionId collectionId) {
     try {
       List<EntryId> entryIds = [];
-      if (toDoEntries1.containsKey(collectionId)) {
-        final toDoEntries = toDoEntries1[collectionId];
-        int l = toDoEntries!.length;
-        for (int i = 0; i < toDoEntries.length; i++) {
-          entryIds.add(toDoEntries[i].id);
+      if (toDoEntries.containsKey(collectionId)) {
+        final entries = toDoEntries[collectionId];
+        for (int i = 0; i < (entries!.length); i++) {
+          entryIds.add(entries[i].id);
         }
       } else {
         throw Exception('invalid collection id');
@@ -126,24 +113,22 @@ class ToDoRepositoryMock implements ToDoRepository {
   }
 
   @override
-  Future<Either<Failure, CollectionId>> createToDoCollection(
+  Future<Either<Failure, bool>> createToDoCollection(
       ToDoCollection todoCollection) {
-
-    CollectionId addCollection(ToDoCollection toDoCollection) {
-      final index = toDoEntries1.length;
+    bool addCollection(ToDoCollection toDoCollection) {
+      final index = toDoCollections.length;
       final collectionId = CollectionId.fromUniqueString(index.toString());
-      final List<ToDoEntry> todoEntries = [];
-      toDoEntries1[collectionId] = todoEntries;
+
+      toDoEntries.putIfAbsent(collectionId, () => []);
       toDoCollections.add(todoCollection.copyWithId(
-          id: collectionId,
-          title: '${toDoCollection.title} ${collectionId.value}'));
-      return collectionId;
+          id: collectionId, title: toDoCollection.title));
+      print(' empty ....   ${toDoEntries[collectionId]}');
+      return true;
     }
 
     try {
-      final collectionId = addCollection(todoCollection);
-      return Future.delayed(
-          Duration(milliseconds: 200), () => Right(collectionId)
+      final result = addCollection(todoCollection);
+      return Future.delayed(Duration(milliseconds: 200), () => Right(result)
           //  () => Left(ServerFailure())
           );
     } on Exception catch (e) {
@@ -152,36 +137,55 @@ class ToDoRepositoryMock implements ToDoRepository {
   }
 
   @override
-  Future<Either<Failure, EntryId>> createToDoEntry(
+  Future<Either<Failure, bool>> createToDoEntry(
       {required CollectionId collectionId, required ToDoEntry toDoEntry}) {
     //   add  an ToDoEntry
-    EntryId addEntry(ToDoEntry toDoEntry) {
-      if (toDoEntries1.containsKey(collectionId)) {
-        int ? index = int.tryParse(toDoEntries1[collectionId]!.last.id.value);
-        if (index is int) {
-          index += 1;
-        }  else {
-          throw (Exception('Invalid entry id'));
+
+    bool addEntry(ToDoEntry toDoEntry) {
+      int index =  0;
+      if (toDoEntries.containsKey(collectionId)) {
+        if (toDoEntries[collectionId]!.isNotEmpty) {
+          index  = int.tryParse(toDoEntries[collectionId]!.last.id.value)?? 0;
+          index++;
         }
         final entryId = EntryId.fromUniqueString(index.toString());
-        toDoEntries1[collectionId]!.add(toDoEntry.copyWithId(
-            id: entryId,
-            description: '${toDoEntry.description} ${entryId.value}'));
-        return entryId;
+        toDoEntries[collectionId]!.add(toDoEntry.copyWithId(
+            id: entryId, description: toDoEntry.description));
+        return true;
       } else {
         throw (Exception('Invalid collection Id'));
       }
     }
 
     try {
-      final entryId = addEntry(toDoEntry);
-      return Future.delayed(Duration(milliseconds: 200), () => Right(entryId)
+      final result = addEntry(toDoEntry);
+      return Future.delayed(Duration(milliseconds: 200), () => Right(result)
           //  () => Left(ServerFailure())
           );
     } on Exception catch (e) {
       return Future.value(Left(ServerFailure(stackTrace: e.toString())));
     }
   }
+
+  //
+  //    generate TodoCollection
+  //
+  static List<ToDoCollection> generateToDoCollections() {
+    return List<ToDoCollection>.generate(
+      collectionNumber,
+      (index) => ToDoCollection(
+        id: CollectionId.fromUniqueString(index.toString()),
+        title: 'title $index',
+        color: ToDoColor(
+          colorIndex: index % ToDoColor.predefinedColors.length,
+        ),
+      ),
+    );
+  }
+
+//
+//    generate initial toDoEntries
+//
 
   static Map<CollectionId, List<ToDoEntry>> generateToDoEntries() {
     final List<ToDoEntry> toDoEntries = List.generate(
@@ -192,20 +196,9 @@ class ToDoRepositoryMock implements ToDoRepository {
         isDone: false,
       ),
     );
-
-    final toDoCollections = List<ToDoCollection>.generate(
-      collectionNumber,
-      (index) => ToDoCollection(
-        id: CollectionId.fromUniqueString(index.toString()),
-        title: 'title $index',
-        color: ToDoColor(
-          colorIndex: index % ToDoColor.predefinedColors.length,
-        ),
-      ),
-    );
-
+    final toDoCollections = generateToDoCollections();
     int start = 0;
-    final Map<CollectionId, List<ToDoEntry>> map = Map();
+    final Map<CollectionId, List<ToDoEntry>> map = {};
     for (int i = 0; i < toDoCollections.length; i++) {
       map[toDoCollections[i].id] = toDoEntries.sublist(start, start + 10);
       start = start + 10;

@@ -3,9 +3,9 @@ class ServerException implements Exception {
   ServerException({required this.stackTrace});
 }
 
-class CacheExceptions implements Exception {}
+class CacheException implements Exception {}
 
-class DataExceptions implements Exception{
+class DataException implements Exception{
   final String stackTrace;
-  DataExceptions({required this.stackTrace});
+  DataException({required this.stackTrace});
 }

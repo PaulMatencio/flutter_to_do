@@ -6,7 +6,7 @@ import 'package:todo_app/core/use_case.dart';
 
 
 
-class CreateToDoCollection implements UseCase<CollectionId,ToDoCollectionParams> {
+class CreateToDoCollection implements UseCase<bool,ToDoCollectionParams> {
 
   CreateToDoCollection({
     required this.toDoRepository
@@ -15,7 +15,7 @@ class CreateToDoCollection implements UseCase<CollectionId,ToDoCollectionParams>
   final ToDoRepository toDoRepository;
 
   @override
-  Future<Either<Failure, CollectionId>> call(ToDoCollectionParams params) async {
+  Future<Either<Failure, bool>> call(ToDoCollectionParams params) async {
     try {
       final createToDoCollection = await toDoRepository.createToDoCollection(
         params.collection
@@ -23,7 +23,7 @@ class CreateToDoCollection implements UseCase<CollectionId,ToDoCollectionParams>
 
       return createToDoCollection.fold(
             (left) => Left(left),
-            (right) => Right(right),
+            (right) => Right(true),
       );
     } on Exception catch (e) {
       return Left(ServerFailure(stackTrace: e.toString()));
