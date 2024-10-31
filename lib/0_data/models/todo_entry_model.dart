@@ -17,6 +17,21 @@ class ToDoEntryModel extends Equatable {
         'isDone': entry.isDone
       };
 
+  ToDoEntryModel copyWith({String? description, bool? isDone}) {
+    return ToDoEntryModel(
+        description: description ?? this.description,
+        isDone: isDone ?? this.isDone,
+        id: id);
+  }
+
   @override
   List<Object?> get props => [description, isDone, id];
+
+  factory ToDoEntryModel.empty() {
+    return ToDoEntryModel(
+      id: '',
+      description: '',
+      isDone: false,
+    );
+  }
 }

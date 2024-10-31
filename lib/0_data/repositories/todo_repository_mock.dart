@@ -47,7 +47,7 @@ class ToDoRepositoryMock implements ToDoRepository {
           (element) => element.id == entryId,
         );
       } else {
-        throw Exception('invalid collection id');
+         selectedEntryItem = ToDoEntry.empty();
       }
 
       // ------------------------------------------------------

@@ -5,6 +5,10 @@ class ServerException implements Exception {
 
 class CacheException implements Exception {}
 
+class CollectionNotFoundException  implements  Exception{}
+
+class EntryNotFoundException  implements  Exception{}
+
 class DataException implements Exception{
   final String stackTrace;
   DataException({required this.stackTrace});

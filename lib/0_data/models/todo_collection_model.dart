@@ -19,6 +19,10 @@ class ToDoCollectionModel extends Equatable {
         'colorIndex': collection.colorIndex
       };
 
+
   @override
   List<Object?> get props => [colorIndex, title, id];
+
+
+
 }
