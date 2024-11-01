@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/1_domain/entities/unique_id.dart';
 import 'package:todo_app/1_domain/repositories/todo_repository.dart';
+import 'package:todo_app/1_domain/use_cases/delete_todo_entry.dart';
 import 'package:todo_app/1_domain/use_cases/load_todo_entry.dart';
 import 'package:todo_app/1_domain/use_cases/update_todo_entry.dart';
 import 'package:todo_app/2_application/components/todo_entry_item/bloc/cubit/todo_entry_item_cubit.dart';
@@ -28,9 +29,14 @@ class ToDoEntryItemProvider extends StatelessWidget {
           loadToDoEntry: LoadToDoEntry(
             toDoRepository: RepositoryProvider.of<ToDoRepository>(context),
           ),
-          uploadToDoEntry: UpdateToDoEntry(
+          updateToDoEntry: UpdateToDoEntry(
             toDoRepository: RepositoryProvider.of<ToDoRepository>(context),
-          ))
+          ),
+        deleteToDoEntry:  DeleteToDoEntry(
+          toDoRepository: RepositoryProvider.of<ToDoRepository>(context),
+        ),
+
+      )
         ..fetch(), //!
       child: ToDoEntryItem(
         collectionId: collectionId,
@@ -57,8 +63,13 @@ class ToDoEntryItem extends StatelessWidget {
           return ToDoEntryItemLoaded(
             entryItem: state.toDoEntry,
             onChanged: (value) => todoEntryItemCubit.update(),
+            onPressed: () => todoEntryItemCubit.delete()
           );
-        } else if (state is ToDoEntryItemErrorState) {
+        }
+        else if (state is ToDoEntryItemDeletedState){
+          return SizedBox();
+        }
+        else if (state is ToDoEntryItemErrorState) {
           return ToDoEntryItemError(
             stackTrace: state.stackTrace,
             onReload: () => todoEntryItemCubit.fetch(),

@@ -22,7 +22,7 @@ class ToDoEntryItemError extends StatelessWidget {
           iconColor: Theme.of(context).colorScheme.error,
           onTap: onReload,
           leading: const Icon(Icons.warning_rounded),
-          title: Text('Could not load entry item ${todoEntryItem.entryId.value}. Tap to reload.'),
+          title: Text('$stackTrace. Tap to reload.'),
         );
       },
     );

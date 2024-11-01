@@ -6,10 +6,15 @@ class ToDoEntryItemLoaded extends StatelessWidget {
     super.key,
     required this.entryItem,
     required this.onChanged,
+    required this.onPressed,
+
   });
 
   final ToDoEntry entryItem;
   final Function(bool?) onChanged;
+  final Function() onPressed;
+
+ // final Function(bool?) onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +24,17 @@ class ToDoEntryItemLoaded extends StatelessWidget {
     /// and rebuild the checkbox tile with a new [value] to update the visual
     /// appearance of the checkbox.
     return Card.outlined(
-      child: CheckboxListTile(
-        title: Text(entryItem.description),
-        activeColor: Colors.blueGrey,
-        value: entryItem.isDone,
-        onChanged: onChanged,
-      ),
+      child: Row(children: [
+        TextButton(onPressed: onPressed, child: Icon(Icons.delete)),
+        Expanded(
+          child: CheckboxListTile(
+            title: Text(entryItem.description),
+            activeColor: Colors.blueGrey,
+            value: entryItem.isDone,
+            onChanged: onChanged,
+          ),
+        ),
+      ]),
     );
   }
 }

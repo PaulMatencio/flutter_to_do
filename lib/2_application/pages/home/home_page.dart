@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:todo_app/2_application/core/widgets/network_image.dart';
 import 'package:todo_app/2_application/pages/dashboard/dashboard_page.dart';
 import 'package:todo_app/2_application/pages/detail/todo_detail_page.dart';
 import 'package:todo_app/2_application/pages/home/bloc/cubit/navigation_todo_cubit.dart';
@@ -145,7 +146,8 @@ class DetailPageProvider extends StatelessWidget {
   });
 
   final ColorScheme colorScheme;
-
+  final String imageUrl = 'https://i.postimg.cc/T1L70cws/coffee.jpg';
+  final String imageAsset = 'images/view-details-4.png';
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -163,7 +165,18 @@ class DetailPageProvider extends StatelessWidget {
 
         if (selectedId == null) {
           //return const Placeholder();
-          return Placeholder();
+          //return  Center(child: NetworkImageWidget(url: imageUrl));
+          return
+              Center(
+                child: Container(
+                    height: 200,
+                    width: 200,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.8),
+                    ),
+                    child: Image.asset(imageAsset)),
+              );
         }
 
         return Padding(
@@ -171,8 +184,10 @@ class DetailPageProvider extends StatelessWidget {
           child: Scaffold(
             appBar: AppBar(
               title: Center(
-                  child: Text('Details for collection ${selectedId.value}',
-                    style: theme.textTheme.titleMedium ,)),
+                  child: Text(
+                'Details',
+                style: theme.textTheme.titleMedium,
+              )),
               backgroundColor: colorScheme.primaryContainer,
             ),
             body: Stack(children: [

@@ -126,7 +126,10 @@ class _CollectionColorField extends StatelessWidget {
           String invalidIndex =
               'Please enter a number between 0 and $maxColorIndex';
           if (value != null && value.isNotEmpty) {
-            final int parsedColorIndex = int.parse(value);
+            final int ? parsedColorIndex = int.tryParse(value);
+            if (parsedColorIndex  == null) {
+              return invalidIndex;
+            }
             if (parsedColorIndex < 0 || parsedColorIndex > maxColorIndex) {
               return invalidIndex;
             }

@@ -126,7 +126,7 @@ final routes = GoRouter(
               },
               child: Scaffold(
                 appBar: AppBar(
-                    title: Text('details for collection $collectionId'),
+                    title: Text('Details'),
                     backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                     leading: BackButton(
                         onPressed: () => context.canPop()

@@ -40,5 +40,13 @@
 -  Following the recommendation, use a callback instead of a previous solution:<submit().then(reload)>  to reload the Detail/Overview pages after items were added .
 -  Here is a screen shoot showing the new items after they were created 
 ![alt screenshot] (https://github.com/PaulMatencio/flutter_to_do/blob/task_t10/todo_create_collection_and_entry.png)
+  
                   
+###  Task-T11 Add an own repository
+- Add an own ToDo Repository implementation
+- This implementation should store all data in the memory
+- Create a new main file to start the app with your  ToDoRepositoryMemory implementation
+- ### Extra : Add a delete button and implemement its functions. 
+- Here is a screen 
+![alt screenshot] (https://github.com/PaulMatencio/flutter_to_do/blob/task_t11/todo_List_task_t11.png)
 

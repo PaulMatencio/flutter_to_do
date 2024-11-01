@@ -2,69 +2,77 @@ import 'package:todo_app/0_data/data_sources/interfaces/todo_local_data_source.d
 import 'package:todo_app/0_data/exceptions/exceptions.dart';
 import 'package:todo_app/0_data/models/todo_collection_model.dart';
 import 'package:todo_app/0_data/models/todo_entry_model.dart';
-import 'package:todo_app/1_domain/entities/todo_entry.dart';
-import 'package:todo_app/1_domain/entities/unique_id.dart';
-import 'package:todo_app/1_domain/use_cases/load_todo_collections.dart';
 
-class ToDoRepositoryLocal implements ToDoLocalDataSource {
+class MemoryLocalDataSource implements ToDoLocalDataSource {
   final List<ToDoCollectionModel> toDoCollections = [];
   final Map<String, List<ToDoEntryModel>> toDoEntries = {};
 
+  Future<List<ToDoCollectionModel>> getToDoCollections() {
+    try {
+      return Future.value(toDoCollections);
+    } on Exception catch (e) {
+      throw ServerException(stackTrace: e.toString());
+    }
+  }
+
   @override
   Future<bool> createToDoCollection({required ToDoCollectionModel collection}) {
-    try {
       toDoCollections.add(collection);
       toDoEntries.putIfAbsent(collection.id, () => []);
       return Future.value(true);
-    } on Exception catch (_) {
-      throw CacheException();
     }
-  }
 
   @override
   Future<bool> createToDoEntry(
       {required String collectionId, required ToDoEntryModel entryModel}) {
-    try {
-      if (toDoEntries.containsKey(collectionId)) {
-        toDoEntries[collectionId]!.add(entryModel);
-        return Future.value(true);
-      } else {
-        throw CollectionNotFoundException();
-      }
-    } on Exception catch (_) {
-      throw CacheException();
+    if (toDoEntries.containsKey(collectionId)) {
+      toDoEntries[collectionId]?.add(entryModel);
+      return Future.value(true);
+    } else {
+      throw CollectionNotFoundException(stackTrace: 'collection not found');
     }
   }
 
   @override
-  Future<List<String>> getToDoCollectionIds() {
-    final List<String> toDoCollectionIds = [];
-    try {
-      for (int i = 0; i < toDoCollections.length; i++) {
-        toDoCollectionIds.add(toDoCollections[i].id);
-      }
-      return Future.value(toDoCollectionIds);
-    } on Exception catch (_) {
-      throw CacheException();
+  Future<bool> deleteToDoEntry({required String collectionId, required String entryModelId}) {
+    if (toDoEntries.containsKey(collectionId)) {
+      toDoEntries[collectionId]?.removeWhere((entry) => entry.id == entryModelId);
+      return Future.value(true);
+    } else {
+      throw CollectionNotFoundException(stackTrace: 'collection not found');
     }
     throw UnimplementedError();
   }
 
   @override
+  Future<List<String>> getToDoCollectionIds() {
+    final List<String> toDoCollectionIds = [];
+    /*
+    for (int i = 0; i < toDoCollections.length; i++) {
+      toDoCollectionIds.add(toDoCollections[i].id);
+    }
+     */
+
+    toDoCollections.map( (collection) => {
+      toDoCollectionIds.add(collection.id)
+    });
+
+    return Future.value(toDoCollectionIds);
+  }
+
+  @override
   Future<List<String>> getToDoEntryIds({required String collectionId}) {
     final List<String> toDoEntryIds = [];
-    try {
-      if (toDoEntries.containsKey(collectionId)) {
-        final entries = toDoEntries[collectionId];
-        for (int i = 0; i < entries!.length; i++) {
-          toDoEntryIds.add(entries[i].id);
-        }
-        return Future.value(toDoEntryIds);
-      } else {
-        throw CollectionNotFoundException();
+
+    if (toDoEntries.containsKey(collectionId)) {
+      final entries = toDoEntries[collectionId];
+
+      for (int i = 0; i < entries!.length; i++) {
+        toDoEntryIds.add(entries[i].id);
       }
-    } on Exception catch (e) {
-      throw CacheException();
+      return Future.value(toDoEntryIds);
+    } else {
+      throw CollectionNotFoundException(stackTrace: 'collection not found');
     }
   }
 
@@ -72,20 +80,16 @@ class ToDoRepositoryLocal implements ToDoLocalDataSource {
   Future<ToDoEntryModel> getToDoEntry(
       {required String collectionId, required String entryId}) {
     // TODO: implement getToDoEntry
-    try {
-      if (toDoEntries.containsKey(collectionId)) {
-        final index =
-            toDoEntries[collectionId]!.indexWhere((item) => item.id == entryId);
-        if (index > 0) {
-          return Future.value(toDoEntries[collectionId]![index]);
-        } else {
-          throw EntryNotFoundException();
-        }
+    if (toDoEntries.containsKey(collectionId)) {
+      final index =
+          toDoEntries[collectionId]!.indexWhere((entry) => entry.id == entryId);
+      if (index >= 0) {
+        return Future.value(toDoEntries[collectionId]?[index]);
       } else {
-        throw CollectionNotFoundException();
+        throw EntryNotFoundException(stackTrace: 'entry not found');
       }
-    } on Exception catch (_) {
-      throw CacheException();
+    } else {
+      throw CollectionNotFoundException(stackTrace: 'collection not found');
     }
   }
 
@@ -93,39 +97,35 @@ class ToDoRepositoryLocal implements ToDoLocalDataSource {
   Future<ToDoEntryModel> updateToDoEntry(
       {required String collectionId, required ToDoEntryModel entryModel}) {
     // TODO: implement updateToDoEntry
-    try {
-      if (toDoEntries.containsKey(collectionId)) {
-        final int index = toDoEntries[collectionId]!
-            .indexWhere(((item) => item.id == entryModel.id));
-        if (index > 0) {
-          final toDoEntry = toDoEntries[collectionId]![index];
-          final updateToDoEntry = toDoEntry.copyWith(isDone: !toDoEntry.isDone);
-          toDoEntries[collectionId]![index] = updateToDoEntry;
-          return Future.value(updateToDoEntry);
-        } else {
-          throw EntryNotFoundException();
-        }
+
+    if (toDoEntries.containsKey(collectionId)) {
+      final int index = toDoEntries[collectionId]!
+          .indexWhere(((entry) => entry.id == entryModel.id));
+      if (index >= 0) {
+        final toDoEntry = toDoEntries[collectionId]![index];
+        final updateToDoEntry = toDoEntry.copyWith(isDone: !toDoEntry.isDone);
+        toDoEntries[collectionId]![index] = updateToDoEntry;
+        return Future.value(updateToDoEntry);
       } else {
-        throw CollectionNotFoundException();
+        throw EntryNotFoundException(stackTrace: 'entry not found');
       }
-    } on Exception catch (_) {
-      throw CacheException();
+    } else {
+      throw CollectionNotFoundException(stackTrace: 'collection not found');
     }
   }
+
+
+
 
   @override
   Future<ToDoCollectionModel> getToDoCollection(
       {required String collectionId}) {
-    try {
-      final index =
-          toDoCollections.indexWhere((item) => item.id == collectionId);
-      if (index > 0) {
-        return Future.value(toDoCollections[index]);
-      } else {
-        throw CollectionNotFoundException();
-      }
-    } on Exception catch (_) {
-      throw CacheException();
+    final index = toDoCollections
+        .indexWhere((collection) => collection.id == collectionId);
+    if (index > 0) {
+      return Future.value(toDoCollections[index]);
+    } else {
+      throw CollectionNotFoundException(stackTrace: 'collection not found');
     }
   }
 }

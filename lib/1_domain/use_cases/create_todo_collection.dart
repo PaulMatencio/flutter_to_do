@@ -17,6 +17,7 @@ class CreateToDoCollection implements UseCase<bool,ToDoCollectionParams> {
   @override
   Future<Either<Failure, bool>> call(ToDoCollectionParams params) async {
     try {
+      print('create Collection -> ${params.collection.id}');
       final createToDoCollection = await toDoRepository.createToDoCollection(
         params.collection
       );

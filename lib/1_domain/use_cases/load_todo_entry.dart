@@ -26,7 +26,8 @@ class LoadToDoEntry implements UseCase<ToDoEntry, ToDoEntryIdsParam> {
             (right) => Right(right),
       );
     } on Exception catch (e) {
-      return Left(ServerFailure(stackTrace: e.toString()));
+          return Left(ServerFailure());
+      }
+
     }
   }
-}

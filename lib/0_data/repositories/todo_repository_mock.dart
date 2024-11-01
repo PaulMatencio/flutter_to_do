@@ -88,6 +88,12 @@ class ToDoRepositoryMock implements ToDoRepository {
   }
 
   @override
+  Future<Either<Failure, bool>> deleteToDoEntry({required CollectionId collectionId, required EntryId entryId}) {
+    // TODO: implement deleteToDoEntry
+    throw UnimplementedError();
+  }
+
+  @override
   //! override readToDoEntryIds
   Future<Either<Failure, List<EntryId>>> readToDoEntryIds(
       CollectionId collectionId) {
@@ -142,15 +148,17 @@ class ToDoRepositoryMock implements ToDoRepository {
     //   add  an ToDoEntry
 
     bool addEntry(ToDoEntry toDoEntry) {
-      int index =  0;
+     // int index =  0;
       if (toDoEntries.containsKey(collectionId)) {
+        /*
         if (toDoEntries[collectionId]!.isNotEmpty) {
           index  = int.tryParse(toDoEntries[collectionId]!.last.id.value)?? 0;
           index++;
         }
-        final entryId = EntryId.fromUniqueString(index.toString());
-        toDoEntries[collectionId]!.add(toDoEntry.copyWithId(
-            id: entryId, description: toDoEntry.description));
+         */
+       // final entryId = EntryId.fromUniqueString(index.toString());
+        toDoEntries[collectionId]!.add(toDoEntry.copyWith(
+           description: toDoEntry.description));
         return true;
       } else {
         throw (Exception('Invalid collection Id'));

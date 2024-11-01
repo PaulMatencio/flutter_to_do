@@ -33,6 +33,8 @@ class ToDoEntry{
     );
   }
 
+  /*
+
   ToDoEntry copyWithId({
     required EntryId id,
     String? description,
@@ -44,6 +46,8 @@ class ToDoEntry{
       isDone: isDone ?? this.isDone,
     );
   }
+
+   */
 
 
 }

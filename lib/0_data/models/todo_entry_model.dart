@@ -11,6 +11,14 @@ class ToDoEntryModel extends Equatable {
   factory ToDoEntryModel.fromJson(Map<String, dynamic> json) => ToDoEntryModel(
       description: json['description'], isDone: json['isDone'], id: json['id']);
 
+  factory ToDoEntryModel.empty() {
+    return ToDoEntryModel(
+      id: '',
+      description: '',
+      isDone: false,
+    );
+  }
+
   Map<String, dynamic> toJson(ToDoEntryModel entry) => {
         'id': entry.id,
         'description': entry.description,
@@ -27,11 +35,5 @@ class ToDoEntryModel extends Equatable {
   @override
   List<Object?> get props => [description, isDone, id];
 
-  factory ToDoEntryModel.empty() {
-    return ToDoEntryModel(
-      id: '',
-      description: '',
-      isDone: false,
-    );
-  }
+
 }

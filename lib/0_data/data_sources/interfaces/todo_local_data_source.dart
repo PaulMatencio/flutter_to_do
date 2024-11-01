@@ -17,5 +17,8 @@ abstract class ToDoLocalDataSource {
   Future<bool> createToDoEntry(
       {required String collectionId, required ToDoEntryModel entryModel});
 
+  Future<bool> deleteToDoEntry(
+      {required String collectionId, required String entryModelId});
+
   Future<bool> createToDoCollection({required ToDoCollectionModel collection});
 }

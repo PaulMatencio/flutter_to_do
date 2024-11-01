@@ -16,6 +16,13 @@ class ToDoEntryItemErrorState extends ToDoEntryItemState {
   List<Object> get props => [stackTrace?? ''] ;
 }
 
+class ToDoEntryItemDeletedState extends ToDoEntryItemState {
+  const ToDoEntryItemDeletedState ({
+    required this.collectionId, required this.entryId
+});
+  final EntryId  entryId;
+  final CollectionId collectionId;
+}
 
 class ToDoEntryItemLoadedState extends ToDoEntryItemState {
   const ToDoEntryItemLoadedState({required this.toDoEntry});

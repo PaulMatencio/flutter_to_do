@@ -16,6 +16,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_app/0_data/repositories/todo_repository_local.dart';
 import 'package:todo_app/2_application/core/services/theme_service.dart';
 import '0_data/repositories/todo_repository_mock.dart';
 import '1_domain/repositories/todo_repository.dart';
@@ -24,7 +25,8 @@ import '2_application/app/basic_app.dart';
 void main() {
  //  runApp(const BasicApp());
     runApp(RepositoryProvider<ToDoRepository>(
-      create: (BuildContext context) => ToDoRepositoryMock(),
+      //create: (BuildContext context) => ToDoRepositoryMock(),
+      create: (BuildContext context) => ToDoRepositoryLocal(),
       child: ChangeNotifierProvider(
           create:(context) => ThemeService(),
           child: const BasicApp())

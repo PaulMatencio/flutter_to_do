@@ -25,6 +25,19 @@ class CreateToDoEntry implements UseCase<bool,ToDoEntryParams> {
             (right) => Right(right),
       );
     } on Exception catch (e) {
+
+      switch (e) {
+        case final ServerFailure _:
+          return Left(ServerFailure());
+        case final GeneralFailure  e:
+          return Left(GeneralFailure(stackTrace: e.stackTrace));
+        case final CacheFailure _:
+          return Left(CacheFailure());
+        default:
+          return Left(GeneralFailure());
+      }
+
+
       return Left(ServerFailure(stackTrace: e.toString()));
     }
   }
