@@ -35,8 +35,10 @@ class MemoryLocalDataSource implements ToDoLocalDataSource {
 
   @override
   Future<bool> deleteToDoEntry({required String collectionId, required String entryModelId}) {
+   //  throw  ServerException(stackTrace:'Ups server exception');
     if (toDoEntries.containsKey(collectionId)) {
       toDoEntries[collectionId]?.removeWhere((entry) => entry.id == entryModelId);
+
       return Future.value(true);
     } else {
       throw CollectionNotFoundException(stackTrace: 'collection not found');

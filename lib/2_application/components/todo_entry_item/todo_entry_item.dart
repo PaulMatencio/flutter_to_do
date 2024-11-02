@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/1_domain/entities/unique_id.dart';
@@ -14,18 +16,21 @@ class ToDoEntryItemProvider extends StatelessWidget {
   const ToDoEntryItemProvider({
     super.key,
     required this.collectionId,
-    required this.entryId,
+    required this.entryIds,
+    required this.index,
   });
 
   final CollectionId collectionId;
-  final EntryId entryId;
+  final List<EntryId> entryIds;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
+   // final entryId  = entryIds[index];
     return BlocProvider<ToDoEntryItemCubit>(
       create: (context) => ToDoEntryItemCubit(
           collectionId: collectionId,
-          entryId: entryId,
+          entryId: entryIds[index],
           loadToDoEntry: LoadToDoEntry(
             toDoRepository: RepositoryProvider.of<ToDoRepository>(context),
           ),
@@ -40,7 +45,8 @@ class ToDoEntryItemProvider extends StatelessWidget {
         ..fetch(), //!
       child: ToDoEntryItem(
         collectionId: collectionId,
-        entryId: entryId,
+        entryIds: entryIds,
+        index:index,
       ),
     );
   }
@@ -48,13 +54,18 @@ class ToDoEntryItemProvider extends StatelessWidget {
 
 class ToDoEntryItem extends StatelessWidget {
   const ToDoEntryItem(
-      {super.key, required this.collectionId, required this.entryId});
+      {super.key, required this.collectionId, required this.entryIds,
+      required this.index});
 
   final CollectionId collectionId;
-  final EntryId entryId;
+  final List<EntryId> entryIds;
+  final int index;
+
   @override
   Widget build(BuildContext context) {
+
     final todoEntryItemCubit = context.read<ToDoEntryItemCubit>();
+
     return BlocBuilder<ToDoEntryItemCubit, ToDoEntryItemState>(
       builder: (context, state) {
         if (state is ToDoEntryItemLoadingState) {
@@ -63,10 +74,15 @@ class ToDoEntryItem extends StatelessWidget {
           return ToDoEntryItemLoaded(
             entryItem: state.toDoEntry,
             onChanged: (value) => todoEntryItemCubit.update(),
-            onDeleted: () => todoEntryItemCubit.delete()
+            onDeleted: ()  {
+              entryIds.removeAt(index);
+              todoEntryItemCubit.delete();
+            }
+            //onDeleted: () => showAlertDialog(context,todoEntryItemCubit)
           );
         }
         else if (state is ToDoEntryItemDeletedState){
+          // entryIds.removeAt(index);
           return SizedBox();
         }
         else if (state is ToDoEntryItemErrorState) {
@@ -82,4 +98,40 @@ class ToDoEntryItem extends StatelessWidget {
       },
     );
   }
+}
+
+
+
+showAlertDialog(BuildContext context,ToDoEntryItemCubit todoEntryItemCubit) {
+  // set up the buttons
+  Widget cancelButton = TextButton(
+    child: Text('Cancel'),
+    onPressed:  () {
+      return;
+    });
+  Widget continueButton = TextButton(
+    child: Text('Continue'),
+    onPressed:  () {
+      todoEntryItemCubit.delete();
+      return;
+      // Navigator.of(context).pop();
+      }
+  );
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text('AlertDialog'),
+    content: Text('Would you like to continue learning how to use delete?'),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+  // show the dialog
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert ;
+    },
+  );
 }

@@ -25,9 +25,11 @@ class ToDoDetailLoaded extends StatelessWidget {
           children: [
             ListView.builder(
               itemCount: entryIds.length,
+
               itemBuilder: (context, index) => ToDoEntryItemProvider(
                 collectionId: collectionId,
-                entryId: entryIds[index],
+                index:index,
+                entryIds: entryIds,
               ),
             ),
             Align(
