@@ -63,7 +63,7 @@ class ToDoEntryItem extends StatelessWidget {
           return ToDoEntryItemLoaded(
             entryItem: state.toDoEntry,
             onChanged: (value) => todoEntryItemCubit.update(),
-            onPressed: () => todoEntryItemCubit.delete()
+            onDeleted: () => todoEntryItemCubit.delete()
           );
         }
         else if (state is ToDoEntryItemDeletedState){
@@ -72,7 +72,9 @@ class ToDoEntryItem extends StatelessWidget {
         else if (state is ToDoEntryItemErrorState) {
           return ToDoEntryItemError(
             stackTrace: state.stackTrace,
-            onReload: () => todoEntryItemCubit.fetch(),
+            onReload: () {
+              return todoEntryItemCubit.fetch();}
+            ,
           );
         } else {
           return Placeholder();

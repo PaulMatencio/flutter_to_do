@@ -209,6 +209,9 @@ class DetailPageProvider extends StatelessWidget {
   }
 }
 
+
+
+
 class CreateCollectionPageProvider extends StatelessWidget {
   const CreateCollectionPageProvider({
     super.key,

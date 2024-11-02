@@ -22,7 +22,7 @@ const String _basePath = '/home';
 
 final routes = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '$_basePath/${DashboardPage.pageConfig.name}',
+  initialLocation: '$_basePath/${SettingsPage.pageConfig.name}',
   observers: [GoRouterObserver()],
   routes: [
     GoRoute(

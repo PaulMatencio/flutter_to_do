@@ -92,8 +92,10 @@ class _EntryDescriptionField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    return BlocBuilder<CreateToDoEntryPageCubit, CreateToDoEntryPageState>(
+  builder: (context, state) {
     return TextFormField(
-        initialValue: '',
+        initialValue:  state.description?.value,
         decoration: InputDecoration(
           icon: const Icon(Icons.description),
           enabledBorder: OutlineInputBorder(
@@ -132,6 +134,8 @@ class _EntryDescriptionField extends StatelessWidget {
               return 'This field is empty';
           }
         });
+  },
+);
   }
 }
 

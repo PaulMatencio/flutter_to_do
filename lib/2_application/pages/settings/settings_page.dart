@@ -3,6 +3,7 @@ import 'package:todo_app/2_application/core/page_config.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/2_application/core/widgets/switch_button.dart';
 import 'package:todo_app/2_application/pages/dashboard/dashboard_page.dart';
+import 'package:todo_app/2_application/pages/overview/overview_page.dart';
 
 import '../home/home_page.dart';
 
@@ -13,22 +14,18 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PageConfig dashBoardPageConfig = DashboardPage().getPageConfig();
+    //PageConfig settingsPageConfig = SettingsPage.pageConfig;
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(pageConfig.name,
           style: theme.textTheme.titleMedium,),
         backgroundColor: theme.colorScheme.primaryContainer ,
-        leading: ElevatedButton(
-            onPressed: () =>
-            //context.canPop()? context.pop():context.push('${HomePage.pageConfig.name}/${dashBoardPageConfig.name}') ,
-            context.canPop()? context.pop():context.pushNamed(
-                HomePage.pageConfig.name,
-                pathParameters:
-                {'tab': DashboardPage.pageConfig.name}
-            ) ,
-            child: Icon(dashBoardPageConfig.icon)),
+          leading: BackButton(
+              onPressed: () => context.canPop()
+                  ? context.pop()
+                  : context.goNamed(HomePage.pageConfig.name,
+                  pathParameters: {'tab': OverviewPage.pageConfig.name})),
         actions: [
           SwitchButton()
         ],
