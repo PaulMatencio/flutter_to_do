@@ -1,5 +1,12 @@
 part of 'todo_entry_item_cubit.dart';
 
+
+//
+// ----------------------------------------------------------
+//!    Create a Cubit for Each Item
+//
+// ---------------------------------------------------------
+
 abstract class ToDoEntryItemState extends Equatable {
   const ToDoEntryItemState();
   @override
@@ -16,19 +23,14 @@ class ToDoEntryItemErrorState extends ToDoEntryItemState {
   List<Object> get props => [stackTrace?? ''] ;
 }
 
+
 class ToDoEntryItemDeletedState extends ToDoEntryItemState {
-  const ToDoEntryItemDeletedState ({
-    required this.collectionId, required this.entryId
-});
-  final EntryId  entryId;
-  final CollectionId collectionId;
 }
+
 
 class ToDoEntryItemLoadedState extends ToDoEntryItemState {
   const ToDoEntryItemLoadedState({required this.toDoEntry});
-
   final ToDoEntry toDoEntry;
-
   @override
   List<Object> get props => [toDoEntry];
 }

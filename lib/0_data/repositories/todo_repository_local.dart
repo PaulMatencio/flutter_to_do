@@ -79,6 +79,7 @@ class ToDoRepositoryLocal implements ToDoRepository {
     }
   }
 
+
   @override
   Future<Either<Failure, List<ToDoCollection>>> readToDoCollections() async {
     // TODO: implement readToDoCollections
@@ -156,6 +157,35 @@ class ToDoRepositoryLocal implements ToDoRepository {
           return Left(GeneralFailure());
       }
     }
+  }
+
+  @override
+  Future<Either<Failure, bool>> modifyToDoEntry({required CollectionId collectionId, required ToDoEntry toDoEntry}) async {
+    // TODO: implement update2ToDo
+    final entryModel = ToDoEntryModel(
+        id: toDoEntry.id.value,
+        description: toDoEntry.description,
+        isDone: toDoEntry.isDone);
+    try {
+      final result = await toDoRepositoryLocal.modifyToDoEntry(
+          collectionId: collectionId.value,
+          entryModel: entryModel);
+
+      return Right(true);
+
+    } on Exception catch (e) {
+      switch (e) {
+        case final CollectionNotFoundException e:
+          return Left(GeneralFailure(stackTrace: e.toString()));
+        case final CacheException e:
+          return Left(CacheFailure(stackTrace: e.toString()));
+        default:
+          return Left(GeneralFailure(stackTrace: e.toString()));
+      }
+    }
+
+
+    throw UnimplementedError();
   }
 
 

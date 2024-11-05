@@ -112,13 +112,6 @@ class _EntryDescriptionField extends StatelessWidget {
             .read<CreateToDoEntryPageCubit>()
             .descriptionChanged(description: value),
         validator: (value) {
-          /*
-          if (value != null && value.isNotEmpty) {
-            return null;
-          } else {
-            return 'Please enter some description';
-          }
-           */
           final currentValidationState = context
                   .read<CreateToDoEntryPageCubit>()
                   .state

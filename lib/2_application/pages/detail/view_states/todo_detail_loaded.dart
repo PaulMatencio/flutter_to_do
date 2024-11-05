@@ -16,8 +16,14 @@ class ToDoDetailLoaded extends StatelessWidget {
   final List<EntryId> entryIds;
   final CollectionId collectionId;
 
+
+  void removeEntryId({required EntryId entryId}) {
+    entryIds.remove(entryId);
+  }
+
   @override
   Widget build(BuildContext context) {
+   // print('entryIds length ${entryIds.length}');
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -25,11 +31,9 @@ class ToDoDetailLoaded extends StatelessWidget {
           children: [
             ListView.builder(
               itemCount: entryIds.length,
-
               itemBuilder: (context, index) => ToDoEntryItemProvider(
                 collectionId: collectionId,
-                index:index,
-                entryIds: entryIds,
+                entryId: entryIds[index],
               ),
             ),
             Align(

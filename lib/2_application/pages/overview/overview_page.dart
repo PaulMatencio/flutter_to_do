@@ -16,11 +16,6 @@ class OverviewPageProvider extends StatelessWidget {
     return BlocProvider(
       create: (context) => ToDoOverviewCubit(
         loadToDoCollections: LoadToDoCollections(  //   use_cases
-          /// Takes a [Create] function that is responsible for creating the repository
-          /// and a `child` which will have access to the repository via
-          /// `RepositoryProvider.of(context)`.
-          /// It is used as a dependency injection (DI) widget so that a single instance
-          /// of a repository can be provided to multiple widgets within a subtree.
           toDoRepository: RepositoryProvider.of(context), //!  main.dart
         ),
       )..readToDoCollections(),

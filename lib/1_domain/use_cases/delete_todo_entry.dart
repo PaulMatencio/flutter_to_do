@@ -1,7 +1,6 @@
 
 
 import 'package:either_dart/either.dart';
-import 'package:todo_app/1_domain/entities/todo_entry.dart';
 import 'package:todo_app/1_domain/failures/failures.dart';
 import 'package:todo_app/1_domain/repositories/todo_repository.dart';
 import 'package:todo_app/core/use_case.dart';
@@ -13,6 +12,7 @@ class DeleteToDoEntry implements UseCase<bool, ToDoEntryIdsParam> {
 
   @override
   Future<Either<Failure, bool>> call(ToDoEntryIdsParam params) async {
+    // print('useCase: delete_todo_entry for  collection:  ${params.collectionId} - entry id: ${params.entryId}');
     try {
       final result = await toDoRepository.deleteToDoEntry(
         collectionId: params.collectionId,
@@ -20,7 +20,10 @@ class DeleteToDoEntry implements UseCase<bool, ToDoEntryIdsParam> {
       );
       return result.fold(
             (left) => Left(left),
-            (right) => Right(true),
+            (right) {
+              print('EntryId ${params.entryId}  is successfully  deleted');
+              return Right(true);
+            },
       );
     } on Exception catch (e) {
       return Left(ServerFailure(stackTrace: e.toString()));

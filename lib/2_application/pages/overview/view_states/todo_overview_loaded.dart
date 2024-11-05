@@ -97,7 +97,9 @@ class ToDoOverviewLoaded extends StatelessWidget {
                                 });
                           }
                         },
-                        leading: const Icon(Icons.circle),
+                        leading: Tooltip(
+                            message: 'click anywhere to see the detail',
+                            child: const Icon(Icons.circle)),
                         title: Text(item.title),
                       ),
                     );

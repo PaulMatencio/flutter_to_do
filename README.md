@@ -46,7 +46,12 @@
 - Add an own ToDo Repository implementation
 - This implementation should store all data in the memory
 - Create a new main file to start the app with your  ToDoRepositoryMemory implementation
-- ### Extra : Add a delete button and implemement its functions. 
-- Here is a screen 
-![alt screenshot] (https://github.com/PaulMatencio/flutter_to_do/blob/task_t11/todo_List_task_t11.png)
+
+- #### Bonus : Add a delete button to delete an entry +  Alert box for confirmation 
+  #### Bonus : Add a modify button to modify an entry such description  
+  
+- Here is a screenshot  to show the app in desktop mode
+![alt screenshot] (https://github.com/PaulMatencio/flutter_to_do/blob/task_t11/Todo_list_Task_T11.png)
+![alt screenshot] (https://github.com/PaulMatencio/flutter_to_do/blob/task_t11/Alert_delete_box.png)
+
 

@@ -1,13 +1,15 @@
 
+
 import 'package:either_dart/either.dart';
+import 'package:todo_app/1_domain/entities/todo_entry.dart';
 import 'package:todo_app/1_domain/entities/unique_id.dart';
 import 'package:todo_app/1_domain/failures/failures.dart';
 import 'package:todo_app/1_domain/repositories/todo_repository.dart';
 import 'package:todo_app/core/use_case.dart';
 
-class CreateToDoEntry implements UseCase<bool,ToDoEntryParams> {
+class ModifyToDoEntry implements UseCase<bool,ToDoEntryParams> {
 
-  CreateToDoEntry({
+  ModifyToDoEntry({
     required this.toDoRepository
   });
 
@@ -16,12 +18,12 @@ class CreateToDoEntry implements UseCase<bool,ToDoEntryParams> {
 
   @override
   Future<Either<Failure, bool>> call(ToDoEntryParams params) async {
-    // print('useCase: create_todo_entry for  collection:  ${params.collectionId} - entry description: ${params.entry.description}');
+   //  print('useCase: modify_todo_entry for collection: ${params.collectionId} - entry description: ${params.entry.description}');
     try {
-      final result =   await toDoRepository.createToDoEntry(
-            collectionId: params.collectionId, toDoEntry: params.entry);
+      final result  =   await toDoRepository.modifyToDoEntry(
+          collectionId: params.collectionId, toDoEntry: params.entry);
 
-      return result.fold(
+      return  result.fold(
             (left) => Left(left),
             (right) => Right(right),
       );

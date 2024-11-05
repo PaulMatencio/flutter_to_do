@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
   final destinations = HomePage.tabs
       .map(
         (page) =>
-            NavigationDestination(icon: Icon(page.icon), label: page.name),
+            NavigationDestination(icon: Icon(page.icon), label: page.name, tooltip: page.name,),
       )
       .toList();
 
@@ -62,10 +62,13 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
-                  trailing: IconButton(
-                    onPressed: () =>
-                        context.pushNamed(SettingsPage.pageConfig.name),
-                    icon: Icon(SettingsPage.pageConfig.icon),
+                  trailing: Tooltip(
+                    message: SettingsPage.pageConfig.name,
+                    child: IconButton(
+                      onPressed: () =>
+                          context.pushNamed(SettingsPage.pageConfig.name),
+                      icon: Icon(SettingsPage.pageConfig.icon),
+                    ),
                   ),
                   backgroundColor: colorScheme.inversePrimary,
                   selectedLabelTextStyle:
@@ -208,9 +211,6 @@ class DetailPageProvider extends StatelessWidget {
     );
   }
 }
-
-
-
 
 class CreateCollectionPageProvider extends StatelessWidget {
   const CreateCollectionPageProvider({

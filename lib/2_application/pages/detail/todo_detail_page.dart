@@ -10,8 +10,6 @@ import 'package:todo_app/2_application/pages/detail/view_states/todo_detail_erro
 import 'package:todo_app/2_application/pages/detail/view_states/todo_detail_loaded.dart';
 import 'package:todo_app/2_application/pages/detail/view_states/todo_detail_loading.dart';
 
-
-
 class ToDoDetailPageProvider extends StatelessWidget {
   const ToDoDetailPageProvider({
     super.key,
@@ -24,15 +22,16 @@ class ToDoDetailPageProvider extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<ToDoDetailCubit>(
       create: (context) => ToDoDetailCubit(
-        collectionId: collectionId,
-        //!
-        //! Call useCases  LoadToDoEntryIdsForCollection
-        //!  to retrieve  entry ids for a given collection
-        //!
-        loadToDoEntryIdsForCollection: LoadToDoEntryIdsForCollection(
-          toDoRepository: RepositoryProvider.of<ToDoRepository>(context),
-        ),
-      )..fetch(),
+          collectionId: collectionId,
+          //!
+          //! Call useCases  LoadToDoEntryIdsForCollection
+          //!  to retrieve  entry ids for a given collection
+          //!
+          loadToDoEntryIdsForCollection: LoadToDoEntryIdsForCollection(
+            toDoRepository: RepositoryProvider.of<ToDoRepository>(context),
+          ),
+    )
+        ..fetch(),
       child: ToDoDetailPage(
         collectionId: collectionId,
       ),
@@ -58,18 +57,20 @@ class ToDoDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return BlocBuilder<ToDoDetailCubit, ToDoDetailCubitState>(
       builder: (BuildContext context, ToDoDetailCubitState state) {
         //return const Placeholder();
         if (state is ToDoDetailCubitLoadingState) {
           return ToDoDetailLoading();
         } else if (state is ToDoDetailCubitLoadedState) {
-          return  ToDoDetailLoaded(collectionId: collectionId,entryIds: state.entryIds,);
-        } else  if (state is ToDoDetailCubitErrorState){
+          return ToDoDetailLoaded(
+            collectionId: collectionId,
+            entryIds: state.entryIds,
+          );
+        } else if (state is ToDoDetailCubitErrorState) {
           return ToDoDetailError();
-        }  else {
-          return const  SizedBox();
+        } else {
+          return const SizedBox();
         }
       },
     );

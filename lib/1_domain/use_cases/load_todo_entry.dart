@@ -15,6 +15,7 @@ class LoadToDoEntry implements UseCase<ToDoEntry, ToDoEntryIdsParam> {
 
   @override
   Future<Either<Failure, ToDoEntry>> call(ToDoEntryIdsParam params) async {
+   //  print('useCase: load_todo_entry for  collection: ${params.collectionId} - entry: ${params.entryId}');
     try {
       final loadedEntry = toDoRepository.readToDoEntry(
         params.collectionId,

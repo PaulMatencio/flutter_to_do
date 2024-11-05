@@ -14,6 +14,9 @@ abstract class ToDoLocalDataSource {
   Future<ToDoEntryModel> updateToDoEntry(
       {required String collectionId, required ToDoEntryModel entryModel});
 
+  Future<bool> modifyToDoEntry(
+      {required String collectionId, required ToDoEntryModel entryModel});
+
   Future<bool> createToDoEntry(
       {required String collectionId, required ToDoEntryModel entryModel});
 

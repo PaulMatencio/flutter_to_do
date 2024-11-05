@@ -41,7 +41,7 @@ class _CreateToDoCollectionPageState extends State<CreateToDoCollectionPage> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    final int maxColorIndex = ToDoColor.predefinedColors.length + 1;
+    final int maxColorIndex = ToDoColor.predefinedColors.length -1;
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Form(

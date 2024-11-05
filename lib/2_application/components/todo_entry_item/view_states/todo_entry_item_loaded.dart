@@ -7,26 +7,25 @@ class ToDoEntryItemLoaded extends StatelessWidget {
     required this.entryItem,
     required this.onChanged,
     required this.onDeleted,
-
+    required this.onUpdated,
   });
 
   final ToDoEntry entryItem;
   final Function(bool?) onChanged;
   final Function() onDeleted;
-
- // final Function(bool?) onPressed;
+  final Function() onUpdated;
 
   @override
   Widget build(BuildContext context) {
-    /// The checkbox tile itself does not maintain any state. Instead, when the
-    /// state of the checkbox changes, the widget calls the [onChanged] callback.
-    /// Most widgets that use a checkbox will listen for the [onChanged] callback
-    /// and rebuild the checkbox tile with a new [value] to update the visual
-    /// appearance of the checkbox.
     return Card.outlined(
       child: Row(children: [
-        TextButton(onPressed: onDeleted, child: Icon(Icons.delete)),
-        TextButton(onPressed: () => {},  child: Icon(Icons.update_rounded)),
+        Tooltip(
+            message: 'delete',
+            child: TextButton(onPressed: onDeleted, child: Icon(Icons.delete))),
+        Tooltip(
+            message: 'modify',
+            child: TextButton(
+                onPressed: onUpdated, child: Icon(Icons.update_rounded))),
         Expanded(
           child: CheckboxListTile(
             title: Text(entryItem.description),

@@ -16,6 +16,7 @@ class LoadToDoEntryIdsForCollection implements UseCase<List<EntryId>, Collection
 
   @override
   Future<Either<Failure, List<EntryId>>> call(CollectionIdParam params) async {
+    // print('useCase: load_todo_entry_id for collection ${params.collectionId}');
     try {
       final loadedEntry = toDoRepository.readToDoEntryIds(
         params.collectionId,
@@ -23,7 +24,7 @@ class LoadToDoEntryIdsForCollection implements UseCase<List<EntryId>, Collection
 
       return loadedEntry.fold(
             (left) => Left(left),
-            (right) => Right(right),
+            (right) => Right(right)
       );
     } on Exception catch (e) {
       return Left(ServerFailure(stackTrace: e.toString()));

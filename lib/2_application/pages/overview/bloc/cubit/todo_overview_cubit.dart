@@ -27,6 +27,7 @@ class ToDoOverviewCubit extends Cubit<ToDoOverviewCubitState> {
   //!
 
   Future<void> readToDoCollections() async {
+
     emit(ToDoOverviewCubitLoadingState());
     try {
       final collectionsFuture = loadToDoCollections.call(NoParams());
@@ -47,10 +48,6 @@ String _mapFailureToMessage(Failure failure) {
       return ( message ?? serverFailureMessage);
     case final CacheFailure _:
       return cacheFailureMessage;
-      /*
-    case final DataFailure e :
-      return e.message;
-       */
     default:
       return generalFailureMessage;
   }

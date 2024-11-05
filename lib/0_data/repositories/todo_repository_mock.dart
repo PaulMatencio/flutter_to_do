@@ -87,9 +87,18 @@ class ToDoRepositoryMock implements ToDoRepository {
     // return Future.delayed(const Duration(milliseconds: 100), () => Left(ServerFailure()));
   }
 
+
+
   @override
   Future<Either<Failure, bool>> deleteToDoEntry({required CollectionId collectionId, required EntryId entryId}) {
     // TODO: implement deleteToDoEntry
+    throw UnimplementedError();
+  }
+
+
+  @override
+  Future<Either<Failure, bool>> modifyToDoEntry({required CollectionId collectionId, required ToDoEntry toDoEntry}) {
+    // TODO: implement modifyToDoEntry
     throw UnimplementedError();
   }
 

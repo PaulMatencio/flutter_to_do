@@ -10,8 +10,10 @@ import 'package:todo_app/2_application/pages/detail/todo_detail_page.dart';
 import 'package:todo_app/2_application/pages/home/bloc/cubit/navigation_todo_cubit.dart';
 
 import 'package:todo_app/2_application/pages/home/home_page.dart';
+import 'package:todo_app/2_application/pages/modify_todo_entry/modify_todo_entry_page.dart';
 import 'package:todo_app/2_application/pages/overview/overview_page.dart';
 import 'package:todo_app/2_application/pages/settings/settings_page.dart';
+
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -22,7 +24,7 @@ const String _basePath = '/home';
 
 final routes = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '$_basePath/${SettingsPage.pageConfig.name}',
+  initialLocation: '$_basePath/${DashboardPage.pageConfig.name}',
   observers: [GoRouterObserver()],
   routes: [
     GoRoute(
@@ -103,6 +105,41 @@ final routes = GoRouter(
         );
       },
     ),
+
+    GoRoute(
+      name: ModifyToDoEntryPage.pageConfig.name,
+      path: '$_basePath/overview/${ModifyToDoEntryPage.pageConfig.name}',
+      builder: (context, state) {
+        // final collectionId = state.extra as CollectionId;
+        final castedExtras = state.extra as ModifyToDoEntryPageExtra;
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('update entry'),
+            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+            leading: BackButton(
+              onPressed: () {
+                if (context.canPop()) {
+                  context.pop();
+                } else {
+                  context.goNamed(
+                    HomePage.pageConfig.name,
+                    pathParameters: {'tab': OverviewPage.pageConfig.name},
+                  );
+                }
+              },
+            ),
+          ),
+          body: SafeArea(
+              child: ModifyToDoEntryPageProvider (
+                  toDoEntryItemModifiedCallback: castedExtras.toDoEntryItemModifiedCallback,
+                  todoEntry: castedExtras.toDoEntry,
+                  collectionId: castedExtras.collectionId)),
+        );
+      },
+    ),
+
+
+
     GoRoute(
         name: ToDoDetailPage.pageConfig.name,
         path: '$_basePath/overview/:collectionId',

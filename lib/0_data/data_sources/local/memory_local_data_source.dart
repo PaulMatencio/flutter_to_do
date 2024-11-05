@@ -2,6 +2,7 @@ import 'package:todo_app/0_data/data_sources/interfaces/todo_local_data_source.d
 import 'package:todo_app/0_data/exceptions/exceptions.dart';
 import 'package:todo_app/0_data/models/todo_collection_model.dart';
 import 'package:todo_app/0_data/models/todo_entry_model.dart';
+import 'package:todo_app/1_domain/entities/unique_id.dart';
 
 class MemoryLocalDataSource implements ToDoLocalDataSource {
   final List<ToDoCollectionModel> toDoCollections = [];
@@ -36,9 +37,9 @@ class MemoryLocalDataSource implements ToDoLocalDataSource {
   @override
   Future<bool> deleteToDoEntry({required String collectionId, required String entryModelId}) {
    //  throw  ServerException(stackTrace:'Ups server exception');
+    print('deleteToDoEntry model id $entryModelId');
     if (toDoEntries.containsKey(collectionId)) {
       toDoEntries[collectionId]?.removeWhere((entry) => entry.id == entryModelId);
-
       return Future.value(true);
     } else {
       throw CollectionNotFoundException(stackTrace: 'collection not found');
@@ -46,15 +47,10 @@ class MemoryLocalDataSource implements ToDoLocalDataSource {
     throw UnimplementedError();
   }
 
+
   @override
   Future<List<String>> getToDoCollectionIds() {
     final List<String> toDoCollectionIds = [];
-    /*
-    for (int i = 0; i < toDoCollections.length; i++) {
-      toDoCollectionIds.add(toDoCollections[i].id);
-    }
-     */
-
     toDoCollections.map( (collection) => {
       toDoCollectionIds.add(collection.id)
     });
@@ -68,7 +64,6 @@ class MemoryLocalDataSource implements ToDoLocalDataSource {
 
     if (toDoEntries.containsKey(collectionId)) {
       final entries = toDoEntries[collectionId];
-
       for (int i = 0; i < entries!.length; i++) {
         toDoEntryIds.add(entries[i].id);
       }
@@ -101,9 +96,8 @@ class MemoryLocalDataSource implements ToDoLocalDataSource {
     // TODO: implement updateToDoEntry
 
     if (toDoEntries.containsKey(collectionId)) {
-      final int index = toDoEntries[collectionId]!
-          .indexWhere(((entry) => entry.id == entryModel.id));
-      if (index >= 0) {
+      final index = toDoEntries[collectionId]!.indexWhere(((entry) => entry.id == entryModel.id));
+      if (index >= 0 ) {
         final toDoEntry = toDoEntries[collectionId]![index];
         final updateToDoEntry = toDoEntry.copyWith(isDone: !toDoEntry.isDone);
         toDoEntries[collectionId]![index] = updateToDoEntry;
@@ -117,6 +111,30 @@ class MemoryLocalDataSource implements ToDoLocalDataSource {
   }
 
 
+
+  @override
+  Future<bool> modifyToDoEntry({required String collectionId, required ToDoEntryModel entryModel}) {
+    // TODO: implement update2ToDoEntry
+    if (toDoEntries.containsKey(collectionId)) {
+      final index = toDoEntries[collectionId]!.indexWhere(((entry) => entry.id == entryModel.id));
+      if (index >= 0 ) {
+        final toDoEntry = toDoEntries[collectionId]![index];
+        //  update the todoEntry model
+        final updateToDoEntry = toDoEntry.copyWith(
+            description: entryModel.description);
+        // update the todoEntries repository
+        toDoEntries[collectionId]?[index] = updateToDoEntry;
+
+        return Future.value(true);
+      } else {
+        throw EntryNotFoundException(stackTrace: 'entry not found');
+      }
+
+    } else {
+      throw CollectionNotFoundException(stackTrace: 'collection not found');
+    }
+
+  }
 
 
   @override

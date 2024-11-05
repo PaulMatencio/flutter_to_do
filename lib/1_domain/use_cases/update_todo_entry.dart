@@ -12,6 +12,7 @@ class UpdateToDoEntry implements UseCase<ToDoEntry, ToDoEntryParams> {
 
   @override
   Future<Either<Failure, ToDoEntry>> call(ToDoEntryParams params) async {
+    // print('useCase: update_to_entry for collection:  ${params.collectionId} - entry description: ${params.entry.description}');
     try {
       final loadedEntry = await toDoRepository.updateToDoEntry(
         collectionId: params.collectionId,
