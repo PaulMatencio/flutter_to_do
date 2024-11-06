@@ -12,6 +12,12 @@ import 'package:todo_app/1_domain/repositories/todo_repository.dart';
 
 class ToDoRepositoryLocal implements ToDoRepository {
   final toDoRepositoryLocal = MemoryLocalDataSource();
+
+  ///
+  ///
+  ///  crate a todoCollection for a create_todo_collection form
+  ///
+
   @override
   Future<Either<Failure, bool>> createToDoCollection(
       ToDoCollection todoCollection) async {
@@ -34,7 +40,11 @@ class ToDoRepositoryLocal implements ToDoRepository {
       }
     }
   }
-
+  ///
+  ///   createToDoEntry
+  ///   create an entry  for a  create_todo_entry form
+  ///
+  ///
   @override
   Future<Either<Failure, bool>> createToDoEntry(
       {required CollectionId collectionId,
@@ -61,53 +71,14 @@ class ToDoRepositoryLocal implements ToDoRepository {
     throw UnimplementedError();
   }
 
-  @override
-  Future<Either<Failure, bool>> deleteToDoEntry(
-      {required CollectionId collectionId, required EntryId entryId}) async {
-    try {
-      await toDoRepositoryLocal.deleteToDoEntry(
-          collectionId: collectionId.value, entryModelId: entryId.value);
-      return (Right(true));
-    } on Exception catch (e) {
-      switch (e) {
-        case final CollectionNotFoundException e:
-          return Left(GeneralFailure(stackTrace: e.toString()));
-        case final CacheException e:
-          return Left(CacheFailure(stackTrace: e.toString()));
-        default:
-          return Left(GeneralFailure(stackTrace: e.toString()));
-      }
-    }
-  }
-
-
-  /*
+  ///
+  ///   readToDoCollections
+  ///   read a list of all collections
+  ///
   @override
   Future<Either<Failure, List<ToDoCollection>>> readToDoCollections() async {
     try {
-     //final List<ToDoCollection> todoCollections = [];
-      final result = await toDoRepositoryLocal.getToDoCollections();
-      final todoCollections = result
-          .map((item) => ToDoCollection(
-          id: CollectionId.fromUniqueString(item.id),
-          title: item.title,
-          color: ToDoColor(colorIndex: item.colorIndex)))
-          .toList();
-
-      return Right(todoCollections);
-    } on Exception catch (_) {
-      return Left(ServerFailure());
-   }
-  }
-
-   */
-
-
-
- @override
- Future<Either<Failure, List<ToDoCollection>>> readToDoCollections() async {try {
-    final collectionIds = await toDoRepositoryLocal.getToDoCollectionIds();
-    print(collectionIds.length);
+      final collectionIds = await toDoRepositoryLocal.getToDoCollectionIds();
       final List<ToDoCollection> collections = [];
       for (String collectionId in collectionIds) {
         final collection = await toDoRepositoryLocal.getToDoCollection(
@@ -122,8 +93,37 @@ class ToDoRepositoryLocal implements ToDoRepository {
     }
   }
 
+  ///
+  ///   readToDoEntryIds
+  ///   Read a list of entries for a given collection id
+  ///
+  @override
+  Future<Either<Failure, List<EntryId>>> readToDoEntryIds(
+      CollectionId collectionId) async {
+    try {
+      final result = await toDoRepositoryLocal.getToDoEntryIds(
+          collectionId: collectionId.value);
+      final toDoEntries =
+          result.map((item) => EntryId.fromUniqueString(item)).toList();
+      return Right(toDoEntries);
+    } on Exception catch (e) {
+      switch (e) {
+        case final ServerException e:
+          return Left(ServerFailure(stackTrace: e.toString()));
+        case final CollectionNotFoundException e:
+          return Left(GeneralFailure(stackTrace: e.stackTrace));
+        case final CacheException _:
+          return Left(CacheFailure());
+        default:
+          return Left(GeneralFailure());
+      }
+    }
+  }
 
-
+  ///
+  ///    readToDoEntry
+  ///    read an entry for a given  entry id
+  ///
   @override
   Future<Either<Failure, ToDoEntry>> readToDoEntry(
       CollectionId collectionId, EntryId entryId) async {
@@ -151,11 +151,16 @@ class ToDoRepositoryLocal implements ToDoRepository {
     }
   }
 
+  ///
+  ///   updateToDoEntry
+  ///   update an entry status for a given entry id
+  ///
   @override
   Future<Either<Failure, ToDoEntry>> updateToDoEntry(
       {required CollectionId collectionId, required EntryId entryId}) async {
     try {
-      final entry = await toDoRepositoryLocal.updateToDoEntry(collectionId: collectionId.value, entryId: entryId.value);
+      final entry = await toDoRepositoryLocal.updateToDoEntry(
+          collectionId: collectionId.value, entryId: entryId.value);
 
       return Right(toDoEntryModelToEntity(entry));
     } on CacheException catch (e) {
@@ -165,18 +170,15 @@ class ToDoRepositoryLocal implements ToDoRepository {
     }
   }
 
+  ///
+  ///    modifyToDoEntry
+  ///    modify an entry  for  a given entry id
+  ///
+
   @override
   Future<Either<Failure, bool>> modifyToDoEntry(
       {required CollectionId collectionId,
       required ToDoEntry toDoEntry}) async {
-    /// final entryModel = ToDoEntryModel(
-
-    ///   final entryModel = ToDoEntryModel(
-    ///     id: toDoEntry.id.value,
-    ///     description: toDoEntry.description,
-    ///     isDone: toDoEntry.isDone
-    ///    );
-    ///
     final entryModel = toDoEntryToModel(toDoEntry);
     try {
       final result = await toDoRepositoryLocal.modifyToDoEntry(
@@ -196,32 +198,33 @@ class ToDoRepositoryLocal implements ToDoRepository {
     }
   }
 
+  ///
+  ///    deleteToDoEntry
+  ///    delete en entry   for a given entry id
+  ///
+  ///
   @override
-  Future<Either<Failure, List<EntryId>>> readToDoEntryIds(
-      CollectionId collectionId) async {
+  Future<Either<Failure, bool>> deleteToDoEntry(
+      {required CollectionId collectionId, required EntryId entryId}) async {
     try {
-      final result = await toDoRepositoryLocal.getToDoEntryIds(
-          collectionId: collectionId.value);
-      final toDoEntries =
-          result.map((item) => EntryId.fromUniqueString(item)).toList();
-      return Right(toDoEntries);
+      await toDoRepositoryLocal.deleteToDoEntry(
+          collectionId: collectionId.value, entryModelId: entryId.value);
+      return (Right(true));
     } on Exception catch (e) {
       switch (e) {
-        case final ServerException e:
-          return Left(ServerFailure(stackTrace: e.toString()));
         case final CollectionNotFoundException e:
-          return Left(GeneralFailure(stackTrace: e.stackTrace));
-        case final CacheException _:
-          return Left(CacheFailure());
+          return Left(GeneralFailure(stackTrace: e.toString()));
+        case final CacheException e:
+          return Left(CacheFailure(stackTrace: e.toString()));
         default:
-          return Left(GeneralFailure());
+          return Left(GeneralFailure(stackTrace: e.toString()));
       }
     }
   }
 }
 
 ///
-///     EntryModel -> EntryEntity
+///     todo Entry Model -> todo Entry Entity
 ///
 ToDoEntry toDoEntryModelToEntity(ToDoEntryModel model) {
   final entity = ToDoEntry(
@@ -234,7 +237,8 @@ ToDoEntry toDoEntryModelToEntity(ToDoEntryModel model) {
 }
 
 ///
-///  Collection Model -> Collection Entity
+///  todo Collection Model -> todo Collection Entity
+///
 
 ToDoCollection toDoCollectionModelToEntity(ToDoCollectionModel model) {
   final entity = ToDoCollection(
@@ -242,19 +246,24 @@ ToDoCollection toDoCollectionModelToEntity(ToDoCollectionModel model) {
     title: model.title,
     color: ToDoColor(colorIndex: model.colorIndex),
   );
-
   return entity;
 }
 
+///
+///   Todo entry  Entity -> todo entry model
+///
 ToDoEntryModel toDoEntryToModel(ToDoEntry entry) {
   final model = ToDoEntryModel(
     id: entry.id.value,
     description: entry.description,
     isDone: entry.isDone,
   );
-
   return model;
 }
+
+///
+///     todo collection entity  ->  todo collection model
+///
 
 ToDoCollectionModel toDoCollectionToModel(ToDoCollection collection) {
   final model = ToDoCollectionModel(
@@ -262,6 +271,5 @@ ToDoCollectionModel toDoCollectionToModel(ToDoCollection collection) {
     title: collection.title,
     colorIndex: collection.color.colorIndex,
   );
-
   return model;
 }

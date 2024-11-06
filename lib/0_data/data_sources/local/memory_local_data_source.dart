@@ -1,4 +1,4 @@
-import 'package:todo_app/0_data/data_sources/interfaces/todo_local_data_source.dart';
+import 'package:todo_app/0_data/data_sources/interfaces/todo_local_data_source_interface.dart';
 import 'package:todo_app/0_data/exceptions/exceptions.dart';
 import 'package:todo_app/0_data/models/todo_collection_model.dart';
 import 'package:todo_app/0_data/models/todo_entry_model.dart';
@@ -135,19 +135,15 @@ class MemoryLocalDataSource implements ToDoLocalDataSourceInterface {
   @override
   Future<bool> modifyToDoEntry(
       {required String collectionId, required ToDoEntryModel entryModel}) {
-    // TODO: implement update2ToDoEntry
     try {
       if (toDoEntries.containsKey(collectionId)) {
         final index = toDoEntries[collectionId]!
             .indexWhere(((entry) => entry.id == entryModel.id));
         if (index >= 0) {
           final toDoEntry = toDoEntries[collectionId]![index];
-          //  update the todoEntry model
           final updateToDoEntry =
               toDoEntry.copyWith(description: entryModel.description);
-          // update the todoEntries repository
           toDoEntries[collectionId]?[index] = updateToDoEntry;
-
           return Future.value(true);
         } else {
           throw EntryNotFoundException(stackTrace: 'entry not found');
@@ -160,11 +156,10 @@ class MemoryLocalDataSource implements ToDoLocalDataSourceInterface {
     }
   }
 
+
   @override
   Future<bool> deleteToDoEntry(
       {required String collectionId, required String entryModelId}) {
-    //  throw  ServerException(stackTrace:'Ups server exception');
-    // print('deleteToDoEntry model id $entryModelId');
     try {
       if (toDoEntries.containsKey(collectionId)) {
         toDoEntries[collectionId]
