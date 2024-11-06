@@ -12,7 +12,7 @@ abstract class ToDoLocalDataSourceInterface {
   Future<List<String>> getToDoCollectionIds();
 
   Future<ToDoEntryModel> updateToDoEntry(
-      {required String collectionId, required String entryId});
+      {required String collectionId, required ToDoEntryModel entryModel});
 
   Future<bool> modifyToDoEntry(
       {required String collectionId, required ToDoEntryModel entryModel});

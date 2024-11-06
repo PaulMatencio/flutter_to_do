@@ -22,16 +22,16 @@ class ToDoOverviewLoaded extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme =  Theme.of(context);
+    final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final shouldDisplayAddItemButton = Breakpoints.small.isActive(context);
     return Scaffold(
       appBar: AppBar(
           backgroundColor: colorScheme.primaryContainer,
-          title: Center(child: Text(OverviewPage.pageConfig.name,
-          style: theme.textTheme.titleMedium)),
-          actions:[
-            SwitchButton()
-          ],
+          title: Center(
+              child: Text(OverviewPage.pageConfig.name,
+                  style: theme.textTheme.titleMedium)),
+          actions: [SwitchButton()],
           leading: BackButton(
               onPressed: () => context.canPop()
                   ? context.pop()
@@ -41,8 +41,7 @@ class ToDoOverviewLoaded extends StatelessWidget {
         color: colorScheme.onPrimary,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Stack(
-              children: [
+          child: Stack(children: [
             ListView.builder(
               itemCount: collections.length,
               itemBuilder: (context, index) {
@@ -107,6 +106,9 @@ class ToDoOverviewLoaded extends StatelessWidget {
                 );
               },
             ),
+
+            ///   if (shouldDisplayAddItemButton)
+
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Align(
@@ -121,12 +123,12 @@ class ToDoOverviewLoaded extends StatelessWidget {
                         .then((value) {
                       if (value == null) {
                         if (context.mounted) {
-                          context.read<ToDoOverviewCubit>()
+                          context
+                              .read<ToDoOverviewCubit>()
                               .readToDoCollections();
                         }
                       }
-                    }
-                    );
+                    });
                   },
                   child: Icon(CreateToDoCollectionPage.pageConfig.icon),
                 ),

@@ -22,18 +22,15 @@ class ToDoEntryItemCubit extends Cubit<ToDoEntryItemState> {
   final EntryId entryId;
   final CollectionId collectionId;
   final LoadToDoEntry loadToDoEntry;
-  final UpdateToDoEntry updateToDoEntry;  //  update status
+  final UpdateToDoEntry updateToDoEntry; //  update status
   final DeleteToDoEntry deleteToDoEntry;
-   // update field
+  // update field
 
   Future<void> fetch() async {
-   // print('todo_entry_item_cubit: fetch entryId  $entryId');
+    // print('todo_entry_item_cubit: fetch entryId  $entryId');
     try {
       final entry = await loadToDoEntry.call(
-        ToDoEntryIdsParam(
-          collectionId: collectionId,
-          entryId: entryId
-        ),
+        ToDoEntryIdsParam(collectionId: collectionId, entryId: entryId),
       );
       entry.fold(
         (left) {
@@ -49,15 +46,15 @@ class ToDoEntryItemCubit extends Cubit<ToDoEntryItemState> {
   }
 
   Future<void> update() async {
-   // print('todo_entry_item_cubit: update entryId  $entryId');
+    // print('todo_entry_item_cubit: update entryId  $entryId');
     try {
       if (state is ToDoEntryItemLoadedState) {
         final currentToDoEntry = (state as ToDoEntryItemLoadedState).toDoEntry;
         final entryToUpdate =
             currentToDoEntry.copyWith(isDone: !currentToDoEntry.isDone);
-        final updatedEntry = await updateToDoEntry.call(ToDoEntryParams(
+        final updatedEntry = await updateToDoEntry.call(ToDoEntryIdsParam(
           collectionId: collectionId,
-          entry: entryToUpdate,
+          entryId: entryToUpdate.id,
         ));
 
         updatedEntry.fold(
@@ -77,12 +74,11 @@ class ToDoEntryItemCubit extends Cubit<ToDoEntryItemState> {
     }
   }
 
-  Future<void> delete({required CollectionId collectionId, required EntryId entryId}) async {
-   //  print('todo_entry_item_cubit: delete  entryId  $entryId');
+  Future<void> delete(
+      {required CollectionId collectionId, required EntryId entryId}) async {
     try {
       if (state is ToDoEntryItemLoadedState) {
-        final currentToDoEntry = (state as ToDoEntryItemLoadedState).toDoEntry;
-        // print('current toDoEntry to be deleted ${currentToDoEntry.description}');
+        // final currentToDoEntry = (state as ToDoEntryItemLoadedState).toDoEntry;
         final result = await deleteToDoEntry.call(ToDoEntryIdsParam(
           collectionId: collectionId,
           entryId: entryId,
@@ -91,7 +87,7 @@ class ToDoEntryItemCubit extends Cubit<ToDoEntryItemState> {
           String message = 'Error: ${_mapFailureToMessage(left)}';
           emit(ToDoEntryItemErrorState(stackTrace: message));
         }, (right) {
-           emit(ToDoEntryItemDeletedState());
+          emit(ToDoEntryItemDeletedState());
         });
       }
     } on Exception {
