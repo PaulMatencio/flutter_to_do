@@ -1,6 +1,6 @@
 import 'package:either_dart/either.dart';
+import 'package:todo_app/0_data/data_sources/interfaces/todo_local_data_source_interface.dart';
 import 'package:todo_app/0_data/exceptions/exceptions.dart';
-import 'package:todo_app/0_data/data_sources/local/memory_local_data_source.dart';
 import 'package:todo_app/0_data/models/todo_collection_model.dart';
 import 'package:todo_app/0_data/models/todo_entry_model.dart';
 import 'package:todo_app/1_domain/entities/todo_collection.dart';
@@ -11,7 +11,16 @@ import 'package:todo_app/1_domain/failures/failures.dart';
 import 'package:todo_app/1_domain/repositories/todo_repository.dart';
 
 class ToDoRepositoryLocal implements ToDoRepository {
-  final toDoRepositoryLocal = MemoryLocalDataSource();
+  // final localDataSource = MemoryLocalDataSource();
+
+
+  ToDoRepositoryLocal({required this.localDataSource});
+  ///
+  ///   localDataSource is
+  ///   either MemoryLocalDataSource()
+  ///   or HiveLocalDataSource()
+  ///
+  ToDoLocalDataSourceInterface localDataSource;
 
   ///
   ///
@@ -26,7 +35,7 @@ class ToDoRepositoryLocal implements ToDoRepository {
         title: todoCollection.title,
         id: todoCollection.id.value);
     try {
-      final result = await toDoRepositoryLocal.createToDoCollection(
+      final result = await localDataSource.createToDoCollection(
           collection: collectionModel);
       return Right(result);
     } on Exception catch (e) {
@@ -40,6 +49,7 @@ class ToDoRepositoryLocal implements ToDoRepository {
       }
     }
   }
+
   ///
   ///   createToDoEntry
   ///   create an entry  for a  create_todo_entry form
@@ -54,7 +64,7 @@ class ToDoRepositoryLocal implements ToDoRepository {
         description: toDoEntry.description,
         isDone: toDoEntry.isDone);
     try {
-      final result = await toDoRepositoryLocal.createToDoEntry(
+      final result = await localDataSource.createToDoEntry(
           collectionId: collectionId.value, entryModel: entryModel);
       return Right(result);
     } on Exception catch (e) {
@@ -78,11 +88,12 @@ class ToDoRepositoryLocal implements ToDoRepository {
   @override
   Future<Either<Failure, List<ToDoCollection>>> readToDoCollections() async {
     try {
-      final collectionIds = await toDoRepositoryLocal.getToDoCollectionIds();
+      print('Read todo collection has been called ');
+      final collectionIds = await localDataSource.getToDoCollectionIds();
       final List<ToDoCollection> collections = [];
       for (String collectionId in collectionIds) {
-        final collection = await toDoRepositoryLocal.getToDoCollection(
-            collectionId: collectionId);
+        final collection =
+            await localDataSource.getToDoCollection(collectionId: collectionId);
         collections.add(toDoCollectionModelToEntity(collection));
       }
       return Right(collections);
@@ -101,7 +112,7 @@ class ToDoRepositoryLocal implements ToDoRepository {
   Future<Either<Failure, List<EntryId>>> readToDoEntryIds(
       CollectionId collectionId) async {
     try {
-      final result = await toDoRepositoryLocal.getToDoEntryIds(
+      final result = await localDataSource.getToDoEntryIds(
           collectionId: collectionId.value);
       final toDoEntries =
           result.map((item) => EntryId.fromUniqueString(item)).toList();
@@ -128,13 +139,16 @@ class ToDoRepositoryLocal implements ToDoRepository {
   Future<Either<Failure, ToDoEntry>> readToDoEntry(
       CollectionId collectionId, EntryId entryId) async {
     try {
-      final result = await toDoRepositoryLocal.getToDoEntry(
+
+      final result = await localDataSource.getToDoEntry(
           collectionId: collectionId.value, entryId: entryId.value);
 
       return Right(ToDoEntry(
           id: EntryId.fromUniqueString(result.id),
           description: result.description,
           isDone: result.isDone));
+
+
     } on Exception catch (e) {
       switch (e) {
         case final ServerException _:
@@ -159,7 +173,7 @@ class ToDoRepositoryLocal implements ToDoRepository {
   Future<Either<Failure, ToDoEntry>> updateToDoEntry(
       {required CollectionId collectionId, required EntryId entryId}) async {
     try {
-      final entry = await toDoRepositoryLocal.updateToDoEntry(
+      final entry = await localDataSource.updateToDoEntry(
           collectionId: collectionId.value, entryId: entryId.value);
 
       return Right(toDoEntryModelToEntity(entry));
@@ -179,9 +193,11 @@ class ToDoRepositoryLocal implements ToDoRepository {
   Future<Either<Failure, bool>> modifyToDoEntry(
       {required CollectionId collectionId,
       required ToDoEntry toDoEntry}) async {
+
     final entryModel = toDoEntryToModel(toDoEntry);
+
     try {
-      final result = await toDoRepositoryLocal.modifyToDoEntry(
+      final result = await localDataSource.modifyToDoEntry(
           collectionId: collectionId.value, entryModel: entryModel);
       return Right(result);
     } on Exception catch (e) {
@@ -207,8 +223,8 @@ class ToDoRepositoryLocal implements ToDoRepository {
   Future<Either<Failure, bool>> deleteToDoEntry(
       {required CollectionId collectionId, required EntryId entryId}) async {
     try {
-      await toDoRepositoryLocal.deleteToDoEntry(
-          collectionId: collectionId.value, entryModelId: entryId.value);
+      await localDataSource.deleteToDoEntry(
+          collectionId: collectionId.value, entryId: entryId.value);
       return (Right(true));
     } on Exception catch (e) {
       switch (e) {

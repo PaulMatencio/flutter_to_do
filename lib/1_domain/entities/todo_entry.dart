@@ -33,21 +33,5 @@ class ToDoEntry{
     );
   }
 
-  /*
-
-  ToDoEntry copyWithId({
-    required EntryId id,
-    String? description,
-    bool? isDone,
-  }) {
-    return ToDoEntry(
-      id: id,
-      description: description ?? this.description,
-      isDone: isDone ?? this.isDone,
-    );
-  }
-
-   */
-
 
 }

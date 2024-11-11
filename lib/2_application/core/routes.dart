@@ -42,7 +42,7 @@ final routes = GoRouter(
         GoRoute(
           name: HomePage.pageConfig.name, //
           path: '$_basePath/:tab',
-          builder: (BuildContext context, GoRouterState state) => HomePage(
+          builder: (BuildContext context, GoRouterState state) => HomePageProvider(
             key: state.pageKey,
             //  tab: state.pathParameters['tab'] ?? 'dashboard',
             tab: state.pathParameters['tab']!,
@@ -145,6 +145,35 @@ final routes = GoRouter(
         path: '$_basePath/overview/:collectionId',
         builder: (context, state) {
           final collectionId = state.pathParameters['collectionId'];
+          return Scaffold(
+                appBar: AppBar(
+                    title: Text('Details'),
+                    backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                    leading: BackButton(
+                        onPressed: () => context.canPop()
+                            ? context.pop()
+                            : context.goNamed(HomePage.pageConfig.name,
+                                pathParameters: {
+                                    'tab': OverviewPage.pageConfig.name
+                                  }))),
+                body: ToDoDetailPageProvider(
+                  collectionId: CollectionId.fromUniqueString(
+                      collectionId ?? ''),
+                ),
+              );
+        }),
+  ],
+);
+
+
+
+/*
+
+GoRoute(
+        name: ToDoDetailPage.pageConfig.name,
+        path: '$_basePath/overview/:collectionId',
+        builder: (context, state) {
+          final collectionId = state.pathParameters['collectionId'];
           return BlocListener<NavigationToDoCubit, NavigationToDoCubitState>(
               //  -------------------------------------------------------
               //  pop the  detail_page when the   second display  state
@@ -178,5 +207,8 @@ final routes = GoRouter(
                 ),
               ));
         }),
-  ],
-);
+
+
+
+
+ */

@@ -9,12 +9,10 @@ import 'package:todo_app/core/use_case.dart';
 //   implements UseCase<List<>,noParams>
 class LoadToDoCollections implements UseCase<List<ToDoCollection>, NoParams> {
   const LoadToDoCollections({required this.toDoRepository});
-
   final ToDoRepository toDoRepository;
 
   @override
   Future<Either<Failure, List<ToDoCollection>>> call(NoParams params) async {
-   //  print('useCase: load_todo_collections for  all collections');
     try {
       final loadedCollections = toDoRepository.readToDoCollections();
       return loadedCollections.fold(

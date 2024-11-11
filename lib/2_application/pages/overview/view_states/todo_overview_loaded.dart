@@ -24,6 +24,7 @@ class ToDoOverviewLoaded extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    ///  not used for the moment
     final shouldDisplayAddItemButton = Breakpoints.small.isActive(context);
     return Scaffold(
       appBar: AppBar(
@@ -63,8 +64,9 @@ class ToDoOverviewLoaded extends StatelessWidget {
                       child: ListTile(
                         tileColor: colorScheme.surface,
                         selectedTileColor: colorScheme.surfaceContainerHighest,
-                        iconColor: item.color.color,
-                        selectedColor: item.color.color,
+                        iconColor: item.color.getColor(),
+                        selectedColor: item.color.getColor(),
+
                         //
                         //  selected is set to TRUE
                         //     when the item.id is the same
@@ -120,15 +122,17 @@ class ToDoOverviewLoaded extends StatelessWidget {
                   onPressed: () {
                     context
                         .pushNamed(CreateToDoCollectionPage.pageConfig.name)
-                        .then((value) {
-                      if (value == null) {
+                       .then((value) {
+                      if (value == true ) {    // it was == null
                         if (context.mounted) {
                           context
                               .read<ToDoOverviewCubit>()
                               .readToDoCollections();
                         }
                       }
-                    });
+                    })
+
+                    ;
                   },
                   child: Icon(CreateToDoCollectionPage.pageConfig.icon),
                 ),

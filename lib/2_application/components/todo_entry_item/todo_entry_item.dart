@@ -119,10 +119,12 @@ showAlertDialog({
   required EntryId entryId,
   required CollectionId collectionId,
 }) {
-  // set up the buttonsRepositoryProvider.of<ToDoRepository>(context))
+  /// set up the Cancel button
   Widget cancelButton =
       TextButton(child: Text('Cancel'), onPressed: () => context.pop());
 
+
+  ///  Setup the continue button
   Widget continueButton = BlocProvider(
     create: (context) => ToDoDetailCubit(
       loadToDoEntryIdsForCollection: LoadToDoEntryIdsForCollection(
@@ -144,8 +146,9 @@ showAlertDialog({
         }),
   );
 
-  // set up the AlertDialog
-
+  ///
+  /// Set up the AlertDialog
+  ///
   AlertDialog alert = AlertDialog(
     title: Text('AlertDialog'),
     content: Text('Are you sure you want to delete'),
@@ -155,6 +158,10 @@ showAlertDialog({
     ],
   );
   // show the dialog
+
+  ///
+  ///    Build the AlertDialog
+  ///
   showDialog(
     context: context,
     useRootNavigator: false, //  use go router instead

@@ -11,6 +11,18 @@ import 'package:todo_app/2_application/pages/overview/overview_page.dart';
 import '../../core/page_config.dart';
 import '../settings/settings_page.dart';
 
+class HomePageProvider extends StatelessWidget {
+  const HomePageProvider({super.key, required this.tab});
+  final String tab;
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<NavigationToDoCubit>(
+      create: (_) => NavigationToDoCubit(),
+      child: HomePage(tab: tab),
+    );
+  }
+}
+
 class HomePage extends StatefulWidget {
   HomePage({
     super.key,
@@ -37,8 +49,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final destinations = HomePage.tabs
       .map(
-        (page) =>
-            NavigationDestination(icon: Icon(page.icon), label: page.name, tooltip: page.name,),
+        (page) => NavigationDestination(
+          icon: Icon(page.icon),
+          label: page.name,
+          tooltip: page.name,
+        ),
       )
       .toList();
 
@@ -46,71 +61,80 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     // print(SettingsPage.pageConfig.name);
-    return Scaffold(
-      body: SafeArea(
-        child: AdaptiveLayout(
-          primaryNavigation: SlotLayout(
-            config: <Breakpoint, SlotLayoutConfig>{
-              Breakpoints.mediumAndUp: SlotLayout.from(
-                key: const Key('primary-navigation-medium'),
-                builder: (context) => AdaptiveScaffold.standardNavigationRail(
-                  padding: EdgeInsets.symmetric(horizontal: 5),
-                  leading: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Text(
-                      'Menus',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+    return BlocListener<NavigationToDoCubit, NavigationToDoCubitState>(
+      listenWhen: (previous, current) =>
+          previous.isSecondBodyDisplayed != current.isSecondBodyDisplayed,
+      listener: (context, state) {
+        if (context.canPop() && (state.isSecondBodyDisplayed ?? false)) {
+          context.pop();
+        }
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: AdaptiveLayout(
+            primaryNavigation: SlotLayout(
+              config: <Breakpoint, SlotLayoutConfig>{
+                Breakpoints.mediumAndUp: SlotLayout.from(
+                  key: const Key('primary-navigation-medium'),
+                  builder: (context) => AdaptiveScaffold.standardNavigationRail(
+                    padding: EdgeInsets.symmetric(horizontal: 5),
+                    leading: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        'Menus',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  ),
-                  trailing: Tooltip(
-                    message: SettingsPage.pageConfig.name,
-                    child: IconButton(
-                      onPressed: () =>
-                          context.pushNamed(SettingsPage.pageConfig.name),
-                      icon: Icon(SettingsPage.pageConfig.icon),
+                    trailing: Tooltip(
+                      message: SettingsPage.pageConfig.name,
+                      child: IconButton(
+                        onPressed: () =>
+                            context.pushNamed(SettingsPage.pageConfig.name),
+                        icon: Icon(SettingsPage.pageConfig.icon),
+                      ),
                     ),
+                    backgroundColor: colorScheme.inversePrimary,
+                    selectedLabelTextStyle:
+                        TextStyle(color: colorScheme.onSurface),
+                    selectedIconTheme:
+                        IconThemeData(color: colorScheme.onSurface),
+                    unselectedIconTheme: IconThemeData(
+                        color: colorScheme.onSurface.withOpacity(0.5)),
+                    onDestinationSelected: (index) =>
+                        _tapOnNavigationDestination(context, index),
+                    selectedIndex: widget.index,
+                    destinations: destinations
+                        .map(
+                          (_) => AdaptiveScaffold.toRailDestination(_),
+                        )
+                        .toList(),
                   ),
-                  backgroundColor: colorScheme.inversePrimary,
-                  selectedLabelTextStyle:
-                      TextStyle(color: colorScheme.onSurface),
-                  selectedIconTheme:
-                      IconThemeData(color: colorScheme.onSurface),
-                  unselectedIconTheme: IconThemeData(
-                      color: colorScheme.onSurface.withOpacity(0.5)),
-                  onDestinationSelected: (index) =>
-                      _tapOnNavigationDestination(context, index),
-                  selectedIndex: widget.index,
-                  destinations: destinations
-                      .map(
-                        (_) => AdaptiveScaffold.toRailDestination(_),
-                      )
-                      .toList(),
                 ),
-              ),
-            },
-          ),
-          bottomNavigation: SlotLayout(
-            config: <Breakpoint, SlotLayoutConfig>{
-              Breakpoints.small: SlotLayout.from(
-                key: const Key('bottom-navigation-small'),
-                builder: (_) => AdaptiveScaffold.standardBottomNavigationBar(
-                  destinations: destinations,
-                  currentIndex: widget.index,
-                  onDestinationSelected: (value) =>
-                      _tapOnNavigationDestination(context, value),
+              },
+            ),
+            bottomNavigation: SlotLayout(
+              config: <Breakpoint, SlotLayoutConfig>{
+                Breakpoints.small: SlotLayout.from(
+                  key: const Key('bottom-navigation-small'),
+                  builder: (_) => AdaptiveScaffold.standardBottomNavigationBar(
+                    destinations: destinations,
+                    currentIndex: widget.index,
+                    onDestinationSelected: (value) =>
+                        _tapOnNavigationDestination(context, value),
+                  ),
                 ),
-              ),
-            },
+              },
+            ),
+            body: SlotLayout(
+              config: <Breakpoint, SlotLayoutConfig>{
+                Breakpoints.smallAndUp: SlotLayout.from(
+                  key: const Key('primary-body-small'),
+                  builder: (_) => HomePage.tabs[widget.index].child,
+                ),
+              },
+            ),
+            secondaryBody: secondaryBodyLayout(),
           ),
-          body: SlotLayout(
-            config: <Breakpoint, SlotLayoutConfig>{
-              Breakpoints.smallAndUp: SlotLayout.from(
-                key: const Key('primary-body-small'),
-                builder: (_) => HomePage.tabs[widget.index].child,
-              ),
-            },
-          ),
-          secondaryBody: secondaryBodyLayout(),
         ),
       ),
     );
@@ -121,15 +145,12 @@ class _HomePageState extends State<HomePage> {
     return SlotLayout(
       config: <Breakpoint, SlotLayoutConfig>{
         Breakpoints.mediumAndUp: SlotLayout.from(
-          key: const Key('secondary-body-medium'),
-          // builder: AdaptiveScaffold.emptyBuilder,
-          builder: widget.index != 1
-              ? null
-              // ? AdaptiveScaffold.emptyBuilder
-              : (_) => Stack(children: [
-                    DetailPageProvider(colorScheme: colorScheme),
-                  ]),
-        ),
+            key: const Key('secondary-body-medium'),
+            // builder: AdaptiveScaffold.emptyBuilder,
+            builder: widget.index != 1
+                ? null
+                // ? AdaptiveScaffold.emptyBuilder
+                : (_) => DetailPageProvider(colorScheme: colorScheme)),
       },
     );
   }
@@ -158,10 +179,10 @@ class DetailPageProvider extends StatelessWidget {
       builder: (context, state) {
         final selectedId = state.selectedCollectionId;
         final isSecondBodyDisplayed = Breakpoints.mediumAndUp.isActive(context);
-        //---------------------------------------------------------
-        //
-        //    change the state of the isSecondBodyDisplayed property
-        //----------------------------------------------------------
+        ///---------------------------------------------------------
+        ///    change the state of the isSecondBodyDisplayed property
+        ///    for mediumAndUp
+        ///----------------------------------------------------------
         context.read<NavigationToDoCubit>().secondBodyHasChanged(
               isSecondBodyDisplayed: isSecondBodyDisplayed,
             );
@@ -169,17 +190,7 @@ class DetailPageProvider extends StatelessWidget {
         if (selectedId == null) {
           //return const Placeholder();
           //return  Center(child: NetworkImageWidget(url: imageUrl));
-          return
-              Center(
-                child: Container(
-                    height: 200,
-                    width: 200,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.8),
-                    ),
-                    child: Image.asset(imageAsset)),
-              );
+          return Container();
         }
 
         return Padding(
@@ -193,50 +204,15 @@ class DetailPageProvider extends StatelessWidget {
               )),
               backgroundColor: colorScheme.primaryContainer,
             ),
-            body: Stack(children: [
-              ToDoDetailPageProvider(
-                //--------------------------------------------------------
-                //  use key attribute to tell Flutter to rebuild the
-                //  detail page  when click on a different collection
-                //!  uniqueId class must be an extension of  the
-                //!      Equatable class
-                //------------------------------------------------------
-                key: Key(selectedId.value),
-                collectionId: selectedId,
-              ),
-            ]),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class CreateCollectionPageProvider extends StatelessWidget {
-  const CreateCollectionPageProvider({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<NavigationToDoCubit, NavigationToDoCubitState>(
-      builder: (context, state) {
-        final isSecondBodyDisplayed = Breakpoints.mediumAndUp.isActive(context);
-        //---------------------------------------------------------
-        //
-        //    change the state of the isSecondBodyDisplayed property
-        //----------------------------------------------------------
-        context.read<NavigationToDoCubit>().secondBodyHasChanged(
-              isSecondBodyDisplayed: isSecondBodyDisplayed,
-            );
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: Scaffold(
-            appBar: AppBar(
-              title: Center(child: Text('Create collection')),
-            ),
-            body: CreateCollectionPageProvider(
-              key: Key('selectedId.value'),
+            body: ToDoDetailPageProvider(
+              //--------------------------------------------------------
+              //  use key attribute to tell Flutter to rebuild the
+              //  detail page  when click on a different collection
+              //!  uniqueId class must be an extension of  the
+              //!      Equatable class
+              //------------------------------------------------------
+              key: Key(selectedId.value),
+              collectionId: selectedId,
             ),
           ),
         );

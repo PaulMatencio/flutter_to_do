@@ -48,10 +48,20 @@
 - Create a new main file to start the app with your  ToDoRepositoryMemory implementation
 
 - #### Bonus : Add a delete button to delete an entry +  Alert box for confirmation 
-  #### Bonus : Add a modify button to modify an entry such description  
+  #### Bonus : Add a modify button to modify an entry such as description  
   
-- Here is a screenshot  to show the app in desktop mode
+- Here is are screenshots to show the app in desktop mode
 ![alt screenshot] (https://github.com/PaulMatencio/flutter_to_do/blob/task_t11/Todo_list_Task_T11.png)
 ![alt screenshot] (https://github.com/PaulMatencio/flutter_to_do/blob/task_t11/Alert_delete_box.png)
 
 
+
+###  Task-T13  ColorPicker for Create Collection Form
+
+- Improve our form create collection form  to select a color by  using a color picker
+- Here are some screnshots to show the color picker 
+![alt screenshot] (https://github.com/PaulMatencio/flutter_to_do/blob/task_t13/CreateCollection_color_picker.png)
+![alt screenshot] (https://github.com/PaulMatencio/flutter_to_do/blob/task_t13/overview_page_collection_color.png)
+
+- ####  add delete and modify entry for Hive local store in addition to memory local store which were done in Task-T11
+- ####  add test for HiveLocalDataSource

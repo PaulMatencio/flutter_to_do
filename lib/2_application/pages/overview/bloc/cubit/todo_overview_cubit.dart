@@ -27,7 +27,6 @@ class ToDoOverviewCubit extends Cubit<ToDoOverviewCubitState> {
   //!
 
   Future<void> readToDoCollections() async {
-
     emit(ToDoOverviewCubitLoadingState());
     try {
       final collectionsFuture = loadToDoCollections.call(NoParams());

@@ -24,7 +24,7 @@ class ToDoDetailCubit extends Cubit<ToDoDetailCubitState> {
   //--------------------------------------------------------
 
   Future<void> fetch() async {
-    print('todo_detail_cubit: fetch todo_entries for collection $collectionId');
+    //print('todo_detail_cubit: fetch todo_entries for collection $collectionId');
     emit(ToDoDetailCubitLoadingState());
     if (collectionId != null) {
       try {

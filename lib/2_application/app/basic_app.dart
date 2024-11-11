@@ -13,9 +13,7 @@ class BasicApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeService>(builder: ((context, themeService, child) {
-      return BlocProvider<NavigationToDoCubit>(
-        create: (context) => NavigationToDoCubit(),
-        child: MaterialApp.router(
+      return MaterialApp.router(
           title: 'Todo App',
           localizationsDelegates: [
             ...GlobalMaterialLocalizations.delegates,
@@ -25,27 +23,9 @@ class BasicApp extends StatelessWidget {
               themeService.isDarkModeOn ? ThemeMode.dark : ThemeMode.light,
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
-
-          /*
-        themeMode: ThemeMode.system,
-        theme: ThemeData.from(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.deepOrange,
-            brightness: Brightness.light,
-          ),
-        ),
-        darkTheme: ThemeData.from(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.deepOrange,
-          ),
-        ),
-         */
           //!  routes
           routerConfig: routes,
-        ),
-      );
+        );
     }));
   }
 }
