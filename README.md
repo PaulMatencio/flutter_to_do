@@ -71,8 +71,8 @@
 
 -  (1) Delete collection will only delete tasks (entries) if they are $${\color{green}checked (isDone: true)}$$
 -  (2) Raise a warning if there are some tasks which are $${\color{red}unchecke (isDone:false)}$$
--  (3) The collection is deleted when tasks are all $${\color{green}checked (isDone:true)}$$ or when it is empty
--  ####  Alternatively you could also $${\color{green}empty a collection}$$ by deleting each entry before deleting it  
+-  (3) The collection is deleted when all tasks are $${\color{green}checked (isDone:true)}$$ or when it is empty
+-  ####  Alternatively you could also $${\color{green}empty}$$ a collection by deleting each entry before deleting it  
 
 
 
