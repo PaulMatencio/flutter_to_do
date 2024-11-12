@@ -65,3 +65,14 @@
 
 - ####  add delete and modify entry for Hive local store in addition to memory local store which were done in Task-T11
 - ####  add test for HiveLocalDataSource
+
+
+###  Task-T14: Delete a Collection  
+
+-  (1) Delete collection will only delete tasks (entries) if they are $${\color{green}checked (isDone: true)$$
+-  (2) Raise a warning if there are some tasks which are $${\color{red}unchecke (isDone:false)$$
+-  (3) The collection is deleted when tasks are all $${\color{green}checked (isDone:true)$$ or when it is empty
+-  ####  Alternatively you can also empty a collection by deleting each entry before deleting the  whole collection 
+
+
+
