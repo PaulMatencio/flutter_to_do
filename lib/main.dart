@@ -24,8 +24,7 @@ import '1_domain/repositories/todo_repository.dart';
 import '2_application/app/basic_app.dart';
 
 Future<void> main() async {
-
-   ///final localDataSource =  MemoryLocalDataSource() ;
+  ///final localDataSource =  MemoryLocalDataSource() ;
   final localDataSource = HiveLocalDataSource();
   await localDataSource.init();
   runApp(RepositoryProvider<ToDoRepository>(
@@ -33,6 +32,5 @@ Future<void> main() async {
             localDataSource: localDataSource,
             // localDataSource: HiveLocalDataSource(),
           ),
-      child: ChangeNotifierProvider(
-          create: (context) => ThemeService(), child: const BasicApp())));
+      child: ChangeNotifierProvider(create: (context) => ThemeService(), child: const BasicApp())));
 }

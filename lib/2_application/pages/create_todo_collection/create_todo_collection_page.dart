@@ -29,13 +29,10 @@ class CreateToDoCollectionPage extends StatefulWidget {
   const CreateToDoCollectionPage({super.key});
 
   static const pageConfig = PageConfig(
-      icon: Icons.add_task_rounded,
-      name: 'create_todo_collection',
-      child: CreateToDoCollectionPageProvider());
+      icon: Icons.add_task_rounded, name: 'create_todo_collection', child: CreateToDoCollectionPageProvider());
 
   @override
-  State<CreateToDoCollectionPage> createState() =>
-      _CreateToDoCollectionPageState();
+  State<CreateToDoCollectionPage> createState() => _CreateToDoCollectionPageState();
 }
 
 class _CreateToDoCollectionPageState extends State<CreateToDoCollectionPage> {
@@ -46,7 +43,9 @@ class _CreateToDoCollectionPageState extends State<CreateToDoCollectionPage> {
   @override
   void initState() {
     super.initState();
-    selectedColor = defaultColor; /// default color from a ToDoColor tablet
+    selectedColor = defaultColor;
+
+    /// default color from a ToDoColor tablet
   }
 
   @override
@@ -66,45 +65,35 @@ class _CreateToDoCollectionPageState extends State<CreateToDoCollectionPage> {
                 decoration: InputDecoration(
                   icon: const Icon(Icons.title_outlined),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        width: 1.0, color: theme.colorScheme.primary),
+                    borderSide: BorderSide(width: 1.0, color: theme.colorScheme.primary),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        width: 1.0, color: theme.colorScheme.inversePrimary),
+                    borderSide: BorderSide(width: 1.0, color: theme.colorScheme.inversePrimary),
                   ),
                   labelText: 'Title',
                   helperText: 'Title should not be empty',
                 ),
                 onChanged: (value) {
-                  context
-                      .read<CreateToDoCollectionPageCubit>()
-                      .titleChanged(value);
+                  context.read<CreateToDoCollectionPageCubit>().titleChanged(value);
                 },
                 validator: (value) {
-                  return (value == null || value.isEmpty)
-                      ? 'Please enter a title'
-                      : null;
+                  return (value == null || value.isEmpty) ? 'Please enter a title' : null;
                 }),
             SizedBox(
               height: 20,
             ),
             TextFormField(
-                controller: TextEditingController(
-                    text: selectedColor.value.toRadixString(16)),
+                controller: TextEditingController(text: selectedColor.value.toRadixString(16)),
                 decoration: InputDecoration(
                     icon: const Icon(Icons.color_lens),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          width: 1.0, color: theme.colorScheme.primary),
+                      borderSide: BorderSide(width: 1.0, color: theme.colorScheme.primary),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          width: 1.0, color: theme.colorScheme.inversePrimary),
+                      borderSide: BorderSide(width: 1.0, color: theme.colorScheme.inversePrimary),
                     ),
                     labelText: 'color assignment',
-                    helperText:
-                        'should be a valid color value->  FF.... ',
+                    helperText: 'should be a valid color value->  FF.... ',
                     suffixIcon: IconButton(
                         onPressed: () => _openColorPicker(context),
                         icon: Tooltip(
@@ -123,7 +112,7 @@ class _CreateToDoCollectionPageState extends State<CreateToDoCollectionPage> {
                   if (value != null && value.isNotEmpty) {
                     if (checkColor(value)) {
                       return null;
-                    } else{
+                    } else {
                       return invalidColor;
                     }
                   } else {
@@ -135,18 +124,17 @@ class _CreateToDoCollectionPageState extends State<CreateToDoCollectionPage> {
             ),
             ElevatedButton(
                 style: ButtonStyle(
-                  backgroundColor:
-                  WidgetStatePropertyAll<Color>(theme.colorScheme.primary),
-                  foregroundColor:
-                  WidgetStatePropertyAll<Color>(theme.colorScheme.inversePrimary),
-                  textStyle:
-                  WidgetStatePropertyAll<TextStyle>(theme.textTheme.titleSmall!),
+                  backgroundColor: WidgetStatePropertyAll<Color>(theme.colorScheme.primary),
+                  foregroundColor: WidgetStatePropertyAll<Color>(theme.colorScheme.inversePrimary),
+                  textStyle: WidgetStatePropertyAll<TextStyle>(theme.textTheme.titleSmall!),
                 ),
-                onPressed: ()  {
+                onPressed: () {
                   final isValid = _formKey.currentState?.validate();
                   if (isValid == true) {
-                    context.read<CreateToDoCollectionPageCubit>().submit(selectedColor.value).
-                    then((_) => context.pop(true));
+                    context
+                        .read<CreateToDoCollectionPageCubit>()
+                        .submit(selectedColor.value)
+                        .then((_) => context.pop(true));
                   }
                 },
                 child: Text('Save Collection')),
@@ -181,8 +169,7 @@ class _CreateToDoCollectionPageState extends State<CreateToDoCollectionPage> {
     ).showPickerDialog(
       context,
       actionsPadding: const EdgeInsets.all(16),
-      constraints:
-          const BoxConstraints(minHeight: 480, minWidth: 300, maxWidth: 320),
+      constraints: const BoxConstraints(minHeight: 480, minWidth: 300, maxWidth: 320),
     );
     if (pickedColor) {
       final colorValue = selectedColor.value;
@@ -196,8 +183,6 @@ class _CreateToDoCollectionPageState extends State<CreateToDoCollectionPage> {
   }
 }
 
-
-
 ///
 ///  check color
 ///
@@ -206,8 +191,7 @@ bool checkColor(String color) {
   try {
     Color(int.parse(color, radix: 16));
     return true;
-  } on Exception catch(_) {
+  } on Exception catch (_) {
     return false;
   }
 }
-

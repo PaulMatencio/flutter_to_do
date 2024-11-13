@@ -1,6 +1,3 @@
-
-
-
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +6,7 @@ import 'package:todo_app/2_application/pages/create_todo_collection/bloc/cubit/c
 
 class ToDoColorPicker extends StatefulWidget {
   const ToDoColorPicker({super.key});
+
   @override
   State<ToDoColorPicker> createState() => _ToDoColorPickerState();
 }
@@ -28,16 +26,14 @@ class _ToDoColorPickerState extends State<ToDoColorPicker> {
 
 class ToDoColorPickerPage extends StatefulWidget {
   const ToDoColorPickerPage({super.key});
+
   @override
   State<ToDoColorPickerPage> createState() => _ColorPickerPageState();
 }
 
-
-
 class _ColorPickerPageState extends State<ToDoColorPickerPage> {
-  late Color  selectedColor; //
-  final Map<ColorSwatch<Object>, String> customSwatches =
-  <ColorSwatch<Object>, String>{
+  late Color selectedColor; //
+  final Map<ColorSwatch<Object>, String> customSwatches = <ColorSwatch<Object>, String>{
     const MaterialColor(0xFFfae738, <int, Color>{
       50: Color(0xFFfffee9),
       100: Color(0xFFfff9c6),
@@ -53,12 +49,13 @@ class _ColorPickerPageState extends State<ToDoColorPickerPage> {
     ColorTools.createPrimarySwatch(const Color(0xFFBC350F)): 'Rust',
     ColorTools.createAccentSwatch(const Color(0xFFB062DB)): 'Lavender',
   };
+
   //
   //
   //
   final Map<ColorSwatch<Object>, String> colorsNameMap = {
     for (final color in ToDoColor.predefinedColors.map(
-          (color) => ColorTools.createPrimarySwatch(color),
+      (color) => ColorTools.createPrimarySwatch(color),
     ))
       color: color.toString()
   };
@@ -87,31 +84,27 @@ class _ColorPickerPageState extends State<ToDoColorPickerPage> {
             child: Padding(
               padding: const EdgeInsets.all(6),
               child: Card(
-                elevation: 2,
-                child: ColorPicker(
-                  // Use the screenPickerColor as color.
-                  color: selectedColor,
-                  // Update the screenPickerColor using the callback.
-                  onColorChanged: (Color color) {
-                    setState(() => selectedColor = color);
-                    context
-                        .read<CreateToDoCollectionPageCubit>()
-                        .colorChanged(color as String);
+                  elevation: 2,
+                  child: ColorPicker(
+                    // Use the screenPickerColor as color.
+                    color: selectedColor,
+                    // Update the screenPickerColor using the callback.
+                    onColorChanged: (Color color) {
+                      setState(() => selectedColor = color);
+                      context.read<CreateToDoCollectionPageCubit>().colorChanged(color as String);
                     },
 
-                  width: 44,
-                  height: 44,
-                  borderRadius: 22,
-                  heading: Text(
-                    'Select color',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  customColorSwatchesAndNames: colorsNameMap,
-                )
-              ),
+                    width: 44,
+                    height: 44,
+                    borderRadius: 22,
+                    heading: Text(
+                      'Select color',
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    customColorSwatchesAndNames: colorsNameMap,
+                  )),
             ),
           ),
-
         ],
       ),
     );

@@ -16,12 +16,16 @@ class MemoryLocalDataSource implements ToDoLocalDataSourceInterface {
 
   @override
   Future<bool> createToDoCollection({required ToDoCollectionModel collection}) {
+    toDoCollections.add(collection);
+    toDoEntries.putIfAbsent(collection.id, () => []);
+    return Future.value(true);
+  }
 
-      toDoCollections.add(collection);
-      toDoEntries.putIfAbsent(collection.id, () => []);
-      return Future.value(true);
-    }
-
+  @override
+  Future<bool> deleteToDoCollection({required String collectionId}) {
+    // TODO: implement deleteToDoCollection
+    throw UnimplementedError();
+  }
 
   ///
   ///    createToDoEntry :
@@ -31,15 +35,13 @@ class MemoryLocalDataSource implements ToDoLocalDataSourceInterface {
   ///    Exception: Collection  not found
   ///
   @override
-  Future<bool> createToDoEntry(
-      {required String collectionId, required ToDoEntryModel entryModel}) {
-
-      if (toDoEntries.containsKey(collectionId)) {
-        toDoEntries[collectionId]?.add(entryModel);
-        return Future.value(true);
-      } else {
-        throw CollectionNotFoundException(stackTrace: 'collection not found');
-      }
+  Future<bool> createToDoEntry({required String collectionId, required ToDoEntryModel entryModel}) {
+    if (toDoEntries.containsKey(collectionId)) {
+      toDoEntries[collectionId]?.add(entryModel);
+      return Future.value(true);
+    } else {
+      throw CollectionNotFoundException(stackTrace: 'collection not found');
+    }
   }
 
   ///
@@ -47,9 +49,9 @@ class MemoryLocalDataSource implements ToDoLocalDataSourceInterface {
   ///
   @override
   Future<List<String>> getToDoCollectionIds() {
-      return Future.value(
-        toDoCollections.map((collection) => collection.id).toList(),
-      );
+    return Future.value(
+      toDoCollections.map((collection) => collection.id).toList(),
+    );
   }
 
   ///
@@ -63,105 +65,87 @@ class MemoryLocalDataSource implements ToDoLocalDataSourceInterface {
   ///
 
   @override
-  Future<ToDoEntryModel> getToDoEntry(
-      {required String collectionId, required String entryId}) {
+  Future<ToDoEntryModel> getToDoEntry({required String collectionId, required String entryId}) {
+    if (toDoEntries.containsKey(collectionId)) {
+      final entry = toDoEntries[collectionId]?.firstWhere(
+        (entry) => entry.id == entryId,
+        orElse: () => throw EntryNotFoundException(stackTrace: 'entry not found'),
+      );
 
-      if (toDoEntries.containsKey(collectionId)) {
-        final entry = toDoEntries[collectionId]?.firstWhere(
-          (entry) => entry.id == entryId,
-          orElse: () =>
-              throw EntryNotFoundException(stackTrace: 'entry not found'),
-        );
-
-        return Future.value(entry);
-      } else {
-        throw CollectionNotFoundException(stackTrace: 'collection not found');
-      }
+      return Future.value(entry);
+    } else {
+      throw CollectionNotFoundException(stackTrace: 'collection not found');
+    }
   }
 
   @override
   Future<List<String>> getToDoEntryIds({required String collectionId}) {
-
-      if (toDoEntries.containsKey(collectionId)) {
-        return Future.value(
-          toDoEntries[collectionId]?.map((entry) => entry.id).toList(),
-        );
-      } else {
-        throw CollectionNotFoundException();
-      }
-    }
-
-
-  @override
-  Future<ToDoEntryModel> updateToDoEntry(
-      {required String collectionId, required String entryId}) {
-
-      if (toDoEntries.containsKey(collectionId)) {
-        final indexOfElement = toDoEntries[collectionId]
-            ?.indexWhere((entry) => entry.id == entryId);
-        if (indexOfElement == null || indexOfElement == -1) {
-          throw EntryNotFoundException();
-        }
-        final entry = toDoEntries[collectionId]?[indexOfElement];
-        if (entry == null) {
-          throw EntryNotFoundException();
-        }
-        final updatedEntry = ToDoEntryModel(
-          id: entry.id,
-          description: entry.description,
-          isDone: !entry.isDone,
-        );
-        toDoEntries[collectionId]?[indexOfElement] = updatedEntry;
-        return Future.value(updatedEntry);
-      } else {
-        throw CollectionNotFoundException();
-      }
-    }
-
-  @override
-  Future<ToDoCollectionModel> getToDoCollection(
-      {required String collectionId}) {
-
-      final collectionModel = toDoCollections.firstWhere(
-        (element) => element.id == collectionId,
-        orElse: () => throw CollectionNotFoundException(),
+    if (toDoEntries.containsKey(collectionId)) {
+      return Future.value(
+        toDoEntries[collectionId]?.map((entry) => entry.id).toList(),
       );
-
-      return Future.value(collectionModel);
+    } else {
+      throw CollectionNotFoundException();
+    }
   }
 
   @override
-  Future<bool> modifyToDoEntry(
-      {required String collectionId, required ToDoEntryModel entryModel}) {
-
-      if (toDoEntries.containsKey(collectionId)) {
-        final index = toDoEntries[collectionId]!
-            .indexWhere(((entry) => entry.id == entryModel.id));
-        if (index >= 0) {
-          final toDoEntry = toDoEntries[collectionId]![index];
-          final updateToDoEntry =
-              toDoEntry.copyWith(description: entryModel.description);
-          toDoEntries[collectionId]?[index] = updateToDoEntry;
-          return Future.value(true);
-        } else {
-          throw EntryNotFoundException(stackTrace: 'entry not found');
-        }
-      } else {
-        throw CollectionNotFoundException(stackTrace: 'collection not found');
+  Future<ToDoEntryModel> updateToDoEntry({required String collectionId, required String entryId}) {
+    if (toDoEntries.containsKey(collectionId)) {
+      final indexOfElement = toDoEntries[collectionId]?.indexWhere((entry) => entry.id == entryId);
+      if (indexOfElement == null || indexOfElement == -1) {
+        throw EntryNotFoundException();
       }
+      final entry = toDoEntries[collectionId]?[indexOfElement];
+      if (entry == null) {
+        throw EntryNotFoundException();
+      }
+      final updatedEntry = ToDoEntryModel(
+        id: entry.id,
+        description: entry.description,
+        isDone: !entry.isDone,
+      );
+      toDoEntries[collectionId]?[indexOfElement] = updatedEntry;
+      return Future.value(updatedEntry);
+    } else {
+      throw CollectionNotFoundException();
+    }
   }
 
   @override
-  Future<bool> deleteToDoEntry(
-      {required String collectionId, required String entryId}) {
+  Future<ToDoCollectionModel> getToDoCollection({required String collectionId}) {
+    final collectionModel = toDoCollections.firstWhere(
+      (element) => element.id == collectionId,
+      orElse: () => throw CollectionNotFoundException(),
+    );
 
-      if (toDoEntries.containsKey(collectionId)) {
-        toDoEntries[collectionId]
-            ?.removeWhere((entry) => entry.id == entryId);
+    return Future.value(collectionModel);
+  }
+
+  @override
+  Future<bool> modifyToDoEntry({required String collectionId, required ToDoEntryModel entryModel}) {
+    if (toDoEntries.containsKey(collectionId)) {
+      final index = toDoEntries[collectionId]!.indexWhere(((entry) => entry.id == entryModel.id));
+      if (index >= 0) {
+        final toDoEntry = toDoEntries[collectionId]![index];
+        final updateToDoEntry = toDoEntry.copyWith(description: entryModel.description);
+        toDoEntries[collectionId]?[index] = updateToDoEntry;
         return Future.value(true);
       } else {
-        throw CollectionNotFoundException(stackTrace: 'collection not found');
+        throw EntryNotFoundException(stackTrace: 'entry not found');
       }
+    } else {
+      throw CollectionNotFoundException(stackTrace: 'collection not found');
     }
+  }
 
+  @override
+  Future<bool> deleteToDoEntry({required String collectionId, required String entryId}) {
+    if (toDoEntries.containsKey(collectionId)) {
+      toDoEntries[collectionId]?.removeWhere((entry) => entry.id == entryId);
+      return Future.value(true);
+    } else {
+      throw CollectionNotFoundException(stackTrace: 'collection not found');
+    }
+  }
 }

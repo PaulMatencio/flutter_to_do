@@ -1,17 +1,16 @@
 part of 'todo_detail_cubit.dart';
 
-
 // --------------------------------------------------------
 //!   create a Cubit for the entire list list<EntryId>
 //--------------------------------------------------------
 abstract class ToDoDetailCubitState extends Equatable {
   const ToDoDetailCubitState();
+
   @override
   List<Object> get props => [];
 }
 
 class ToDoDetailCubitLoadingState extends ToDoDetailCubitState {}
-
 
 class ToDoDetailCubitErrorState extends ToDoDetailCubitState {}
 
@@ -26,7 +25,3 @@ class ToDoDetailCubitLoadedState extends ToDoDetailCubitState {
   @override
   List<Object> get props => [entryIds];
 }
-
-
-
-

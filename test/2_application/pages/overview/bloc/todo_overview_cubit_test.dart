@@ -6,6 +6,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:either_dart/either.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:todo_app/1_domain/use_cases/delete_todo_collection.dart';
 import 'package:todo_app/2_application/pages/overview/bloc/cubit/todo_overview_cubit.dart';
 import 'package:todo_app/core/use_case.dart';
 import 'package:todo_app/1_domain/entities/todo_collection.dart';
@@ -15,7 +16,7 @@ import 'package:todo_app/1_domain/failures/failures.dart';
 import 'package:todo_app/1_domain/use_cases/load_todo_collections.dart';
 
 class MockLoadToDoCollections extends Mock implements LoadToDoCollections {}
-
+class MockDeleteToDoCollection extends Mock implements DeleteToDoCollection {}
 final List<ToDoCollection> toDoCollections = [
   ToDoCollection(
     id: CollectionId.fromUniqueString(1.toString()),
@@ -32,6 +33,7 @@ final List<ToDoCollection> toDoCollections = [
 void main() {
   group('ToDoOverviewCubit blocTest', () {
     final mockLoadToDoCollections = MockLoadToDoCollections();
+    final mockDeleteToDoCollection = MockDeleteToDoCollection();
     final expectedCollections = Right<Failure, List<ToDoCollection>>(toDoCollections);
     final expectedServerFailure =
         Left<Failure, List<ToDoCollection>>(ServerFailure());
@@ -44,6 +46,7 @@ void main() {
       },
       build: () => ToDoOverviewCubit(
         loadToDoCollections: mockLoadToDoCollections,
+        deleteToDoCollection:  mockDeleteToDoCollection
       ),
       act: (ToDoOverviewCubit bloc) => bloc.readToDoCollections(),
       expect: () => <ToDoOverviewCubitState>[
@@ -62,6 +65,7 @@ void main() {
       },
       build: () => ToDoOverviewCubit(
         loadToDoCollections: mockLoadToDoCollections,
+        deleteToDoCollection: mockDeleteToDoCollection,
       ),
       act: (ToDoOverviewCubit bloc) => bloc.readToDoCollections(),
       expect: () => <ToDoOverviewCubitState>[
@@ -78,6 +82,7 @@ void main() {
       },
       build: () => ToDoOverviewCubit(
         loadToDoCollections: mockLoadToDoCollections,
+        deleteToDoCollection: mockDeleteToDoCollection
       ),
       act: (ToDoOverviewCubit bloc) => bloc.readToDoCollections(),
       expect: () => <ToDoOverviewCubitState>[

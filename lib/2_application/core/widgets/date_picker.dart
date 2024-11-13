@@ -33,21 +33,17 @@ class CreateOrderFormState extends State<CreateOrderForm> {
               children: [
                 TextFormField(
                   //initialValue: "${selectedDate.toLocal()}",
-                  controller:
-                      TextEditingController(text: '${selectedDate.toLocal()}'),
+                  controller: TextEditingController(text: '${selectedDate.toLocal()}'),
                   decoration: InputDecoration(
                       icon: Icon(Icons.event),
                       border: OutlineInputBorder(),
                       labelText: 'Assignment Date & Time',
-                      suffixIcon: IconButton(
-                          onPressed: () => _selectDate(context),
-                          icon: Icon(Icons.event))),
+                      suffixIcon: IconButton(onPressed: () => _selectDate(context), icon: Icon(Icons.event))),
                 ),
                 const Padding(padding: EdgeInsets.only(top: 8)),
                 Align(
                   alignment: Alignment.bottomRight,
-                  child:
-                      ElevatedButton(onPressed: (() {}), child: Text('Submit')),
+                  child: ElevatedButton(onPressed: (() {}), child: Text('Submit')),
                 )
               ],
             ),
@@ -57,10 +53,7 @@ class CreateOrderFormState extends State<CreateOrderForm> {
 
   Future<void> _selectDate(BuildContext context) async {
     await showDatePicker(
-            context: context,
-            initialDate: selectedDate,
-            firstDate: DateTime(1970),
-            lastDate: DateTime(9999))
+            context: context, initialDate: selectedDate, firstDate: DateTime(1970), lastDate: DateTime(9999))
         .then((value) {
       if (value != null && value != selectedDate) {
         setState(() {

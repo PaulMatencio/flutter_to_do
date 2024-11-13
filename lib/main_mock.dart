@@ -10,8 +10,5 @@ void main() {
   //  runApp(const BasicApp());
   runApp(RepositoryProvider<ToDoRepository>(
       create: (BuildContext context) => ToDoRepositoryMock(),
-      child: ChangeNotifierProvider(
-          create:(context) => ThemeService(),
-          child: const BasicApp())
-  ));
+      child: ChangeNotifierProvider(create: (context) => ThemeService(), child: const BasicApp())));
 }

@@ -5,24 +5,13 @@ class ToDoCollectionModel extends Equatable {
   final String title;
   final String id;
 
-  const ToDoCollectionModel(
-      {required this.colorIndex, required this.title, required this.id});
+  const ToDoCollectionModel({required this.colorIndex, required this.title, required this.id});
 
   factory ToDoCollectionModel.fromJson(Map<String, dynamic> json) =>
-      ToDoCollectionModel(
-          id: json['id'], title: json['title'], colorIndex: json['colorIndex']);
+      ToDoCollectionModel(id: json['id'], title: json['title'], colorIndex: json['colorIndex']);
 
-  Map<String, dynamic> toJson(ToDoCollectionModel collection) =>
-      <String, dynamic>{
-        'id': collection.id,
-        'title': collection.title,
-        'colorIndex': collection.colorIndex
-      };
-
+  Map<String, dynamic> toJson() => <String, dynamic>{'id': id, 'title': title, 'colorIndex': colorIndex};
 
   @override
   List<Object?> get props => [colorIndex, title, id];
-
-
-
 }

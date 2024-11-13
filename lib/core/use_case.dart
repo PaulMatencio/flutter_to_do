@@ -6,8 +6,6 @@ import 'package:todo_app/1_domain/failures/failures.dart';
 
 import '../1_domain/entities/unique_id.dart';
 
-
-
 // <Type>    ->   List<TodoCollection>
 abstract class UseCase<Type, Params> {
   Future<Either<Failure, Type>> call(Params params);
@@ -20,9 +18,7 @@ class NoParams extends Params {
   List<Object?> get props => [];
 }
 
-
 class ToDoEntryIdsParam extends Params {
-
   ToDoEntryIdsParam({
     required this.collectionId,
     required this.entryId,
@@ -32,9 +28,8 @@ class ToDoEntryIdsParam extends Params {
   final CollectionId collectionId;
 
   @override
-  List<Object> get props => [collectionId,entryId];
+  List<Object> get props => [collectionId, entryId];
 }
-
 
 class CollectionIdParam extends Params {
   CollectionIdParam({
@@ -46,8 +41,6 @@ class CollectionIdParam extends Params {
   @override
   List<Object> get props => [collectionId];
 }
-
-
 
 class ToDoEntryParams extends Params {
   ToDoEntryParams({
@@ -62,13 +55,8 @@ class ToDoEntryParams extends Params {
   List<Object> get props => [entry, collectionId];
 }
 
-
-
-
 class ToDoCollectionParams extends Params {
-  ToDoCollectionParams({
-    required this.collection
-  }) : super();
+  ToDoCollectionParams({required this.collection}) : super();
 
   final ToDoCollection collection;
 

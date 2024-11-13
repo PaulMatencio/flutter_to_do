@@ -10,8 +10,7 @@ import 'package:todo_app/core/use_case.dart';
 part 'create_todo_entry_page_state.dart';
 
 class CreateToDoEntryPageCubit extends Cubit<CreateToDoEntryPageState> {
-  CreateToDoEntryPageCubit(
-      {required this.createToDoEntry, required this.collectionId})
+  CreateToDoEntryPageCubit({required this.createToDoEntry, required this.collectionId})
       : super(CreateToDoEntryPageState());
 
   final CreateToDoEntry createToDoEntry;
@@ -36,12 +35,9 @@ class CreateToDoEntryPageCubit extends Cubit<CreateToDoEntryPageState> {
   }
 
   Future<void> submit() async {
-    final todoEntry = ToDoEntry.empty()
-        .copyWith(description: state.description!.value, isDone: false);
+    final todoEntry = ToDoEntry.empty().copyWith(description: state.description!.value, isDone: false);
     await createToDoEntry
         .call(ToDoEntryParams(entry: todoEntry, collectionId: collectionId))
         .then((entryId) => entryId.fold((left) => null, (right) => true));
   }
-
-
 }

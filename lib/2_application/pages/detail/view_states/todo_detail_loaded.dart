@@ -16,14 +16,13 @@ class ToDoDetailLoaded extends StatelessWidget {
   final List<EntryId> entryIds;
   final CollectionId collectionId;
 
-
   void removeEntryId({required EntryId entryId}) {
     entryIds.remove(entryId);
   }
 
   @override
   Widget build(BuildContext context) {
-   // print('entryIds length ${entryIds.length}');
+    // print('entryIds length ${entryIds.length}');
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -45,7 +44,7 @@ class ToDoDetailLoaded extends StatelessWidget {
                   onPressed: () {
                     context.pushNamed(
                       CreateToDoEntryPage.pageConfig.name,
-                      extra:  CreateToDoEntryPageExtra(
+                      extra: CreateToDoEntryPageExtra(
                         collectionId: collectionId,
                         toDoEntryItemAddedCallback: context.read<ToDoDetailCubit>().fetch,
                       ),

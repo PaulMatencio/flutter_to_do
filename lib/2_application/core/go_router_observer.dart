@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class GoRouterObserver extends NavigatorObserver {
@@ -34,4 +33,3 @@ class GoRouterObserver extends NavigatorObserver {
     debugPrint('didStopUserGesture');
   }
 }
-

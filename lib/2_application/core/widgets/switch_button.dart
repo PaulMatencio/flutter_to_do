@@ -2,16 +2,13 @@
 //   lib/2_application/core/widgets/switch_button/switch_button.dart
 //
 
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/2_application/core/services/theme_service.dart';
 
-
-
-
 class SwitchButton extends StatefulWidget {
   const SwitchButton({super.key});
+
   @override
   State<SwitchButton> createState() => _SwitchButtonState();
 }

@@ -14,13 +14,9 @@ import 'package:todo_app/2_application/pages/modify_todo_entry/modify_todo_entry
 import 'package:todo_app/2_application/pages/overview/overview_page.dart';
 import 'package:todo_app/2_application/pages/settings/settings_page.dart';
 
-
-final GlobalKey<NavigatorState> _rootNavigatorKey =
-    GlobalKey<NavigatorState>(debugLabel: 'root');
-final GlobalKey<NavigatorState> _shellNavigatorKey =
-    GlobalKey<NavigatorState>(debugLabel: 'shell');
+final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
+final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'shell');
 const String _basePath = '/home';
-
 
 final routes = GoRouter(
   navigatorKey: _rootNavigatorKey,
@@ -36,8 +32,7 @@ final routes = GoRouter(
     ),
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
-      builder: (BuildContext context, GoRouterState state, Widget child) =>
-          child,
+      builder: (BuildContext context, GoRouterState state, Widget child) => child,
       routes: <RouteBase>[
         GoRoute(
           name: HomePage.pageConfig.name, //
@@ -105,7 +100,6 @@ final routes = GoRouter(
         );
       },
     ),
-
     GoRoute(
       name: ModifyToDoEntryPage.pageConfig.name,
       path: '$_basePath/overview/${ModifyToDoEntryPage.pageConfig.name}',
@@ -130,42 +124,34 @@ final routes = GoRouter(
             ),
           ),
           body: SafeArea(
-              child: ModifyToDoEntryPageProvider (
+              child: ModifyToDoEntryPageProvider(
                   toDoEntryItemModifiedCallback: castedExtras.toDoEntryItemModifiedCallback,
                   todoEntry: castedExtras.toDoEntry,
                   collectionId: castedExtras.collectionId)),
         );
       },
     ),
-
-
-
     GoRoute(
         name: ToDoDetailPage.pageConfig.name,
         path: '$_basePath/overview/:collectionId',
         builder: (context, state) {
           final collectionId = state.pathParameters['collectionId'];
           return Scaffold(
-                appBar: AppBar(
-                    title: Text('Details'),
-                    backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                    leading: BackButton(
-                        onPressed: () => context.canPop()
-                            ? context.pop()
-                            : context.goNamed(HomePage.pageConfig.name,
-                                pathParameters: {
-                                    'tab': OverviewPage.pageConfig.name
-                                  }))),
-                body: ToDoDetailPageProvider(
-                  collectionId: CollectionId.fromUniqueString(
-                      collectionId ?? ''),
-                ),
-              );
+            appBar: AppBar(
+                title: Text('Details'),
+                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                leading: BackButton(
+                    onPressed: () => context.canPop()
+                        ? context.pop()
+                        : context
+                            .goNamed(HomePage.pageConfig.name, pathParameters: {'tab': OverviewPage.pageConfig.name}))),
+            body: ToDoDetailPageProvider(
+              collectionId: CollectionId.fromUniqueString(collectionId ?? ''),
+            ),
+          );
         }),
   ],
 );
-
-
 
 /*
 

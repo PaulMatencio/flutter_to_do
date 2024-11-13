@@ -15,15 +15,14 @@ class ToDoColor {
   ];
 
   Color get color => predefinedColors[colorIndex];
+
   ToDoColor({required this.colorIndex});
 
-   factory  ToDoColor.setColor(int index) {
-     return ToDoColor(
-       colorIndex: index,
-     );
+  factory ToDoColor.setColor(int index) {
+    return ToDoColor(
+      colorIndex: index,
+    );
   }
 
   Color getColor() => Color(colorIndex);
 }
-
-

@@ -7,6 +7,7 @@ import 'package:todo_app/1_domain/use_cases/delete_todo_entry.dart';
 import 'package:todo_app/1_domain/use_cases/load_todo_entry.dart';
 import 'package:todo_app/1_domain/use_cases/update_todo_entry.dart';
 import 'package:todo_app/core/use_case.dart';
+
 part 'todo_entry_item_cubit_state.dart';
 
 class ToDoEntryItemCubit extends Cubit<ToDoEntryItemState> {
@@ -24,6 +25,7 @@ class ToDoEntryItemCubit extends Cubit<ToDoEntryItemState> {
   final LoadToDoEntry loadToDoEntry;
   final UpdateToDoEntry updateToDoEntry; //  update status
   final DeleteToDoEntry deleteToDoEntry;
+
   // update field
 
   Future<void> fetch() async {
@@ -50,8 +52,7 @@ class ToDoEntryItemCubit extends Cubit<ToDoEntryItemState> {
     try {
       if (state is ToDoEntryItemLoadedState) {
         final currentToDoEntry = (state as ToDoEntryItemLoadedState).toDoEntry;
-        final entryToUpdate =
-            currentToDoEntry.copyWith(isDone: !currentToDoEntry.isDone);
+        final entryToUpdate = currentToDoEntry.copyWith(isDone: !currentToDoEntry.isDone);
         final updatedEntry = await updateToDoEntry.call(ToDoEntryIdsParam(
           collectionId: collectionId,
           entryId: entryToUpdate.id,
@@ -74,8 +75,7 @@ class ToDoEntryItemCubit extends Cubit<ToDoEntryItemState> {
     }
   }
 
-  Future<void> delete(
-      {required CollectionId collectionId, required EntryId entryId}) async {
+  Future<void> delete({required CollectionId collectionId, required EntryId entryId}) async {
     try {
       if (state is ToDoEntryItemLoadedState) {
         // final currentToDoEntry = (state as ToDoEntryItemLoadedState).toDoEntry;
@@ -101,8 +101,7 @@ class ToDoEntryItemCubit extends Cubit<ToDoEntryItemState> {
 String _mapFailureToMessage(Failure failure) {
   switch (failure) {
     case final ServerFailure e:
-      String? message =
-          (e.stackTrace == null) ? 'Server failure' : e.stackTrace;
+      String? message = (e.stackTrace == null) ? 'Server failure' : e.stackTrace;
       return message!;
     case final CacheFailure _:
       return 'Cache failure';

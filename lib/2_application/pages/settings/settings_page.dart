@@ -9,8 +9,8 @@ import '../home/home_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
-  static const pageConfig =
-      PageConfig(icon: Icons.settings, name: 'settings', child: SettingsPage());
+
+  static const pageConfig = PageConfig(icon: Icons.settings, name: 'settings', child: SettingsPage());
 
   @override
   Widget build(BuildContext context) {
@@ -18,17 +18,16 @@ class SettingsPage extends StatelessWidget {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(pageConfig.name,
-          style: theme.textTheme.titleMedium,),
-        backgroundColor: theme.colorScheme.primaryContainer ,
-          leading: BackButton(
-              onPressed: () => context.canPop()
-                  ? context.pop()
-                  : context.goNamed(HomePage.pageConfig.name,
-                  pathParameters: {'tab': OverviewPage.pageConfig.name})),
-        actions: [
-          SwitchButton()
-        ],
+        title: Text(
+          pageConfig.name,
+          style: theme.textTheme.titleMedium,
+        ),
+        backgroundColor: theme.colorScheme.primaryContainer,
+        leading: BackButton(
+            onPressed: () => context.canPop()
+                ? context.pop()
+                : context.goNamed(HomePage.pageConfig.name, pathParameters: {'tab': OverviewPage.pageConfig.name})),
+        actions: [SwitchButton()],
       ),
       body: Container(color: theme.colorScheme.inversePrimary),
     );

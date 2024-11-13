@@ -42,12 +42,25 @@ class HiveLocalDataSource implements ToDoLocalDataSourceInterface {
   ///         and  a   Map<collection.Id,List<entry>?   into the entryBox
   ///
   @override
-  Future<bool> createToDoCollection(
-      {required ToDoCollectionModel collection}) async {
+  Future<bool> createToDoCollection({required ToDoCollectionModel collection}) async {
     final collectionBox = await _openCollectionBox();
     final entryBox = await _openEntryBox();
-    await collectionBox.put(collection.id, collection.toJson(collection));
+    await collectionBox.put(collection.id, collection.toJson());
     await entryBox.put(collection.id, {});
+    return true;
+  }
+
+  @override
+  Future<bool> deleteToDoCollection({required String collectionId}) async {
+    final collectionBox = await _openCollectionBox();
+    final entryBox = await _openEntryBox();
+    final entryList = await entryBox.get(collectionId);
+    if (entryList == null) throw CollectionNotFoundException();
+    final entryIdList = entryList.cast<String, dynamic>().keys.toList();
+    if (entryIdList.isNotEmpty) {
+      throw CollectionNotEmptyException(stackTrace: 'collection is not empty');
+    }
+    await entryBox.delete(collectionId).then((_) => collectionBox.delete(collectionId));
     return true;
   }
 
@@ -56,26 +69,21 @@ class HiveLocalDataSource implements ToDoLocalDataSourceInterface {
   ///
 
   @override
-  Future<bool> createToDoEntry(
-      {required String collectionId,
-      required ToDoEntryModel entryModel}) async {
+  Future<bool> createToDoEntry({required String collectionId, required ToDoEntryModel entryModel}) async {
     final entryBox = await _openEntryBox();
     final entryList = await entryBox.get(collectionId);
     if (entryList == null) throw CollectionNotFoundException();
-    entryList
-        .cast<String, dynamic>()
-        .putIfAbsent(entryModel.id, () => entryModel.toJson(entryModel));
+    entryList.cast<String, dynamic>().putIfAbsent(entryModel.id, () => entryModel.toJson());
     await entryBox.put(collectionId, entryList);
     return true;
   }
 
   @override
-  Future<ToDoCollectionModel> getToDoCollection(
-      {required String collectionId}) async {
+  Future<ToDoCollectionModel> getToDoCollection({required String collectionId}) async {
     final collectionBox = await _openCollectionBox();
     final collection =
-       // (await collectionBox.get(collectionId)) as Map<String, dynamic>?;
-    (await collectionBox.get(collectionId))?.cast<String,dynamic>();
+        // (await collectionBox.get(collectionId)) as Map<String, dynamic>?;
+        (await collectionBox.get(collectionId))?.cast<String, dynamic>();
     if (collection == null) {
       throw EntryNotFoundException();
     }
@@ -86,13 +94,11 @@ class HiveLocalDataSource implements ToDoLocalDataSourceInterface {
   Future<List<String>> getToDoCollectionIds() async {
     final collectionBox = await _openCollectionBox();
     final collectionIds = await collectionBox.getAllKeys();
-    print('collection ids list  length  ${collectionIds.length}');
     return collectionIds;
   }
 
   @override
-  Future<ToDoEntryModel> getToDoEntry(
-      {required String collectionId, required String entryId}) async {
+  Future<ToDoEntryModel> getToDoEntry({required String collectionId, required String entryId}) async {
     final entryBox = await _openEntryBox();
     final entryList = await entryBox.get(collectionId);
     if (entryList == null) throw CollectionNotFoundException();
@@ -111,20 +117,18 @@ class HiveLocalDataSource implements ToDoLocalDataSourceInterface {
   }
 
   @override
-  Future<ToDoEntryModel> updateToDoEntry(
-      {required String collectionId, required String entryId}) async {
+  Future<ToDoEntryModel> updateToDoEntry({required String collectionId, required String entryId}) async {
     final entryBox = await _openEntryBox();
     final entryList = await entryBox.get(collectionId);
     if (entryList == null) throw CollectionNotFoundException();
     if (!entryList.containsKey(entryId)) throw EntryNotFoundException();
-    final entry =
-        ToDoEntryModel.fromJson(entryList[entryId].cast<String, dynamic>());
+    final entry = ToDoEntryModel.fromJson(entryList[entryId].cast<String, dynamic>());
     final updatedEntry = ToDoEntryModel(
       id: entry.id,
       description: entry.description,
       isDone: !entry.isDone,
     );
-    entryList[entryId] = updatedEntry.toJson(entry);
+    entryList[entryId] = updatedEntry.toJson();
     await entryBox.put(collectionId, entryList);
     return updatedEntry;
   }
@@ -133,8 +137,7 @@ class HiveLocalDataSource implements ToDoLocalDataSourceInterface {
   ///   delete an entry
   ///
   @override
-  Future<bool> deleteToDoEntry(
-      {required String collectionId, required String entryId}) async {
+  Future<bool> deleteToDoEntry({required String collectionId, required String entryId}) async {
     // TODO: implement deleteToDoEntry
     final entryBox = await _openEntryBox();
     final entryList = await entryBox.get(collectionId);
@@ -150,15 +153,13 @@ class HiveLocalDataSource implements ToDoLocalDataSourceInterface {
   ///
 
   @override
-  Future<bool> modifyToDoEntry(
-      {required String collectionId,
-      required ToDoEntryModel entryModel}) async {
+  Future<bool> modifyToDoEntry({required String collectionId, required ToDoEntryModel entryModel}) async {
     // TODO: implement modifyToDoEntry
     final entryBox = await _openEntryBox();
     final entryList = await entryBox.get(collectionId);
     if (entryList == null) throw CollectionNotFoundException();
     if (!entryList.containsKey(entryModel.id)) throw EntryNotFoundException();
-    entryList[entryModel.id] = entryModel.toJson(entryModel);
+    entryList[entryModel.id] = entryModel.toJson();
     entryBox.put(collectionId, entryList);
     return true;
   }

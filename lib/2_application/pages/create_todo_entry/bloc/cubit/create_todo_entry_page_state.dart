@@ -1,9 +1,8 @@
-
 part of 'create_todo_entry_page_cubit.dart';
 
 class CreateToDoEntryPageState extends Equatable {
+  const CreateToDoEntryPageState({this.description});
 
-  const CreateToDoEntryPageState({ this.description});
   final FormValue<String?>? description;
 
   CreateToDoEntryPageState copyWith({FormValue<String?>? description}) {
@@ -13,5 +12,5 @@ class CreateToDoEntryPageState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [ description];
+  List<Object?> get props => [description];
 }

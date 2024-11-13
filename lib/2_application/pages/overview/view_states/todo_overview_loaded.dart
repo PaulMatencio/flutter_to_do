@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_app/0_data/exceptions/exceptions.dart';
 import 'package:todo_app/1_domain/entities/todo_collection.dart';
 import 'package:go_router/go_router.dart';
+import 'package:todo_app/1_domain/entities/unique_id.dart';
+import 'package:todo_app/1_domain/failures/failures.dart';
+import 'package:todo_app/1_domain/repositories/todo_repository.dart';
+import 'package:todo_app/1_domain/use_cases/delete_todo_collection.dart';
+import 'package:todo_app/1_domain/use_cases/load_todo_collections.dart';
+import 'package:todo_app/2_application/core/widgets/failure_dialog.dart';
 import 'package:todo_app/2_application/core/widgets/switch_button.dart';
 import 'package:todo_app/2_application/pages/create_todo_collection/create_todo_collection_page.dart';
 import 'package:todo_app/2_application/pages/dashboard/dashboard_page.dart';
@@ -24,20 +31,18 @@ class ToDoOverviewLoaded extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+
     ///  not used for the moment
     final shouldDisplayAddItemButton = Breakpoints.small.isActive(context);
     return Scaffold(
       appBar: AppBar(
           backgroundColor: colorScheme.primaryContainer,
-          title: Center(
-              child: Text(OverviewPage.pageConfig.name,
-                  style: theme.textTheme.titleMedium)),
+          title: Center(child: Text(OverviewPage.pageConfig.name, style: theme.textTheme.titleMedium)),
           actions: [SwitchButton()],
           leading: BackButton(
               onPressed: () => context.canPop()
                   ? context.pop()
-                  : context.goNamed(HomePage.pageConfig.name,
-                      pathParameters: {'tab': DashboardPage.pageConfig.name}))),
+                  : context.goNamed(HomePage.pageConfig.name, pathParameters: {'tab': DashboardPage.pageConfig.name}))),
       body: Container(
         color: colorScheme.onPrimary,
         child: Padding(
@@ -48,60 +53,65 @@ class ToDoOverviewLoaded extends StatelessWidget {
               itemBuilder: (context, index) {
                 final item = collections[index];
                 // final colorScheme = Theme.of(context).colorScheme;
-                return BlocBuilder<NavigationToDoCubit,
-                    NavigationToDoCubitState>(
+                return BlocBuilder<NavigationToDoCubit, NavigationToDoCubitState>(
                   //  ----------------------------------------------------------------
                   //  condition to rebuild the overview page
                   //  Only rebuild the  overview  page when
                   //        another collection is selected
                   //------------------------------------------------------------------
-                  buildWhen: (previous, current) =>
-                      previous.selectedCollectionId !=
-                      current.selectedCollectionId,
+                  buildWhen: (previous, current) => previous.selectedCollectionId != current.selectedCollectionId,
                   builder: (context, state) {
                     // debugPrint('build item ${item.id.value}');
                     return Card.outlined(
-                      child: ListTile(
-                        tileColor: colorScheme.surface,
-                        selectedTileColor: colorScheme.surfaceContainerHighest,
-                        iconColor: item.color.getColor(),
-                        selectedColor: item.color.getColor(),
+                      child: Row(
+                        children: [
+                          Tooltip(
+                              message: 'delete',
+                              child: TextButton(
+                                  onPressed: () {
+                                    showAlertDialog(context: context, collectionId: item.id);
+                                  },
+                                  child: Icon(Icons.delete))),
+                          Expanded(
+                            child: ListTile(
+                              tileColor: colorScheme.surface,
+                              selectedTileColor: colorScheme.surfaceContainerHighest,
+                              iconColor: item.color.getColor(),
+                              selectedColor: item.color.getColor(),
 
-                        //
-                        //  selected is set to TRUE
-                        //     when the item.id is the same
-                        //
-                        selected: state.selectedCollectionId == item.id,
-                        onTap: () {
-                          //------------------------------------------------
-                          // when pressed => change the state of
-                          //  the  selected item.id  to the  current item.id
-                          //   change  the  state of
-                          //!       collectionId = item.id
-                          //
-                          //    Important to avoid building the
-                          //        overview page everytime
-                          //        a collectionId is changed
-                          //!     see   buildWhen  previous != current
-                          //-----------------------------------------------
-                          context
-                              .read<NavigationToDoCubit>()
-                              .selectedToDoCollectionChanged(item.id);
-                          //--------------------------------------------
-                          //   if screen is small  =>  display the
-                          //   detailPage of the selected collection
-                          //-----------------------------------------------
-                          if (Breakpoints.small.isActive(context)) {
-                            context.pushNamed(ToDoDetailPage.pageConfig.name,
-                                pathParameters: {
-                                  'collectionId': item.id.value
-                                });
-                          }
-                        },
-                        leading: Tooltip(
-                            message: 'click anywhere to see the detail',
-                            child: const Icon(Icons.circle)),
-                        title: Text(item.title),
+                              ///
+                              //  selected is set to TRUE
+                              //     when the item.id is the same
+                              //
+                              selected: state.selectedCollectionId == item.id,
+                              onTap: () {
+                                //------------------------------------------------
+                                // when pressed => change the state of
+                                //  the  selected item.id  to the  current item.id
+                                //   change  the  state of
+                                //!       collectionId = item.id
+                                //
+                                //    Important to avoid building the
+                                //        overview page everytime
+                                //        a collectionId is changed
+                                //!     see   buildWhen  previous != current
+                                //-----------------------------------------------
+                                context.read<NavigationToDoCubit>().selectedToDoCollectionChanged(item.id);
+                                //--------------------------------------------
+                                //   if screen is small  =>  display the
+                                //   detailPage of the selected collection
+                                //-----------------------------------------------
+                                if (Breakpoints.small.isActive(context)) {
+                                  context.pushNamed(ToDoDetailPage.pageConfig.name,
+                                      pathParameters: {'collectionId': item.id.value});
+                                }
+                              },
+                              leading:
+                                  Tooltip(message: 'click anywhere to see the detail', child: const Icon(Icons.circle)),
+                              title: Text(item.title),
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   },
@@ -120,19 +130,14 @@ class ToDoOverviewLoaded extends StatelessWidget {
                   heroTag: 'create-todo-collection',
                   tooltip: 'add_new_collection',
                   onPressed: () {
-                    context
-                        .pushNamed(CreateToDoCollectionPage.pageConfig.name)
-                       .then((value) {
-                      if (value == true ) {    // it was == null
+                    context.pushNamed(CreateToDoCollectionPage.pageConfig.name).then((value) {
+                      if (value == true) {
+                        // it was == null
                         if (context.mounted) {
-                          context
-                              .read<ToDoOverviewCubit>()
-                              .readToDoCollections();
+                          context.read<ToDoOverviewCubit>().readToDoCollections();
                         }
                       }
-                    })
-
-                    ;
+                    });
                   },
                   child: Icon(CreateToDoCollectionPage.pageConfig.icon),
                 ),
@@ -143,4 +148,68 @@ class ToDoOverviewLoaded extends StatelessWidget {
       ),
     );
   }
+}
+
+showAlertDialog({
+  required BuildContext context,
+  required CollectionId collectionId,
+}) {
+  /// set up the Cancel button
+  Widget cancelButton = TextButton(child: Text('Cancel'), onPressed: () => context.pop());
+
+  ///  Setup the continue button
+  Widget continueButton = BlocProvider(
+      create: (context) => ToDoOverviewCubit(
+          deleteToDoCollection: DeleteToDoCollection(toDoRepository: RepositoryProvider.of<ToDoRepository>(context)),
+          loadToDoCollections: LoadToDoCollections(toDoRepository: RepositoryProvider.of<ToDoRepository>(context))),
+      child: TextButton(
+          child: Text('Continue'),
+          onPressed: () async {
+            ///     Delete ta collection given its collectId
+            try {
+              await context.read<ToDoOverviewCubit>().deleteCollection(collectionId: collectionId).then((_) {
+                if (context.mounted) {
+                  context.read<ToDoOverviewCubit>().readToDoCollections();
+                }
+              });
+            } on GeneralFailure catch (e) {
+              if (context.mounted) {
+                showScaffoldMessage(context: context, message: e.stackTrace ?? 'Collection is not empty');
+              }
+            }
+            if (context.mounted) context.pop();
+          }));
+
+  ///
+  /// Set up the AlertDialog
+  ///
+  AlertDialog alert = AlertDialog(
+    title: Text('AlertDialog'),
+    content: Text('Are you sure you want to delete'),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+  // show the dialog
+
+  ///
+  ///    Build the AlertDialog
+  ///
+  showDialog(
+    context: context,
+    useRootNavigator: false, //  use go router instead
+    builder: (BuildContext context) {
+      return alert; //
+    },
+  );
+}
+
+void showScaffoldMessage({required BuildContext context, required String message}) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text(message, style: TextStyle(fontSize: 20)),
+    duration: const Duration(milliseconds: 6500),
+    action: SnackBarAction(label: 'Quit', onPressed: () {}),
+    behavior: SnackBarBehavior.floating,
+  ));
 }

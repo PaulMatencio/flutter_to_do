@@ -4,13 +4,9 @@ import 'package:todo_app/1_domain/failures/failures.dart';
 import 'package:todo_app/1_domain/repositories/todo_repository.dart';
 import 'package:todo_app/core/use_case.dart';
 
+class CreateToDoCollection implements UseCase<bool, ToDoCollectionParams> {
+  CreateToDoCollection({required this.toDoRepository});
 
-
-class CreateToDoCollection implements UseCase<bool,ToDoCollectionParams> {
-
-  CreateToDoCollection({
-    required this.toDoRepository
-  });
   // final collection toDoCollection;
   final ToDoRepository toDoRepository;
 
@@ -18,20 +14,17 @@ class CreateToDoCollection implements UseCase<bool,ToDoCollectionParams> {
   Future<Either<Failure, bool>> call(ToDoCollectionParams params) async {
     try {
       print('UseCase: create_todo_collection -> ${params.collection.id}');
-      final createToDoCollection = await toDoRepository.createToDoCollection(
-        params.collection
-      );
+      final createToDoCollection = await toDoRepository.createToDoCollection(params.collection);
 
       return createToDoCollection.fold(
-            (left) => Left(left),
-            (right) => Right(true),
+        (left) => Left(left),
+        (right) => Right(true),
       );
     } on Exception catch (e) {
       return Left(ServerFailure(stackTrace: e.toString()));
     }
   }
 }
-
 
 /*
 class CreateToDoCollection implements UseCase<bool, ToDoCollectionParams> {

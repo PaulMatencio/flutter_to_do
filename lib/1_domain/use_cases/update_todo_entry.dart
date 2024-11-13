@@ -1,4 +1,3 @@
-
 import 'package:either_dart/either.dart';
 import 'package:todo_app/1_domain/entities/todo_entry.dart';
 import 'package:todo_app/1_domain/failures/failures.dart';
@@ -18,8 +17,8 @@ class UpdateToDoEntry implements UseCase<ToDoEntry, ToDoEntryIdsParam> {
         entryId: params.entryId,
       );
       return loadedEntry.fold(
-            (left) => Left(left),
-            (right) => Right(right),
+        (left) => Left(left),
+        (right) => Right(right),
       );
     } on Exception catch (e) {
       return Left(ServerFailure(stackTrace: e.toString()));

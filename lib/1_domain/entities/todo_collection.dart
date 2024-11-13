@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:todo_app/1_domain/entities/todo_color.dart';
@@ -25,29 +24,18 @@ class ToDoCollection {
     );
   }
 
-
   ToDoCollection copyWith({
     String? title,
-    ToDoColor ? color ,
+    ToDoColor? color,
   }) {
-    return ToDoCollection(
-      id: id,
-      title: title ?? this.title,
-      color: color ?? this.color
-    );
+    return ToDoCollection(id: id, title: title ?? this.title, color: color ?? this.color);
   }
 
   ToDoCollection copyWithId({
     required CollectionId id,
     String? title,
-    ToDoColor ? color ,
-
+    ToDoColor? color,
   }) {
-    return ToDoCollection(
-        id: id,
-        title: title ?? this.title,
-        color: color ?? this.color
-    );
+    return ToDoCollection(id: id, title: title ?? this.title, color: color ?? this.color);
   }
-
 }

@@ -4,7 +4,6 @@ class CreateToDoCollectionPageState extends Equatable {
   final String? title;
   final String? color;
 
-
   const CreateToDoCollectionPageState({this.title, this.color});
 
   CreateToDoCollectionPageState copyWith({String? title, String? color}) {

@@ -7,13 +7,9 @@ import 'package:todo_app/1_domain/entities/todo_color.dart';
 import 'package:todo_app/1_domain/use_cases/create_todo_collection.dart';
 import 'package:todo_app/core/use_case.dart';
 
-
 part 'create_todo_collection_page_state.dart';
 
-
-
-class CreateToDoCollectionPageCubit
-    extends Cubit<CreateToDoCollectionPageState> {
+class CreateToDoCollectionPageCubit extends Cubit<CreateToDoCollectionPageState> {
   CreateToDoCollectionPageCubit({
     required this.createToDoCollection,
   }) : super(const CreateToDoCollectionPageState());
@@ -30,13 +26,12 @@ class CreateToDoCollectionPageCubit
   }
 
   Future<void> submit(int colorIndex) async {
-   // final parsedColorIndex = int.tryParse(state.color ?? '') ?? 0;
+    // final parsedColorIndex = int.tryParse(state.color ?? '') ?? 0;
     await createToDoCollection.call(ToDoCollectionParams(
       collection: ToDoCollection.empty().copyWith(
-        title: state.title,
-       // color: ToDoColor(colorIndex: parsedColorIndex),
-        color:ToDoColor.setColor(colorIndex)
-      ),
+          title: state.title,
+          // color: ToDoColor(colorIndex: parsedColorIndex),
+          color: ToDoColor.setColor(colorIndex)),
     ));
   }
 }

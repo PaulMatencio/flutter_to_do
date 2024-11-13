@@ -32,8 +32,7 @@ class ToDoRepositoryMock implements ToDoRepository {
 
   @override
   //! @override readToDoEntry
-  Future<Either<Failure, ToDoEntry>> readToDoEntry(
-      CollectionId collectionId, EntryId entryId) {
+  Future<Either<Failure, ToDoEntry>> readToDoEntry(CollectionId collectionId, EntryId entryId) {
     try {
       /*
       final selectedEntryItem = toDoEntries.firstWhere(
@@ -47,7 +46,7 @@ class ToDoRepositoryMock implements ToDoRepository {
           (element) => element.id == entryId,
         );
       } else {
-         selectedEntryItem = ToDoEntry.empty();
+        selectedEntryItem = ToDoEntry.empty();
       }
 
       // ------------------------------------------------------
@@ -57,8 +56,7 @@ class ToDoRepositoryMock implements ToDoRepository {
       Random rand = Random();
       int r = rand.nextInt(10);
       if (['20', '30'].contains(entryId.value) && r.isEven) {
-        return Future.delayed(
-            Duration(milliseconds: 300), () => Left(ServerFailure()));
+        return Future.delayed(Duration(milliseconds: 300), () => Left(ServerFailure()));
       } else {
         return Future.delayed(
           const Duration(milliseconds: 200),
@@ -76,25 +74,20 @@ class ToDoRepositoryMock implements ToDoRepository {
     required CollectionId collectionId,
     required EntryId entryId,
   }) {
-    final index = toDoEntries[collectionId]!
-        .indexWhere((element) => element.id == entryId);
+    final index = toDoEntries[collectionId]!.indexWhere((element) => element.id == entryId);
     final entryToUpdate = toDoEntries[collectionId]![index];
     final updatedEntry = entryToUpdate.copyWith(isDone: !entryToUpdate.isDone);
     toDoEntries[collectionId]![index] = updatedEntry;
-    return Future.delayed(
-        const Duration(milliseconds: 100), () => Right(updatedEntry));
+    return Future.delayed(const Duration(milliseconds: 100), () => Right(updatedEntry));
 
     // return Future.delayed(const Duration(milliseconds: 100), () => Left(ServerFailure()));
   }
-
-
 
   @override
   Future<Either<Failure, bool>> deleteToDoEntry({required CollectionId collectionId, required EntryId entryId}) {
     // TODO: implement deleteToDoEntry
     throw UnimplementedError();
   }
-
 
   @override
   Future<Either<Failure, bool>> modifyToDoEntry({required CollectionId collectionId, required ToDoEntry toDoEntry}) {
@@ -104,8 +97,7 @@ class ToDoRepositoryMock implements ToDoRepository {
 
   @override
   //! override readToDoEntryIds
-  Future<Either<Failure, List<EntryId>>> readToDoEntryIds(
-      CollectionId collectionId) {
+  Future<Either<Failure, List<EntryId>>> readToDoEntryIds(CollectionId collectionId) {
     try {
       List<EntryId> entryIds = [];
       if (toDoEntries.containsKey(collectionId)) {
@@ -128,16 +120,13 @@ class ToDoRepositoryMock implements ToDoRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> createToDoCollection(
-      ToDoCollection todoCollection) {
+  Future<Either<Failure, bool>> createToDoCollection(ToDoCollection todoCollection) {
     bool addCollection(ToDoCollection toDoCollection) {
       final index = toDoCollections.length;
       final collectionId = CollectionId.fromUniqueString(index.toString());
 
       toDoEntries.putIfAbsent(collectionId, () => []);
-      toDoCollections.add(todoCollection.copyWithId(
-          id: collectionId, title: toDoCollection.title));
-      print(' empty ....   ${toDoEntries[collectionId]}');
+      toDoCollections.add(todoCollection.copyWithId(id: collectionId, title: toDoCollection.title));
       return true;
     }
 
@@ -152,12 +141,17 @@ class ToDoRepositoryMock implements ToDoRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> createToDoEntry(
-      {required CollectionId collectionId, required ToDoEntry toDoEntry}) {
+  Future<Either<Failure, bool>> deleteToDoCollection(CollectionId collectionId) {
+    // TODO: implement deleteToDoCollection
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> createToDoEntry({required CollectionId collectionId, required ToDoEntry toDoEntry}) {
     //   add  an ToDoEntry
 
     bool addEntry(ToDoEntry toDoEntry) {
-     // int index =  0;
+      // int index =  0;
       if (toDoEntries.containsKey(collectionId)) {
         /*
         if (toDoEntries[collectionId]!.isNotEmpty) {
@@ -165,9 +159,8 @@ class ToDoRepositoryMock implements ToDoRepository {
           index++;
         }
          */
-       // final entryId = EntryId.fromUniqueString(index.toString());
-        toDoEntries[collectionId]!.add(toDoEntry.copyWith(
-           description: toDoEntry.description));
+        // final entryId = EntryId.fromUniqueString(index.toString());
+        toDoEntries[collectionId]!.add(toDoEntry.copyWith(description: toDoEntry.description));
         return true;
       } else {
         throw (Exception('Invalid collection Id'));

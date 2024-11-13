@@ -43,8 +43,7 @@ class ModifyToDoEntryPageCubit extends Cubit<ModifyToDoEntryPageState> {
   }
 
   Future<void> submit() async {
-    final todoEntry =
-        toDoEntry!.copyWith(description: state.description!.value);
+    final todoEntry = toDoEntry!.copyWith(description: state.description!.value);
     await modifyToDoEntry
         .call(ToDoEntryParams(entry: todoEntry, collectionId: collectionId))
         .then((result) => result.fold((left) => null, (right) {

@@ -14,18 +14,17 @@ class BasicApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ThemeService>(builder: ((context, themeService, child) {
       return MaterialApp.router(
-          title: 'Todo App',
-          localizationsDelegates: [
-            ...GlobalMaterialLocalizations.delegates,
-            GlobalWidgetsLocalizations.delegate,
-          ],
-          themeMode:
-              themeService.isDarkModeOn ? ThemeMode.dark : ThemeMode.light,
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          //!  routes
-          routerConfig: routes,
-        );
+        title: 'Todo App',
+        localizationsDelegates: [
+          ...GlobalMaterialLocalizations.delegates,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        themeMode: themeService.isDarkModeOn ? ThemeMode.dark : ThemeMode.light,
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        //!  routes
+        routerConfig: routes,
+      );
     }));
   }
 }

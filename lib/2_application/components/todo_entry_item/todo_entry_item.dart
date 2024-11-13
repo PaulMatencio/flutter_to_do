@@ -56,6 +56,7 @@ class ToDoEntryItem extends StatelessWidget {
     super.key,
     required this.collectionId,
   });
+
   final CollectionId collectionId;
 
   @override
@@ -76,8 +77,7 @@ class ToDoEntryItem extends StatelessWidget {
               onUpdated: () {
                 context.pushNamed(ModifyToDoEntryPage.pageConfig.name,
                     extra: ModifyToDoEntryPageExtra(
-                        toDoEntryItemModifiedCallback:
-                            context.read<ToDoEntryItemCubit>().fetch,
+                        toDoEntryItemModifiedCallback: context.read<ToDoEntryItemCubit>().fetch,
                         collectionId: collectionId,
                         toDoEntry: state.toDoEntry));
               },
@@ -120,24 +120,20 @@ showAlertDialog({
   required CollectionId collectionId,
 }) {
   /// set up the Cancel button
-  Widget cancelButton =
-      TextButton(child: Text('Cancel'), onPressed: () => context.pop());
-
+  Widget cancelButton = TextButton(child: Text('Cancel'), onPressed: () => context.pop());
 
   ///  Setup the continue button
   Widget continueButton = BlocProvider(
     create: (context) => ToDoDetailCubit(
-      loadToDoEntryIdsForCollection: LoadToDoEntryIdsForCollection(
-          toDoRepository: RepositoryProvider.of<ToDoRepository>(context)),
+      loadToDoEntryIdsForCollection:
+          LoadToDoEntryIdsForCollection(toDoRepository: RepositoryProvider.of<ToDoRepository>(context)),
     ),
     child: TextButton(
         child: Text('Continue'),
         onPressed: () {
           ///     Delete the entryId from the collection repository
           try {
-            context
-                .read<ToDoEntryItemCubit>()
-                .delete(collectionId: collectionId, entryId: entryId);
+            context.read<ToDoEntryItemCubit>().delete(collectionId: collectionId, entryId: entryId);
             context.read<ToDoDetailCubit>().removeEntryId(entryId);
           } on Exception catch (e) {
             FailureDialog(message: e.toString());

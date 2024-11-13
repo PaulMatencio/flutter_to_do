@@ -19,13 +19,8 @@ class ToDoEntryItemLoaded extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card.outlined(
       child: Row(children: [
-        Tooltip(
-            message: 'delete',
-            child: TextButton(onPressed: onDeleted, child: Icon(Icons.delete))),
-        Tooltip(
-            message: 'modify',
-            child: TextButton(
-                onPressed: onUpdated, child: Icon(Icons.update_rounded))),
+        Tooltip(message: 'delete', child: TextButton(onPressed: onDeleted, child: Icon(Icons.delete))),
+        Tooltip(message: 'modify', child: TextButton(onPressed: onUpdated, child: Icon(Icons.update_rounded))),
         Expanded(
           child: CheckboxListTile(
             title: Text(entryItem.description),

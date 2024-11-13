@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -16,7 +14,7 @@ typedef ToDoEntryItemModifiedCallback = Function();
 
 class ModifyToDoEntryPageExtra {
   final CollectionId collectionId;
-  final ToDoEntry  toDoEntry;
+  final ToDoEntry toDoEntry;
   final ToDoEntryItemModifiedCallback toDoEntryItemModifiedCallback;
 
   ModifyToDoEntryPageExtra({
@@ -33,6 +31,7 @@ class ModifyToDoEntryPageProvider extends StatelessWidget {
     required this.todoEntry,
     required this.toDoEntryItemModifiedCallback,
   });
+
   final CollectionId collectionId;
   final ToDoEntry todoEntry;
   final ToDoEntryItemModifiedCallback toDoEntryItemModifiedCallback;
@@ -41,16 +40,13 @@ class ModifyToDoEntryPageProvider extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<ModifyToDoEntryPageCubit>(
         create: (context) => ModifyToDoEntryPageCubit(
-          collectionId: collectionId,
-          toDoEntry: todoEntry,
-          modifyToDoEntry: ModifyToDoEntry(
-            toDoRepository: RepositoryProvider.of<ToDoRepository>(context),
-          ),
-        ),
-        child: ModifyToDoEntryPage(
-            toDoEntryItemModifiedCallback: toDoEntryItemModifiedCallback,
-            toDoEntry: todoEntry
-        ));
+              collectionId: collectionId,
+              toDoEntry: todoEntry,
+              modifyToDoEntry: ModifyToDoEntry(
+                toDoRepository: RepositoryProvider.of<ToDoRepository>(context),
+              ),
+            ),
+        child: ModifyToDoEntryPage(toDoEntryItemModifiedCallback: toDoEntryItemModifiedCallback, toDoEntry: todoEntry));
   }
 }
 
@@ -60,13 +56,11 @@ class ModifyToDoEntryPage extends StatefulWidget {
     required this.toDoEntry,
     required this.toDoEntryItemModifiedCallback,
   });
-  final ToDoEntry  toDoEntry;
+
+  final ToDoEntry toDoEntry;
   final ToDoEntryItemModifiedCallback toDoEntryItemModifiedCallback;
 
-  static const pageConfig = PageConfig(
-      icon: Icons.update_rounded,
-      name: 'modify_todo_entry',
-      child: Placeholder());
+  static const pageConfig = PageConfig(icon: Icons.update_rounded, name: 'modify_todo_entry', child: Placeholder());
 
   @override
   State<ModifyToDoEntryPage> createState() => _ModifyToDoEntryPageState();
@@ -74,6 +68,7 @@ class ModifyToDoEntryPage extends StatefulWidget {
 
 class _ModifyToDoEntryPageState extends State<ModifyToDoEntryPage> {
   final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -84,53 +79,47 @@ class _ModifyToDoEntryPageState extends State<ModifyToDoEntryPage> {
             SizedBox(
               height: 20,
             ),
-            _EntryDescriptionField(toDoEntry: widget.toDoEntry,),
+            _EntryDescriptionField(
+              toDoEntry: widget.toDoEntry,
+            ),
             SizedBox(
               height: 20,
             ),
-            _SubmissionButton(formKey: _formKey,
-              toDoEntryItemModifiedCallback: widget.toDoEntryItemModifiedCallback,)
+            _SubmissionButton(
+              formKey: _formKey,
+              toDoEntryItemModifiedCallback: widget.toDoEntryItemModifiedCallback,
+            )
           ])),
     );
   }
 }
 
 class _EntryDescriptionField extends StatelessWidget {
-  const _EntryDescriptionField({
-    super.key,
-    required this.toDoEntry
-  });
+  const _EntryDescriptionField({super.key, required this.toDoEntry});
+
   final ToDoEntry toDoEntry;
+
   @override
   Widget build(BuildContext context) {
-
     final theme = Theme.of(context);
     return BlocBuilder<ModifyToDoEntryPageCubit, ModifyToDoEntryPageState>(
       builder: (context, state) {
         return TextFormField(
-            initialValue:  toDoEntry.description,
+            initialValue: toDoEntry.description,
             decoration: InputDecoration(
               icon: const Icon(Icons.description),
-              enabledBorder: OutlineInputBorder(
-                  borderSide:
-                  BorderSide(width: 1.0, color: theme.colorScheme.primary)),
+              enabledBorder: OutlineInputBorder(borderSide: BorderSide(width: 1.0, color: theme.colorScheme.primary)),
               focusedBorder: OutlineInputBorder(
-                borderSide:
-                BorderSide(width: 1.0, color: theme.colorScheme.inversePrimary),
+                borderSide: BorderSide(width: 1.0, color: theme.colorScheme.inversePrimary),
               ),
               labelText: 'description',
               helperText: 'should exceed 2 characters long',
             ),
-            onChanged: (value) => context
-                .read<ModifyToDoEntryPageCubit>()
-                .descriptionChanged(description: value),
+            onChanged: (value) => context.read<ModifyToDoEntryPageCubit>().descriptionChanged(description: value),
             validator: (value) {
-              final currentValidationState = context
-                  .read<ModifyToDoEntryPageCubit>()
-                  .state
-                  .description
-                  ?.validationStatus ??
-                  ValidationStatus.pending;
+              final currentValidationState =
+                  context.read<ModifyToDoEntryPageCubit>().state.description?.validationStatus ??
+                      ValidationStatus.pending;
               switch (currentValidationState) {
                 case ValidationStatus.error:
                   return 'This field needs at least two characters to be valid';
@@ -147,9 +136,7 @@ class _EntryDescriptionField extends StatelessWidget {
 
 class _SubmissionButton extends StatelessWidget {
   const _SubmissionButton(
-      {super.key,
-        required GlobalKey<FormState> formKey,
-        required this.toDoEntryItemModifiedCallback})
+      {super.key, required GlobalKey<FormState> formKey, required this.toDoEntryItemModifiedCallback})
       : _formKey = formKey;
 
   final GlobalKey<FormState> _formKey;
@@ -160,14 +147,11 @@ class _SubmissionButton extends StatelessWidget {
     final theme = Theme.of(context);
     return ElevatedButton(
         style: ButtonStyle(
-          backgroundColor:
-          WidgetStatePropertyAll<Color>(theme.colorScheme.primary),
-          foregroundColor:
-          WidgetStatePropertyAll<Color>(theme.colorScheme.inversePrimary),
-          textStyle:
-          WidgetStatePropertyAll<TextStyle>(theme.textTheme.titleSmall!),
+          backgroundColor: WidgetStatePropertyAll<Color>(theme.colorScheme.primary),
+          foregroundColor: WidgetStatePropertyAll<Color>(theme.colorScheme.inversePrimary),
+          textStyle: WidgetStatePropertyAll<TextStyle>(theme.textTheme.titleSmall!),
         ),
-        onPressed: () async{
+        onPressed: () async {
           final isValid = _formKey.currentState?.validate();
           if (isValid == true) {
             context.read<ModifyToDoEntryPageCubit>().submit();

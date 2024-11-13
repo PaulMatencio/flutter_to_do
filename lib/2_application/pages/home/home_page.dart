@@ -13,7 +13,9 @@ import '../settings/settings_page.dart';
 
 class HomePageProvider extends StatelessWidget {
   const HomePageProvider({super.key, required this.tab});
+
   final String tab;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<NavigationToDoCubit>(
@@ -62,8 +64,7 @@ class _HomePageState extends State<HomePage> {
     final colorScheme = Theme.of(context).colorScheme;
     // print(SettingsPage.pageConfig.name);
     return BlocListener<NavigationToDoCubit, NavigationToDoCubitState>(
-      listenWhen: (previous, current) =>
-          previous.isSecondBodyDisplayed != current.isSecondBodyDisplayed,
+      listenWhen: (previous, current) => previous.isSecondBodyDisplayed != current.isSecondBodyDisplayed,
       listener: (context, state) {
         if (context.canPop() && (state.isSecondBodyDisplayed ?? false)) {
           context.pop();
@@ -88,20 +89,15 @@ class _HomePageState extends State<HomePage> {
                     trailing: Tooltip(
                       message: SettingsPage.pageConfig.name,
                       child: IconButton(
-                        onPressed: () =>
-                            context.pushNamed(SettingsPage.pageConfig.name),
+                        onPressed: () => context.pushNamed(SettingsPage.pageConfig.name),
                         icon: Icon(SettingsPage.pageConfig.icon),
                       ),
                     ),
                     backgroundColor: colorScheme.inversePrimary,
-                    selectedLabelTextStyle:
-                        TextStyle(color: colorScheme.onSurface),
-                    selectedIconTheme:
-                        IconThemeData(color: colorScheme.onSurface),
-                    unselectedIconTheme: IconThemeData(
-                        color: colorScheme.onSurface.withOpacity(0.5)),
-                    onDestinationSelected: (index) =>
-                        _tapOnNavigationDestination(context, index),
+                    selectedLabelTextStyle: TextStyle(color: colorScheme.onSurface),
+                    selectedIconTheme: IconThemeData(color: colorScheme.onSurface),
+                    unselectedIconTheme: IconThemeData(color: colorScheme.onSurface.withOpacity(0.5)),
+                    onDestinationSelected: (index) => _tapOnNavigationDestination(context, index),
                     selectedIndex: widget.index,
                     destinations: destinations
                         .map(
@@ -119,8 +115,7 @@ class _HomePageState extends State<HomePage> {
                   builder: (_) => AdaptiveScaffold.standardBottomNavigationBar(
                     destinations: destinations,
                     currentIndex: widget.index,
-                    onDestinationSelected: (value) =>
-                        _tapOnNavigationDestination(context, value),
+                    onDestinationSelected: (value) => _tapOnNavigationDestination(context, value),
                   ),
                 ),
               },
@@ -158,8 +153,7 @@ class _HomePageState extends State<HomePage> {
   //void _tapOnNavigationDestination(BuildContext context, int index) => context.go('/home/${HomePage.tabs[index].name.toLowerCase()}');
   void _tapOnNavigationDestination(BuildContext context, int index) {
     //   HomePage.pageConfig.name/:tab
-    context.goNamed(HomePage.pageConfig.name,
-        pathParameters: {'tab': HomePage.tabs[index].name});
+    context.goNamed(HomePage.pageConfig.name, pathParameters: {'tab': HomePage.tabs[index].name});
   }
 }
 
@@ -172,6 +166,7 @@ class DetailPageProvider extends StatelessWidget {
   final ColorScheme colorScheme;
   final String imageUrl = 'https://i.postimg.cc/T1L70cws/coffee.jpg';
   final String imageAsset = 'images/view-details-4.png';
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -179,6 +174,7 @@ class DetailPageProvider extends StatelessWidget {
       builder: (context, state) {
         final selectedId = state.selectedCollectionId;
         final isSecondBodyDisplayed = Breakpoints.mediumAndUp.isActive(context);
+
         ///---------------------------------------------------------
         ///    change the state of the isSecondBodyDisplayed property
         ///    for mediumAndUp

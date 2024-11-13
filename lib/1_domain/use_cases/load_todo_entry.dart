@@ -1,5 +1,3 @@
-
-
 import 'package:either_dart/either.dart';
 import 'package:todo_app/1_domain/entities/todo_entry.dart';
 import 'package:todo_app/1_domain/failures/failures.dart';
@@ -7,15 +5,15 @@ import 'package:todo_app/1_domain/repositories/todo_repository.dart';
 import 'package:todo_app/core/use_case.dart';
 
 class LoadToDoEntry implements UseCase<ToDoEntry, ToDoEntryIdsParam> {
-
   const LoadToDoEntry({
     required this.toDoRepository,
   });
+
   final ToDoRepository toDoRepository;
 
   @override
   Future<Either<Failure, ToDoEntry>> call(ToDoEntryIdsParam params) async {
-   //  print('useCase: load_todo_entry for  collection: ${params.collectionId} - entry: ${params.entryId}');
+    //  print('useCase: load_todo_entry for  collection: ${params.collectionId} - entry: ${params.entryId}');
     try {
       final loadedEntry = toDoRepository.readToDoEntry(
         params.collectionId,
@@ -23,12 +21,11 @@ class LoadToDoEntry implements UseCase<ToDoEntry, ToDoEntryIdsParam> {
       );
 
       return loadedEntry.fold(
-            (left) => Left(left),
-            (right) => Right(right),
+        (left) => Left(left),
+        (right) => Right(right),
       );
     } on Exception catch (e) {
-          return Left(ServerFailure());
-      }
-
+      return Left(ServerFailure());
     }
   }
+}

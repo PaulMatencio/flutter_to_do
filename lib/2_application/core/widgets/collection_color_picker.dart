@@ -4,6 +4,7 @@ import 'package:todo_app/1_domain/entities/todo_color.dart';
 
 class ColorPickerDemo extends StatefulWidget {
   const ColorPickerDemo({super.key});
+
   @override
   State<ColorPickerDemo> createState() => _ColorPickerDemoState();
 }
@@ -17,6 +18,7 @@ class _ColorPickerDemoState extends State<ColorPickerDemo> {
     ))
       color: color.toString()
   };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +34,7 @@ class _ColorPickerDemoState extends State<ColorPickerDemo> {
                 shape: BoxShape.circle,
 
               ),
-              
+
                */
               color: selectedColor,
             ),
@@ -51,7 +53,7 @@ class _ColorPickerDemoState extends State<ColorPickerDemo> {
   Future<void> _openColorPicker() async {
     final Map<ColorSwatch<Object>, String> colorsNameMap = {
       for (final color in ToDoColor.predefinedColors.map(
-            (color) => ColorTools.createPrimarySwatch(color),
+        (color) => ColorTools.createPrimarySwatch(color),
       ))
         color: color.toString()
     };
@@ -75,8 +77,7 @@ class _ColorPickerDemoState extends State<ColorPickerDemo> {
     ).showPickerDialog(
       context,
       actionsPadding: const EdgeInsets.all(16),
-      constraints:
-          const BoxConstraints(minHeight: 480, minWidth: 300, maxWidth: 320),
+      constraints: const BoxConstraints(minHeight: 480, minWidth: 300, maxWidth: 320),
     );
     print(pickedColor);
     if (pickedColor) {

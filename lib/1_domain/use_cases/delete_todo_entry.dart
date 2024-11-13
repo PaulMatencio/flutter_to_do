@@ -1,5 +1,3 @@
-
-
 import 'package:either_dart/either.dart';
 import 'package:todo_app/1_domain/failures/failures.dart';
 import 'package:todo_app/1_domain/repositories/todo_repository.dart';
@@ -19,11 +17,11 @@ class DeleteToDoEntry implements UseCase<bool, ToDoEntryIdsParam> {
         entryId: params.entryId,
       );
       return result.fold(
-            (left) => Left(left),
-            (right) {
-              print('EntryId ${params.entryId}  is successfully  deleted');
-              return Right(true);
-            },
+        (left) => Left(left),
+        (right) {
+          print('EntryId ${params.entryId}  is successfully  deleted');
+          return Right(true);
+        },
       );
     } on Exception catch (e) {
       return Left(ServerFailure(stackTrace: e.toString()));

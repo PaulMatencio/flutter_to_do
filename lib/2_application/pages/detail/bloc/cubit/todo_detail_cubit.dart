@@ -8,14 +8,15 @@ import 'package:todo_app/core/use_case.dart';
 part 'todo_detail_cubit_state.dart';
 
 class ToDoDetailCubit extends Cubit<ToDoDetailCubitState> {
-  ToDoDetailCubit({this.collectionId,
+  ToDoDetailCubit({
+    this.collectionId,
     required this.loadToDoEntryIdsForCollection,
     //! required this.removeToDoEntry
-  })
-      : super(ToDoDetailCubitLoadingState()); //! initial
+  }) : super(ToDoDetailCubitLoadingState()); //! initial
 
   final CollectionId? collectionId;
   final LoadToDoEntryIdsForCollection loadToDoEntryIdsForCollection;
+
   //! final RemoveToDoEntry removeToDoEntry;
 
   // -----------------------------------------------------
@@ -47,11 +48,11 @@ class ToDoDetailCubit extends Cubit<ToDoDetailCubitState> {
   //
   //    Remove the EntryId from the current entryId list
   //
-  Future<void>  removeEntryId(EntryId entryId) async {
+  Future<void> removeEntryId(EntryId entryId) async {
     // print('remove entryId $entryId from the state  ');
     try {
       if (state is ToDoDetailCubitLoadedState) {
-        (state  as ToDoDetailCubitLoadedState).entryIds.remove(entryId);
+        (state as ToDoDetailCubitLoadedState).entryIds.remove(entryId);
       }
     } on Exception {
       emit(ToDoDetailCubitErrorState());
@@ -59,14 +60,10 @@ class ToDoDetailCubit extends Cubit<ToDoDetailCubitState> {
   }
 }
 
-
-
-
 String _mapFailureToMessage(Failure failure) {
   switch (failure) {
     case final ServerFailure e:
-      String? message =
-          (e.stackTrace == null) ? 'Server failure' : e.stackTrace;
+      String? message = (e.stackTrace == null) ? 'Server failure' : e.stackTrace;
       return message!;
     case final CacheFailure _:
       return 'Cache failure';

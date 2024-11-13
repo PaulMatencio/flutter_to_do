@@ -22,16 +22,15 @@ class ToDoDetailPageProvider extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<ToDoDetailCubit>(
       create: (context) => ToDoDetailCubit(
-          collectionId: collectionId,
-          //!
-          //! Call useCases  LoadToDoEntryIdsForCollection
-          //!  to retrieve  entry ids for a given collection
-          //!
-          loadToDoEntryIdsForCollection: LoadToDoEntryIdsForCollection(
-            toDoRepository: RepositoryProvider.of<ToDoRepository>(context),
-          ),
-    )
-        ..fetch(),
+        collectionId: collectionId,
+        //!
+        //! Call useCases  LoadToDoEntryIdsForCollection
+        //!  to retrieve  entry ids for a given collection
+        //!
+        loadToDoEntryIdsForCollection: LoadToDoEntryIdsForCollection(
+          toDoRepository: RepositoryProvider.of<ToDoRepository>(context),
+        ),
+      )..fetch(),
       child: ToDoDetailPage(
         collectionId: collectionId,
       ),

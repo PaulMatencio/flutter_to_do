@@ -20,36 +20,24 @@ class AppTheme {
       centerTitle: true,
     ),
     // Define the default color and brightness
-    colorScheme: ColorScheme.fromSeed(
-        seedColor: _primaryColorLight, brightness: Brightness.light),
+    colorScheme: ColorScheme.fromSeed(seedColor: _primaryColorLight, brightness: Brightness.light),
     textTheme: textTheme(),
-    textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(textStyle: TextStyle(
-            fontSize: 16
-        ) )
-    ),
+    textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(textStyle: TextStyle(fontSize: 16))),
     useMaterial3: true,
   );
 
   static final ThemeData darkTheme = ThemeData(
-    useMaterial3: true,
-    appBarTheme: const AppBarTheme(
-      centerTitle: false,
-    ),
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: _primaryColorDark,
-      brightness: Brightness.dark,
-    ),
-    textTheme: textTheme(),
-    textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(textStyle: TextStyle(
-        fontSize: 16
-      ) )
-    )
-  );
+      useMaterial3: true,
+      appBarTheme: const AppBarTheme(
+        centerTitle: false,
+      ),
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: _primaryColorDark,
+        brightness: Brightness.dark,
+      ),
+      textTheme: textTheme(),
+      textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(textStyle: TextStyle(fontSize: 16))));
 }
-
-
 
 TextTheme textTheme() {
   //Define the default `TextTheme`. Use this to specify the default

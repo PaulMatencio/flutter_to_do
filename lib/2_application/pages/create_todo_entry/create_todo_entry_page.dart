@@ -27,6 +27,7 @@ class CreateToDoEntryPageProvider extends StatelessWidget {
     required this.collectionId,
     required this.toDoEntryItemAddedCallback,
   });
+
   final CollectionId collectionId;
   final ToDoEntryItemAddedCallback toDoEntryItemAddedCallback;
 
@@ -50,12 +51,10 @@ class CreateToDoEntryPage extends StatefulWidget {
     super.key,
     required this.toDoEntryItemAddedCallback,
   });
+
   final ToDoEntryItemAddedCallback toDoEntryItemAddedCallback;
 
-  static const pageConfig = PageConfig(
-      icon: Icons.add_task_rounded,
-      name: 'create_todo_entry',
-      child: Placeholder());
+  static const pageConfig = PageConfig(icon: Icons.add_task_rounded, name: 'create_todo_entry', child: Placeholder());
 
   @override
   State<CreateToDoEntryPage> createState() => _CreateToDoEntryPageState();
@@ -63,6 +62,7 @@ class CreateToDoEntryPage extends StatefulWidget {
 
 class _CreateToDoEntryPageState extends State<CreateToDoEntryPage> {
   final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -77,8 +77,10 @@ class _CreateToDoEntryPageState extends State<CreateToDoEntryPage> {
             SizedBox(
               height: 20,
             ),
-            _SubmissionButton(formKey: _formKey,
-            toDoEntryItemAddedCallback: widget.toDoEntryItemAddedCallback,)
+            _SubmissionButton(
+              formKey: _formKey,
+              toDoEntryItemAddedCallback: widget.toDoEntryItemAddedCallback,
+            )
           ])),
     );
   }
@@ -93,50 +95,39 @@ class _EntryDescriptionField extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return BlocBuilder<CreateToDoEntryPageCubit, CreateToDoEntryPageState>(
-  builder: (context, state) {
-    return TextFormField(
-        initialValue:  state.description?.value,
-        decoration: InputDecoration(
-          icon: const Icon(Icons.description),
-          enabledBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(width: 1.0, color: theme.colorScheme.primary)),
-          focusedBorder: OutlineInputBorder(
-            borderSide:
-                BorderSide(width: 1.0, color: theme.colorScheme.inversePrimary),
-          ),
-          labelText: 'description',
-          helperText: 'should exceed 2 characters long',
-        ),
-        onChanged: (value) => context
-            .read<CreateToDoEntryPageCubit>()
-            .descriptionChanged(description: value),
-        validator: (value) {
-          final currentValidationState = context
-                  .read<CreateToDoEntryPageCubit>()
-                  .state
-                  .description
-                  ?.validationStatus ??
-              ValidationStatus.pending;
-          switch (currentValidationState) {
-            case ValidationStatus.error:
-              return 'This field needs at least two characters to be valid';
-            case ValidationStatus.success:
-              return null;
-            case ValidationStatus.pending:
-              return 'This field is empty';
-          }
-        });
-  },
-);
+      builder: (context, state) {
+        return TextFormField(
+            initialValue: state.description?.value,
+            decoration: InputDecoration(
+              icon: const Icon(Icons.description),
+              enabledBorder: OutlineInputBorder(borderSide: BorderSide(width: 1.0, color: theme.colorScheme.primary)),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 1.0, color: theme.colorScheme.inversePrimary),
+              ),
+              labelText: 'description',
+              helperText: 'should exceed 2 characters long',
+            ),
+            onChanged: (value) => context.read<CreateToDoEntryPageCubit>().descriptionChanged(description: value),
+            validator: (value) {
+              final currentValidationState =
+                  context.read<CreateToDoEntryPageCubit>().state.description?.validationStatus ??
+                      ValidationStatus.pending;
+              switch (currentValidationState) {
+                case ValidationStatus.error:
+                  return 'This field needs at least two characters to be valid';
+                case ValidationStatus.success:
+                  return null;
+                case ValidationStatus.pending:
+                  return 'This field is empty';
+              }
+            });
+      },
+    );
   }
 }
 
 class _SubmissionButton extends StatelessWidget {
-  const _SubmissionButton(
-      {super.key,
-      required GlobalKey<FormState> formKey,
-      required this.toDoEntryItemAddedCallback})
+  const _SubmissionButton({super.key, required GlobalKey<FormState> formKey, required this.toDoEntryItemAddedCallback})
       : _formKey = formKey;
 
   final GlobalKey<FormState> _formKey;
@@ -147,12 +138,9 @@ class _SubmissionButton extends StatelessWidget {
     final theme = Theme.of(context);
     return ElevatedButton(
         style: ButtonStyle(
-          backgroundColor:
-              WidgetStatePropertyAll<Color>(theme.colorScheme.primary),
-          foregroundColor:
-              WidgetStatePropertyAll<Color>(theme.colorScheme.inversePrimary),
-          textStyle:
-              WidgetStatePropertyAll<TextStyle>(theme.textTheme.titleSmall!),
+          backgroundColor: WidgetStatePropertyAll<Color>(theme.colorScheme.primary),
+          foregroundColor: WidgetStatePropertyAll<Color>(theme.colorScheme.inversePrimary),
+          textStyle: WidgetStatePropertyAll<TextStyle>(theme.textTheme.titleSmall!),
         ),
         onPressed: () {
           final isValid = _formKey.currentState?.validate();

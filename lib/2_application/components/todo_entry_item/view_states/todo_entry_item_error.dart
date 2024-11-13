@@ -2,13 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/2_application/components/todo_entry_item/bloc/cubit/todo_entry_item_cubit.dart';
 
-
 class ToDoEntryItemError extends StatelessWidget {
-  const ToDoEntryItemError({
-    super.key,
-    this.stackTrace,
-    required this.onReload
-  });
+  const ToDoEntryItemError({super.key, this.stackTrace, required this.onReload});
 
   final Function() onReload;
   final String? stackTrace;
