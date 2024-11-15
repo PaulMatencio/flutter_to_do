@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/1_domain/entities/unique_id.dart';
 import 'package:todo_app/1_domain/repositories/todo_repository.dart';
+import 'package:todo_app/1_domain/use_cases/delete_todo_entries.dart';
 import 'package:todo_app/1_domain/use_cases/delete_todo_entry.dart';
 import 'package:todo_app/1_domain/use_cases/load_todo_entry.dart';
 import 'package:todo_app/1_domain/use_cases/load_todo_entry_ids_for_collection.dart';
@@ -67,13 +68,9 @@ class ToDoEntryItem extends StatelessWidget {
         if (state is ToDoEntryItemLoadingState) {
           return const ToDoEntryItemLoading();
         } else if (state is ToDoEntryItemLoadedState) {
-          //print(' description  from state ${state.toDoEntry.description} ');
           return ToDoEntryItemLoaded(
               entryItem: state.toDoEntry, //!   result from cubit fetch ....
-              ///   update the status
               onChanged: (value) => todoEntryItemCubit.update(),
-
-              ///    modify the todo entry
               onUpdated: () {
                 context.pushNamed(ModifyToDoEntryPage.pageConfig.name,
                     extra: ModifyToDoEntryPageExtra(
@@ -92,8 +89,10 @@ class ToDoEntryItem extends StatelessWidget {
                 );
               });
         } else if (state is ToDoEntryItemDeletedState) {
-          return SizedBox(); //!  an empty widget to clear the tile
-        } else if (state is ToDoEntryItemErrorState) {
+          /// an empty widget to clear the tile
+          return SizedBox();
+        }
+        else if (state is ToDoEntryItemErrorState) {
           return ToDoEntryItemError(
             stackTrace: state.stackTrace,
             onReload: () {
@@ -125,16 +124,18 @@ showAlertDialog({
   ///  Setup the continue button
   Widget continueButton = BlocProvider(
     create: (context) => ToDoDetailCubit(
-      loadToDoEntryIdsForCollection:
-          LoadToDoEntryIdsForCollection(toDoRepository: RepositoryProvider.of<ToDoRepository>(context)),
-    ),
+        loadToDoEntryIdsForCollection:
+            LoadToDoEntryIdsForCollection(toDoRepository: RepositoryProvider.of<ToDoRepository>(context)),
+        deleteToDoEntries: DeleteToDoEntries(toDoRepository: RepositoryProvider.of<ToDoRepository>(context))),
     child: TextButton(
         child: Text('Continue'),
-        onPressed: () {
-          ///     Delete the entryId from the collection repository
+        onPressed: () async {
+          final todoDetailCubit = context.read<ToDoDetailCubit>();
           try {
-            context.read<ToDoEntryItemCubit>().delete(collectionId: collectionId, entryId: entryId);
-            context.read<ToDoDetailCubit>().removeEntryId(entryId);
+            await context
+                .read<ToDoEntryItemCubit>()
+                .delete(collectionId: collectionId)
+                .then((_) => todoDetailCubit.removeEntryId(entryId));
           } on Exception catch (e) {
             FailureDialog(message: e.toString());
           }

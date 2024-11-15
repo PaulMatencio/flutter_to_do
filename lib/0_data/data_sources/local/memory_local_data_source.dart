@@ -21,6 +21,7 @@ class MemoryLocalDataSource implements ToDoLocalDataSourceInterface {
     return Future.value(true);
   }
 
+
   @override
   Future<bool> deleteToDoCollection({required String collectionId}) {
     // TODO: implement deleteToDoCollection

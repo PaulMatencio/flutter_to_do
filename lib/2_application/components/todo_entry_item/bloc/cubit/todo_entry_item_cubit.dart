@@ -47,6 +47,11 @@ class ToDoEntryItemCubit extends Cubit<ToDoEntryItemState> {
     }
   }
 
+
+  ///
+  ///
+  ///   update the status of a current entryId
+  ///
   Future<void> update() async {
     // print('todo_entry_item_cubit: update entryId  $entryId');
     try {
@@ -74,10 +79,15 @@ class ToDoEntryItemCubit extends Cubit<ToDoEntryItemState> {
       ));
     }
   }
-
-  Future<void> delete({required CollectionId collectionId, required EntryId entryId}) async {
+  ///
+  /// Delete an EntryId of a given collection id
+  ///
+  ///
+  Future<void> delete({required CollectionId collectionId}) async {
     try {
       if (state is ToDoEntryItemLoadedState) {
+        final currentToDoEntry = (state as ToDoEntryItemLoadedState).toDoEntry;
+        final entryId = currentToDoEntry.id;
         // final currentToDoEntry = (state as ToDoEntryItemLoadedState).toDoEntry;
         final result = await deleteToDoEntry.call(ToDoEntryIdsParam(
           collectionId: collectionId,
@@ -101,13 +111,11 @@ class ToDoEntryItemCubit extends Cubit<ToDoEntryItemState> {
 String _mapFailureToMessage(Failure failure) {
   switch (failure) {
     case final ServerFailure e:
-      String? message = (e.stackTrace == null) ? 'Server failure' : e.stackTrace;
-      return message!;
+      return e.stackTrace ?? 'Server failure';
     case final CacheFailure _:
       return 'Cache failure';
     case final GeneralFailure e:
-      String? message = (e.stackTrace == null) ? 'Check the log' : e.stackTrace;
-      return message!;
+      return e.stackTrace ?? 'check the log';
     default:
       return 'Ups unhandled error';
   }

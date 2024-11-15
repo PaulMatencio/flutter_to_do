@@ -12,7 +12,7 @@ class ToDoEntryItemError extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ToDoEntryItemCubit, ToDoEntryItemState>(
       builder: (context, state) {
-        final todoEntryItem = context.read<ToDoEntryItemCubit>();
+       // final todoEntryItem = context.read<ToDoEntryItemCubit>();
         return ListTile(
           iconColor: Theme.of(context).colorScheme.error,
           onTap: onReload,

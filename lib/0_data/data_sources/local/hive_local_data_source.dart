@@ -50,6 +50,8 @@ class HiveLocalDataSource implements ToDoLocalDataSourceInterface {
     return true;
   }
 
+
+
   @override
   Future<bool> deleteToDoCollection({required String collectionId}) async {
     final collectionBox = await _openCollectionBox();

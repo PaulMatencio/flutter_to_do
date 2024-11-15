@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_app/0_data/exceptions/exceptions.dart';
 import 'package:todo_app/1_domain/entities/todo_collection.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/1_domain/entities/unique_id.dart';
 import 'package:todo_app/1_domain/failures/failures.dart';
 import 'package:todo_app/1_domain/repositories/todo_repository.dart';
-import 'package:todo_app/1_domain/use_cases/delete_todo_collection.dart';
-import 'package:todo_app/1_domain/use_cases/load_todo_collections.dart';
-import 'package:todo_app/2_application/core/widgets/failure_dialog.dart';
+import 'package:todo_app/1_domain/use_cases/delete_todo_entries.dart';
+import 'package:todo_app/1_domain/use_cases/load_todo_entry_ids_for_collection.dart';
 import 'package:todo_app/2_application/core/widgets/switch_button.dart';
 import 'package:todo_app/2_application/pages/create_todo_collection/create_todo_collection_page.dart';
 import 'package:todo_app/2_application/pages/dashboard/dashboard_page.dart';
+import 'package:todo_app/2_application/pages/detail/bloc/cubit/todo_detail_cubit.dart';
 import 'package:todo_app/2_application/pages/detail/todo_detail_page.dart';
 import 'package:todo_app/2_application/pages/home/bloc/cubit/navigation_todo_cubit.dart';
 import 'package:todo_app/2_application/pages/home/home_page.dart';
@@ -23,9 +22,12 @@ class ToDoOverviewLoaded extends StatelessWidget {
   const ToDoOverviewLoaded({
     super.key,
     required this.collections,
+    //required this.onDeleted
   });
 
   final List<ToDoCollection> collections;
+
+  //final Function()  onDeleted;
 
   @override
   Widget build(BuildContext context) {
@@ -54,12 +56,12 @@ class ToDoOverviewLoaded extends StatelessWidget {
                 final item = collections[index];
                 // final colorScheme = Theme.of(context).colorScheme;
                 return BlocBuilder<NavigationToDoCubit, NavigationToDoCubitState>(
-                  //  ----------------------------------------------------------------
-                  //  condition to rebuild the overview page
-                  //  Only rebuild the  overview  page when
-                  //        another collection is selected
-                  //------------------------------------------------------------------
-                  buildWhen: (previous, current) => previous.selectedCollectionId != current.selectedCollectionId,
+                  ///  ----------------------------------------------------------------
+                  ///  condition to rebuild the overview page
+                  ///  Only rebuild the  overview  page when
+                  ///        another collection is selected
+                  ///------------------------------------------------------------------
+                  buildWhen: (previous, current) => (previous.selectedCollectionId != current.selectedCollectionId) && collections.isNotEmpty,
                   builder: (context, state) {
                     // debugPrint('build item ${item.id.value}');
                     return Card.outlined(
@@ -69,7 +71,10 @@ class ToDoOverviewLoaded extends StatelessWidget {
                               message: 'delete',
                               child: TextButton(
                                   onPressed: () {
-                                    showAlertDialog(context: context, collectionId: item.id);
+                                    final navigationCubit = context.read<NavigationToDoCubit>();
+                                    showAlertDialog(context: context,
+                                        navigationCubit: navigationCubit,
+                                        collection: item);
                                   },
                                   child: Icon(Icons.delete))),
                           Expanded(
@@ -80,22 +85,22 @@ class ToDoOverviewLoaded extends StatelessWidget {
                               selectedColor: item.color.getColor(),
 
                               ///
-                              //  selected is set to TRUE
-                              //     when the item.id is the same
-                              //
+                              ///  selected is set to TRUE
+                              ///     when the item.id is the same
+                              ///
                               selected: state.selectedCollectionId == item.id,
                               onTap: () {
-                                //------------------------------------------------
-                                // when pressed => change the state of
-                                //  the  selected item.id  to the  current item.id
-                                //   change  the  state of
-                                //!       collectionId = item.id
-                                //
-                                //    Important to avoid building the
-                                //        overview page everytime
-                                //        a collectionId is changed
-                                //!     see   buildWhen  previous != current
-                                //-----------------------------------------------
+                                ///------------------------------------------------
+                                /// when pressed => change the state of
+                                ///  the  selected item.id  to the  current item.id
+                                ///   change  the  state of
+                                ///       collectionId = item.id
+                                ///
+                                ///   Important to avoid building the
+                                ///        overview page everytime
+                                ///        a collectionId is changed
+                                ///    see   buildWhen  previous != current
+                                ///-----------------------------------------------
                                 context.read<NavigationToDoCubit>().selectedToDoCollectionChanged(item.id);
                                 //--------------------------------------------
                                 //   if screen is small  =>  display the
@@ -152,33 +157,40 @@ class ToDoOverviewLoaded extends StatelessWidget {
 
 showAlertDialog({
   required BuildContext context,
-  required CollectionId collectionId,
+  required ToDoCollection collection,
+  required NavigationToDoCubit navigationCubit,
 }) {
   /// set up the Cancel button
   Widget cancelButton = TextButton(child: Text('Cancel'), onPressed: () => context.pop());
 
   ///  Setup the continue button
-  Widget continueButton = BlocProvider(
-      create: (context) => ToDoOverviewCubit(
-          deleteToDoCollection: DeleteToDoCollection(toDoRepository: RepositoryProvider.of<ToDoRepository>(context)),
-          loadToDoCollections: LoadToDoCollections(toDoRepository: RepositoryProvider.of<ToDoRepository>(context))),
-      child: TextButton(
-          child: Text('Continue'),
-          onPressed: () async {
-            ///     Delete ta collection given its collectId
-            try {
-              await context.read<ToDoOverviewCubit>().deleteCollection(collectionId: collectionId).then((_) {
-                if (context.mounted) {
-                  context.read<ToDoOverviewCubit>().readToDoCollections();
-                }
-              });
-            } on GeneralFailure catch (e) {
-              if (context.mounted) {
-                showScaffoldMessage(context: context, message: e.stackTrace ?? 'Collection is not empty');
-              }
+  Widget continueButton = TextButton(
+      child: Text('Continue'),
+      onPressed: () async {
+        final overviewCubit = context.read<ToDoOverviewCubit>();
+        final message = 'Please using the checkButton on the right to check all the detail items then delete again';
+        try {
+          await overviewCubit.deleteCollection(collectionId: collection.id).then((value) async {
+            if (value) {
+              ///  remove the given collection from the collections
+              navigationCubit.selectedToDoCollectionChanged(null);
+              await overviewCubit.readToDoCollections();
+
+            } else {
+              showScaffoldMessage(context: context, message: message);
             }
-            if (context.mounted) context.pop();
-          }));
+          });
+        } on GeneralFailure catch (e) {
+          if (context.mounted) {
+            showScaffoldMessage(context: context, message: e.stackTrace ?? message);
+          }
+        } on ServerFailure catch (e) {
+          if (context.mounted) {
+            showScaffoldMessage(context: context, message: e.stackTrace ?? 'Ups server a failure!');
+          }
+        }
+        if (context.mounted) context.pop();
+      });
 
   ///
   /// Set up the AlertDialog
@@ -207,9 +219,9 @@ showAlertDialog({
 
 void showScaffoldMessage({required BuildContext context, required String message}) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    content: Text(message, style: TextStyle(fontSize: 20)),
-    duration: const Duration(milliseconds: 6500),
-    action: SnackBarAction(label: 'Quit', onPressed: () {}),
+    content: Text(message, style: TextStyle(fontSize: 18)),
+    duration: const Duration(milliseconds: 3000),
+    action: SnackBarAction(label: 'Ok', onPressed: () {}),
     behavior: SnackBarBehavior.floating,
   ));
 }

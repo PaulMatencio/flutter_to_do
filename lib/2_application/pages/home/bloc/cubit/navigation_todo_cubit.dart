@@ -9,12 +9,11 @@ class NavigationToDoCubit extends Cubit<NavigationToDoCubitState> {
 
   /// ------------------------------------------------------------
   ///   change the  state of the collectionId to another id
-  ///
   ///   This is  to  avoid rebuilding the overview page
   ///   everytime  you click on another item  of
   ///   overview page
   ///-----------------------------------------------------------------
-  void selectedToDoCollectionChanged(CollectionId collectionId) {
+  void selectedToDoCollectionChanged(CollectionId ? collectionId) {
     emit(NavigationToDoCubitState(selectedCollectionId: collectionId));
   }
 

@@ -144,7 +144,6 @@ class _HomePageState extends State<HomePage> {
             // builder: AdaptiveScaffold.emptyBuilder,
             builder: widget.index != 1
                 ? null
-                // ? AdaptiveScaffold.emptyBuilder
                 : (_) => DetailPageProvider(colorScheme: colorScheme)),
       },
     );
@@ -164,9 +163,6 @@ class DetailPageProvider extends StatelessWidget {
   });
 
   final ColorScheme colorScheme;
-  final String imageUrl = 'https://i.postimg.cc/T1L70cws/coffee.jpg';
-  final String imageAsset = 'images/view-details-4.png';
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

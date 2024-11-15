@@ -26,9 +26,10 @@ class ToDoOverviewCubit extends Cubit<ToDoOverviewCubitState> {
   final LoadToDoCollections loadToDoCollections;
   final DeleteToDoCollection deleteToDoCollection;
 
-  //!
-  //!   readToDoCollections  use_Case/loadTodoCollections
-  //!
+  ///
+  ///
+  /// readToDoCollections  use_Case/loadTodoCollections
+  ///
 
   Future<void> readToDoCollections() async {
     emit(ToDoOverviewCubitLoadingState());
@@ -42,25 +43,43 @@ class ToDoOverviewCubit extends Cubit<ToDoOverviewCubitState> {
     }
   }
 
-  Future<Either<Failure, bool>> deleteCollection({required CollectionId collectionId}) async {
+  Future<bool> deleteCollection({required CollectionId collectionId}) async {
     try {
-      final collectionsFuture = deleteToDoCollection.call(CollectionIdParam(collectionId: collectionId));
-      final collections = await collectionsFuture;
-      collections.fold((failure) => throw GeneralFailure(stackTrace: _mapFailureToMessage(failure)), (right) => true);
+      final result = await deleteToDoCollection.call(CollectionIdParam(collectionId: collectionId));
+      if (result.isRight) {
+        return true;
+      } else {
+        return false;
+      }
     } on Exception catch (e) {
-      return Left(GeneralFailure(stackTrace: e.toString()));
+      emit(ToDoOverviewCubitErrorState(message: e.toString()));
+      return false;
     }
-    return Left(GeneralFailure(stackTrace: 'delete failed. entries must be checked beforehand'));
+  }
+
+  ///
+  ///    Remove a given  entryId from the current entryId list
+  ///
+  Future<void> removeCollection(CollectionId collectionId) async {
+    try {
+      if (state is ToDoOverviewCubitLoadedState) {
+        (state as ToDoOverviewCubitLoadedState).collections.removeWhere((elem) => elem.id == collectionId);
+        emit(ToDoOverviewCubitDeletedState(collectionId: collectionId));
+      }
+    } on Exception catch (e) {
+      emit(ToDoOverviewCubitErrorState(message: e.toString()));
+    }
   }
 }
 
 String _mapFailureToMessage(Failure failure) {
   switch (failure) {
     case final ServerFailure e:
-      String? message = (e.stackTrace == null) ? serverFailureMessage : e.stackTrace;
-      return (message ?? serverFailureMessage);
+      return (e.stackTrace ?? serverFailureMessage);
     case final CacheFailure _:
       return cacheFailureMessage;
+    case final GeneralFailure e:
+      return e.stackTrace ?? generalFailureMessage;
     default:
       return generalFailureMessage;
   }

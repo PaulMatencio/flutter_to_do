@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/1_domain/entities/unique_id.dart';
 import 'package:todo_app/1_domain/repositories/todo_repository.dart';
+import 'package:todo_app/1_domain/use_cases/delete_todo_entries.dart';
 import 'package:todo_app/1_domain/use_cases/load_todo_entry_ids_for_collection.dart';
 import 'package:todo_app/2_application/core/page_config.dart';
 import 'package:todo_app/2_application/pages/detail/bloc/cubit/todo_detail_cubit.dart';
@@ -23,13 +24,10 @@ class ToDoDetailPageProvider extends StatelessWidget {
     return BlocProvider<ToDoDetailCubit>(
       create: (context) => ToDoDetailCubit(
         collectionId: collectionId,
-        //!
-        //! Call useCases  LoadToDoEntryIdsForCollection
-        //!  to retrieve  entry ids for a given collection
-        //!
         loadToDoEntryIdsForCollection: LoadToDoEntryIdsForCollection(
           toDoRepository: RepositoryProvider.of<ToDoRepository>(context),
         ),
+        deleteToDoEntries: DeleteToDoEntries(toDoRepository: RepositoryProvider.of<ToDoRepository>(context))
       )..fetch(),
       child: ToDoDetailPage(
         collectionId: collectionId,
@@ -37,8 +35,6 @@ class ToDoDetailPageProvider extends StatelessWidget {
     );
   }
 }
-
-// The child consume
 
 class ToDoDetailPage extends StatelessWidget {
   const ToDoDetailPage({
@@ -58,7 +54,6 @@ class ToDoDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ToDoDetailCubit, ToDoDetailCubitState>(
       builder: (BuildContext context, ToDoDetailCubitState state) {
-        //return const Placeholder();
         if (state is ToDoDetailCubitLoadingState) {
           return ToDoDetailLoading();
         } else if (state is ToDoDetailCubitLoadedState) {

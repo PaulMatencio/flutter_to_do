@@ -1,4 +1,5 @@
 import 'package:either_dart/either.dart';
+import 'package:test/test.dart';
 import 'package:todo_app/0_data/data_sources/interfaces/todo_local_data_source_interface.dart';
 import 'package:todo_app/0_data/exceptions/exceptions.dart';
 import 'package:todo_app/0_data/models/todo_collection_model.dart';
@@ -24,7 +25,7 @@ class ToDoRepositoryLocal implements ToDoRepository {
 
   ///
   ///
-  ///  crate a todoCollection for a create_todo_collection form
+  ///  crate a todoCollection from a create_todo_collection form
   ///
 
   @override
@@ -46,25 +47,63 @@ class ToDoRepositoryLocal implements ToDoRepository {
     }
   }
 
+
+  ///
+  ///
+  ///  Delete entryId  if it is checked ( isDone)
+  ///  and return a list of deleted entryId
+  ///  to be remove from the entryIds (state) of ToDoDetailCubitState
+  ///
+  ///
   @override
-  Future<Either<Failure, bool>> deleteToDoCollection(CollectionId collectionId) async {
-    // TODO: implement deleteToDoCollection
+  Future<Either<Failure, List<EntryId>>> deleteToDoEntries(CollectionId collectionId) async {
+    List<EntryId> listEntryId = [];
     try {
       final collectionModelId = collectionId.value;
       await localDataSource.getToDoEntryIds(collectionId: collectionModelId).then((entryIds) async {
         for (int i = 0; i < entryIds.length; i++) {
           final entryId = entryIds[i];
-          await localDataSource.getToDoEntry(collectionId: collectionModelId, entryId: entryId).then((item) {
-            ///delete entry which are done
+          await localDataSource.getToDoEntry(collectionId: collectionModelId, entryId: entryId).then((item) async{
             if (item.isDone) {
-              localDataSource.deleteToDoEntry(collectionId: collectionId.value, entryId: entryId);
+              await localDataSource.deleteToDoEntry(collectionId: collectionId.value, entryId: entryId);
+            } else {
+              listEntryId.add(EntryId.fromUniqueString(item.id)); ///
             }
           });
         }
-
-        /// delete the collection
-      }).then((_) => localDataSource.deleteToDoCollection(collectionId: collectionId.value));
-
+      });
+     return  Right(listEntryId);
+    } on Exception catch (e) {
+      switch (e) {
+        case final CollectionNotFoundException e:
+          return Left(GeneralFailure(stackTrace: e.toString()));
+        case final CollectionNotEmptyException e:
+          return Left(GeneralFailure(stackTrace: e.toString()));
+        case final CacheException e:
+          return Left(CacheFailure(stackTrace: e.toString()));
+        default:
+          return Left(ServerFailure(stackTrace: e.toString()));
+      }
+    }
+  }
+  ///
+  ///     delete a collection if all its entries are checked
+  ///     otherwise return a failure
+  ///
+  ///
+  @override
+  Future<Either<Failure, bool>> deleteToDoCollection(CollectionId collectionId) async {
+    try {
+      await deleteToDoEntries(collectionId).then((value) async {
+        if (value.isRight) {
+            if (value.right.isEmpty) {
+              await localDataSource.deleteToDoCollection(collectionId: collectionId.value);
+            }  else {
+              throw Exception('Collection is not empty');
+            }
+        }
+      });
+     //  await localDataSource.deleteToDoCollection(collectionId: collectionId.value);
       return Right(true);
     } on Exception catch (e) {
       switch (e) {
@@ -114,7 +153,6 @@ class ToDoRepositoryLocal implements ToDoRepository {
   @override
   Future<Either<Failure, List<ToDoCollection>>> readToDoCollections() async {
     try {
-      print('Read todo collection has been called ');
       final collectionIds = await localDataSource.getToDoCollectionIds();
       final List<ToDoCollection> collections = [];
       for (String collectionId in collectionIds) {
