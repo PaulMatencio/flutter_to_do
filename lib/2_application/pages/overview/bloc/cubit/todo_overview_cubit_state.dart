@@ -10,23 +10,12 @@ class ToDoOverviewCubitLoadingState extends ToDoOverviewCubitState {
   const ToDoOverviewCubitLoadingState();
 }
 
-class ToDoOverviewCubitDeletedState extends ToDoOverviewCubitState {
-  final CollectionId collectionId;
-  const ToDoOverviewCubitDeletedState({required this.collectionId});
-  @override
-  List<Object> get props => [collectionId];
-
-}
-
-
 class ToDoOverviewCubitErrorState extends ToDoOverviewCubitState {
   final String message;
   const ToDoOverviewCubitErrorState({required this.message});
   @override
   List<Object> get props => [message];
 }
-
-
 
 class ToDoOverviewCubitLoadedState extends ToDoOverviewCubitState {
   const ToDoOverviewCubitLoadedState({required this.collections});

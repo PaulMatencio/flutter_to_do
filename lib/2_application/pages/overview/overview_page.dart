@@ -10,7 +10,6 @@ import 'package:todo_app/2_application/pages/overview/view_states/todo_overview_
 
 class OverviewPageProvider extends StatelessWidget {
   const OverviewPageProvider({super.key});
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -27,13 +26,11 @@ class OverviewPageProvider extends StatelessWidget {
 
 class OverviewPage extends StatelessWidget {
   const OverviewPage({super.key});
-
   static const pageConfig = PageConfig(
     icon: Icons.work_history_rounded,
     name: 'overview',
     child: OverviewPageProvider(),
   );
-
   @override
   Widget build(BuildContext context) {
     return Container(
