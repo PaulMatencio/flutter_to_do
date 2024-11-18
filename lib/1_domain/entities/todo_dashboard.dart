@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:percent_indicator/percent_indicator.dart';
-import 'package:todo_app/1_domain/entities/unique_id.dart';
 
 class ToDoDashboard {
   final int areDone;

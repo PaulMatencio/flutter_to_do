@@ -6,7 +6,6 @@ import 'package:todo_app/1_domain/entities/todo_color.dart';
 import 'package:todo_app/1_domain/repositories/todo_repository.dart';
 import 'package:todo_app/1_domain/use_cases/create_todo_collection.dart';
 import 'package:todo_app/2_application/core/page_config.dart';
-import 'package:todo_app/2_application/core/widgets/collection_color_picker.dart';
 import 'package:todo_app/2_application/pages/create_todo_collection/bloc/cubit/create_todo_collection_page_cubit.dart';
 
 class CreateToDoCollectionPageProvider extends StatelessWidget {

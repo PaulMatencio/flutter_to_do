@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:todo_app/2_application/core/page_config.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/2_application/core/widgets/switch_button.dart';
-import 'package:todo_app/2_application/pages/dashboard/dashboard_page.dart';
 import 'package:todo_app/2_application/pages/overview/overview_page.dart';
 
 import '../home/home_page.dart';

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/2_application/core/routes.dart';
 import 'package:todo_app/2_application/core/services/theme_service.dart';
-import 'package:todo_app/2_application/pages/home/bloc/cubit/navigation_todo_cubit.dart';
 import 'package:todo_app/theme.dart';
 
 class BasicApp extends StatelessWidget {

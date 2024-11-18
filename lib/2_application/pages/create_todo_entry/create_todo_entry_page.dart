@@ -87,9 +87,7 @@ class _CreateToDoEntryPageState extends State<CreateToDoEntryPage> {
 }
 
 class _EntryDescriptionField extends StatelessWidget {
-  const _EntryDescriptionField({
-    super.key,
-  });
+  const _EntryDescriptionField();
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +125,7 @@ class _EntryDescriptionField extends StatelessWidget {
 }
 
 class _SubmissionButton extends StatelessWidget {
-  const _SubmissionButton({super.key, required GlobalKey<FormState> formKey, required this.toDoEntryItemAddedCallback})
+  const _SubmissionButton({required GlobalKey<FormState> formKey, required this.toDoEntryItemAddedCallback})
       : _formKey = formKey;
 
   final GlobalKey<FormState> _formKey;

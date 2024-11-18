@@ -95,7 +95,7 @@ class _ModifyToDoEntryPageState extends State<ModifyToDoEntryPage> {
 }
 
 class _EntryDescriptionField extends StatelessWidget {
-  const _EntryDescriptionField({super.key, required this.toDoEntry});
+  const _EntryDescriptionField({required this.toDoEntry});
 
   final ToDoEntry toDoEntry;
 
@@ -136,7 +136,7 @@ class _EntryDescriptionField extends StatelessWidget {
 
 class _SubmissionButton extends StatelessWidget {
   const _SubmissionButton(
-      {super.key, required GlobalKey<FormState> formKey, required this.toDoEntryItemModifiedCallback})
+      {required GlobalKey<FormState> formKey, required this.toDoEntryItemModifiedCallback})
       : _formKey = formKey;
 
   final GlobalKey<FormState> _formKey;
