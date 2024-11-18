@@ -129,7 +129,7 @@ class ToDoOverviewLoaded extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Align(
-                alignment: Alignment.bottomCenter,
+                alignment: Alignment.bottomRight,
                 child: FloatingActionButton(
                   key: const Key('create-todo-collection'),
                   heroTag: 'create-todo-collection',

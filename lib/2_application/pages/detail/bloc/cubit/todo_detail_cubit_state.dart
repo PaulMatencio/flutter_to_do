@@ -12,8 +12,6 @@ abstract class ToDoDetailCubitState extends Equatable {
 
 class ToDoDetailCubitLoadingState extends ToDoDetailCubitState {}
 
-class ToDoDetailCubitDeletedState extends ToDoDetailCubitState {}
-
 class ToDoDetailCubitErrorState extends ToDoDetailCubitState {}
 
 //

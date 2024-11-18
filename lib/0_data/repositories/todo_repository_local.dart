@@ -6,6 +6,7 @@ import 'package:todo_app/0_data/models/todo_collection_model.dart';
 import 'package:todo_app/0_data/models/todo_entry_model.dart';
 import 'package:todo_app/1_domain/entities/todo_collection.dart';
 import 'package:todo_app/1_domain/entities/todo_color.dart';
+import 'package:todo_app/1_domain/entities/todo_dashboard.dart';
 import 'package:todo_app/1_domain/entities/todo_entry.dart';
 import 'package:todo_app/1_domain/entities/unique_id.dart';
 import 'package:todo_app/1_domain/failures/failures.dart';
@@ -47,7 +48,6 @@ class ToDoRepositoryLocal implements ToDoRepository {
     }
   }
 
-
   ///
   ///
   ///  Delete entryId  if it is checked ( isDone)
@@ -63,16 +63,18 @@ class ToDoRepositoryLocal implements ToDoRepository {
       await localDataSource.getToDoEntryIds(collectionId: collectionModelId).then((entryIds) async {
         for (int i = 0; i < entryIds.length; i++) {
           final entryId = entryIds[i];
-          await localDataSource.getToDoEntry(collectionId: collectionModelId, entryId: entryId).then((item) async{
+          await localDataSource.getToDoEntry(collectionId: collectionModelId, entryId: entryId).then((item) async {
             if (item.isDone) {
               await localDataSource.deleteToDoEntry(collectionId: collectionId.value, entryId: entryId);
             } else {
-              listEntryId.add(EntryId.fromUniqueString(item.id)); ///
+              listEntryId.add(EntryId.fromUniqueString(item.id));
+
+              ///
             }
           });
         }
       });
-     return  Right(listEntryId);
+      return Right(listEntryId);
     } on Exception catch (e) {
       switch (e) {
         case final CollectionNotFoundException e:
@@ -86,6 +88,7 @@ class ToDoRepositoryLocal implements ToDoRepository {
       }
     }
   }
+
   ///
   ///     delete a collection if all its entries are checked
   ///     otherwise return a failure
@@ -96,14 +99,14 @@ class ToDoRepositoryLocal implements ToDoRepository {
     try {
       await deleteToDoEntries(collectionId).then((value) async {
         if (value.isRight) {
-            if (value.right.isEmpty) {
-              await localDataSource.deleteToDoCollection(collectionId: collectionId.value);
-            }  else {
-              throw Exception('Collection is not empty');
-            }
+          if (value.right.isEmpty) {
+            await localDataSource.deleteToDoCollection(collectionId: collectionId.value);
+          } else {
+            throw Exception('Collection is not empty');
+          }
         }
       });
-     //  await localDataSource.deleteToDoCollection(collectionId: collectionId.value);
+      //  await localDataSource.deleteToDoCollection(collectionId: collectionId.value);
       return Right(true);
     } on Exception catch (e) {
       switch (e) {
@@ -284,7 +287,72 @@ class ToDoRepositoryLocal implements ToDoRepository {
       }
     }
   }
+
+  @override
+  Future<Either<Failure, ToDoDashboard>> createToDoDashboard() async {
+    List<Collection> collections = [];
+    int areDone = 0;
+    int areNotDone = 0;
+    try {
+      await localDataSource.getToDoCollectionIds().then((collectionIds) async {
+        for (int i = 0; i < collectionIds.length; i++) {
+          final collectionId = collectionIds[i];
+          await localDataSource.getToDoCollection(collectionId: collectionId).then(
+              (collection)async {
+                int isDone = 0;
+                int isNotDone = 0;
+                await localDataSource.getToDoEntryIds(collectionId: collectionId).then((entryIds) async{
+                  for (int j = 0; j < entryIds.length; j++) {
+                    final entryId = entryIds[j];
+                    await localDataSource.getToDoEntry(collectionId: collectionId, entryId: entryId).then((entry) async{
+                      if (entry.isDone){
+                        isDone ++;
+                        areDone ++;
+                      }  else {
+                        isNotDone ++;
+                        areNotDone++;
+                      }
+                    });
+                  }
+                  collections.add(Collection(title:collection.title,colorIndex:collection.colorIndex, isDone: isDone,isNotDone: isNotDone));
+                });
+
+              }
+          );
+
+          /*
+          await localDataSource.getToDoEntryIds(collectionId: collectionId).then((entryIds) async{
+            for (int j = 0; j < entryIds.length; j++) {
+              final entryId = entryIds[j];
+              await localDataSource.getToDoEntry(collectionId: collectionId, entryId: entryId).then((entry) async{
+               entry.isDone ? areDone +=1  : areNotDone +=1;
+              });
+            }
+          });
+
+           */
+
+        }
+      });
+      return Right(ToDoDashboard(collections: collections, areDone: areDone, areNotDone: areNotDone));
+    } on Exception catch (e) {
+      switch (e) {
+        case final CollectionNotFoundException e:
+          return Left(GeneralFailure(stackTrace: e.toString()));
+        case final CacheException e:
+          return Left(CacheFailure(stackTrace: e.toString()));
+        default:
+          return Left(GeneralFailure(stackTrace: e.toString()));
+      }
+    }
+  }
 }
+
+///
+/// todoDashboard
+///
+///
+///
 
 ///
 ///     todo Entry Model -> todo Entry Entity

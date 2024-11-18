@@ -34,6 +34,9 @@ dependencies:
   hive: ^2.2.3
   flex_color_picker: ^3.6.0
   hive_test: ^1.0.1
+  percent_indicator: ^4.2.3
+  responsive_card: ^0.0.4
+  pie_chart: ^5.4.0
 
 dev_dependencies:
   flutter_test:

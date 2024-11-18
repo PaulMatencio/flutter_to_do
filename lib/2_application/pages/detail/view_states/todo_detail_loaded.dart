@@ -31,7 +31,7 @@ class ToDoDetailLoaded extends StatelessWidget {
               ),
             ),
             Align(
-              alignment: Alignment.bottomCenter,
+              alignment: Alignment.bottomRight,
               child: FloatingActionButton(
                   key: const Key('create-todo-entry'),
                   heroTag: 'create-todo-entry',

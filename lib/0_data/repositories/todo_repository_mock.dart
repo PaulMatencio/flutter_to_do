@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:either_dart/either.dart';
 import 'package:todo_app/1_domain/entities/todo_collection.dart';
 import 'package:todo_app/1_domain/entities/todo_color.dart';
+import 'package:todo_app/1_domain/entities/todo_dashboard.dart';
 import 'package:todo_app/1_domain/entities/todo_entry.dart';
 import 'package:todo_app/1_domain/entities/unique_id.dart';
 import 'package:todo_app/1_domain/failures/failures.dart';
@@ -83,6 +84,10 @@ class ToDoRepositoryMock implements ToDoRepository {
     // return Future.delayed(const Duration(milliseconds: 100), () => Left(ServerFailure()));
   }
 
+
+
+
+
   @override
   Future<Either<Failure, bool>> deleteToDoEntry({required CollectionId collectionId, required EntryId entryId}) {
     // TODO: implement deleteToDoEntry
@@ -146,6 +151,14 @@ class ToDoRepositoryMock implements ToDoRepository {
       return Future.value(Left(ServerFailure(stackTrace: e.toString())));
     }
   }
+
+
+  @override
+  Future<Either<Failure, ToDoDashboard>> createToDoDashboard() {
+    // TODO: implement buildDashboard
+    throw UnimplementedError();
+  }
+
 
   @override
   Future<Either<Failure, bool>> deleteToDoCollection(CollectionId collectionId) {

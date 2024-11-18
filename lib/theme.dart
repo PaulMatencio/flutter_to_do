@@ -12,8 +12,10 @@ import 'package:google_fonts/google_fonts.dart';
 class AppTheme {
   AppTheme._();
 
-  static const _primaryColorLight = Colors.lightBlueAccent;
-  static const _primaryColorDark = Colors.lightGreenAccent;
+  //static const _primaryColorLight = Colors.lightBlueAccent;
+  //static const _primaryColorDark = Colors.lightGreenAccent;
+  static const _primaryColorLight = Colors.indigoAccent;
+  static const _primaryColorDark = Colors.blueAccent;
 
   static final ThemeData lightTheme = ThemeData(
     appBarTheme: const AppBarTheme(

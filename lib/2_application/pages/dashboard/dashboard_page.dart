@@ -1,41 +1,58 @@
+
+
+
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:todo_app/2_application/core/widgets/switch_button.dart';
-import 'package:todo_app/2_application/pages/home/home_page.dart';
-import 'package:todo_app/2_application/pages/overview/overview_page.dart';
-import 'package:todo_app/2_application/pages/settings/settings_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_app/1_domain/failures/failures.dart';
+import 'package:todo_app/1_domain/repositories/todo_repository.dart';
+import 'package:todo_app/1_domain/use_cases/create_todo_dashbord.dart';
+import 'package:todo_app/2_application/pages/dashboard/bloc/cubit/todo_dashboard_cubit.dart';
+import 'package:todo_app/2_application/pages/dashboard/view_states/todo_dashboard_error.dart';
+import 'package:todo_app/2_application/pages/dashboard/view_states/todo_dashboard_loaded.dart';
+import 'package:todo_app/2_application/pages/dashboard/view_states/todo_dashboard_loading.dart';
 
 import '../../core/page_config.dart';
 
+class DashboardPageProvider extends StatelessWidget {
+  const DashboardPageProvider({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => ToDoDashboardCubit(
+       createTodoDashboard: CreateTodoDashboard(
+           toDoRepository: RepositoryProvider.of<ToDoRepository>(context))
+      )..getToDoStats(),
+      child: const DashboardPage(),
+    );
+  }
+}
+
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
-
   static const pageConfig = PageConfig(
     icon: Icons.dashboard_rounded,
     name: 'dashboard',
-    child: DashboardPage(),
+    child: DashboardPageProvider(),
   );
-
   @override
   Widget build(BuildContext context) {
-    PageConfig pageConfig = DashboardPage.pageConfig;
-    final theme = Theme.of(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          pageConfig.name,
-          style: theme.textTheme.titleMedium,
-        ),
-        backgroundColor: theme.colorScheme.primaryContainer,
-        leading: BackButton(
-            onPressed: () => context.canPop()
-                ? context.pop()
-                : context.goNamed(HomePage.pageConfig.name, pathParameters: {'tab': OverviewPage.pageConfig.name})),
-        actions: [SwitchButton()],
+    return Container(
+      color: Colors.tealAccent,
+      child: BlocBuilder<ToDoDashboardCubit, ToDoDashboardCubitState>(
+        builder: (context, state) {
+          //! builder
+          if (state is ToDoDashboardCubitLoadingState) {
+            return const ToDoDashboardLoading();
+          } else if (state is ToDoDashboardCubitLoadedState) {
+            return TodoDashboardLoaded(toDoDashboard: state.toDoDashboard);
+          } else if (state is ToDoDashboardCubitErrorState) {
+            return ToDoDashboardError(stackTrace: state.message,);
+          } else {
+            return const SizedBox();
+          }
+        },
       ),
-      body: Container(color: theme.colorScheme.surfaceContainer),
     );
   }
-
-  getPageConfig() => pageConfig;
 }
+
