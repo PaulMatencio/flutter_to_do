@@ -80,6 +80,6 @@
 ###  Task-T15: dashboard &&  screenshots  for delete collection (Task-t14)
     
   - screenshot for todo dashboard (https://github.com/PaulMatencio/flutter_to_do/blob/task_t15/todo_dashboard.png)
-  - screenshot for delete collection(https://github.com/PaulMatencio/flutter_to_do/blob/task_t15/todo_before_collection_isdeleted.png)
-  - screenshot for delete collection(https://github.com/PaulMatencio/flutter_to_do/blob/task_t15/todo_after_collection_isdeleted.png)
+  - screenshot for before delete collection(https://github.com/PaulMatencio/flutter_to_do/blob/task_t15/todo_before_collection_isdeleted.png)
+  - screenshot for after after collection is deleted (https://github.com/PaulMatencio/flutter_to_do/blob/task_t15/todo_after_collection_isdeleted.png)
 
