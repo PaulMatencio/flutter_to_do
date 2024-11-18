@@ -77,9 +77,17 @@
    ####  Ups  forgot to commit changes. Now code for delete collecion is commited
 
   
-###  Task-T15: dashboard &&  screenshots  for delete collection (Task-t14)
+###  Task-T15: dashboard &&  screenshots  for delete collection (Task-T14)
     
-  - screenshot for todo dashboard (https://github.com/PaulMatencio/flutter_to_do/blob/task_t15/todo_dashboard.png)
-  - screenshot for before delete collection(https://github.com/PaulMatencio/flutter_to_do/blob/task_t15/todo_before_collection_isdeleted.png)
-  - screenshot for after after collection is deleted (https://github.com/PaulMatencio/flutter_to_do/blob/task_t15/todo_after_collection_isdeleted.png)
+  - screenshot for todo dashboard (https://github.com/PaulMatencio/flutter_to_do/blob/task_t15/dashboard-4.png)
+  - screenshot for todo dashboard (https://github.com/PaulMatencio/flutter_to_do/blob/task_t15/dashboard-3.png)
+  - screenshot for todo dashboard (https://github.com/PaulMatencio/flutter_to_do/blob/task_t15/dashboard-2.png)
+  - screenshot for todo dashboard (https://github.com/PaulMatencio/flutter_to_do/blob/task_t15/dashboard-1.png)
+  
+  
+  ####  Task14 screenshots
+  - screenshot for before delete collection
+  (https://github.com/PaulMatencio/flutter_to_do/blob/task_t15/todo_before_collection_isdeleted.png)
+  - screenshot for after after collection is deleted
+   (https://github.com/PaulMatencio/flutter_to_do/blob/task_t15/todo_after_collection_isdeleted.png)
 
