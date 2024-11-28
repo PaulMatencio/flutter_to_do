@@ -93,12 +93,13 @@
    
    
    
-###   Add a login button
+###   Task-B01:   Add a login button
 
-  - Add go routes for <login> and <profile> pages   
+  - Add go routes for login page and profile page   
   - Add a login/profile button to the app
-  - If the user is logged in, the user should be redirected to the profile page
-  - If the user is not logged in, the user should be redirected to the login  page
-  - Add an email-authentication provider in addtion to the phone-authentication provider because it is easier to test the redirection 
+  - If the user is logged in, the user is redirected to the profile page
+  - If the user is not logged in, the user is redirected to the login  page
+  
+  - Add an email-authentication provider in addtion to the phone-authentication provider because it is easier to test the redirection. 
   - Redirection exception-> (!keyReservation.contains(key)is not true). Fix it by replacing $${\color{red}context.pushNamed()}$$  with $${\color{green}context.goNamed()}$$ 
 
