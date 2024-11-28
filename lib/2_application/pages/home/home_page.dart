@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:todo_app/2_application/core/widgets/login_button.dart';
 import 'package:todo_app/2_application/pages/dashboard/dashboard_page.dart';
 import 'package:todo_app/2_application/pages/detail/todo_detail_page.dart';
 import 'package:todo_app/2_application/pages/home/bloc/cubit/navigation_todo_cubit.dart';
@@ -77,14 +78,9 @@ class _HomePageState extends State<HomePage> {
                 Breakpoints.mediumAndUp: SlotLayout.from(
                   key: const Key('primary-navigation-medium'),
                   builder: (context) => AdaptiveScaffold.standardNavigationRail(
+                    width: 100,
                     padding: EdgeInsets.symmetric(horizontal: 5),
-                    leading: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Text(
-                        'Menus',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
+                    leading: const LoginButton(),
                     trailing: Tooltip(
                       message: SettingsPage.pageConfig.name,
                       child: IconButton(
@@ -107,6 +103,28 @@ class _HomePageState extends State<HomePage> {
                 ),
               },
             ),
+            topNavigation: SlotLayout(config: <Breakpoint, SlotLayoutConfig>{
+              Breakpoints.small: SlotLayout.from(
+                key: const Key('top-navigation-small'),
+                builder: (context) => Container(
+                 color: colorScheme.inversePrimary,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Tooltip(
+                        message: SettingsPage.pageConfig.name,
+                        child: IconButton(
+                          onPressed: () => context.pushNamed(SettingsPage.pageConfig.name),
+                          icon: const Icon(Icons.settings),
+                        ),
+                      ),
+                      const LoginButton(),
+                    ],
+                  ),
+                ),
+              ),
+            }),
+
             bottomNavigation: SlotLayout(
               config: <Breakpoint, SlotLayoutConfig>{
                 Breakpoints.small: SlotLayout.from(

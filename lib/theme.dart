@@ -50,7 +50,7 @@ TextTheme textTheme() {
       fontSize: 40,
       fontStyle: FontStyle.normal,
     ),
-    titleMedium: GoogleFonts.oswald(
+    titleMedium: GoogleFonts.pacifico(
       fontSize: 32,
       fontStyle: FontStyle.normal,
     ),
@@ -62,14 +62,14 @@ TextTheme textTheme() {
     bodyMedium: GoogleFonts.merriweather(fontSize: 16),
     bodyLarge: GoogleFonts.merriweather(fontSize: 20),
     displayLarge: const TextStyle(
-      fontSize: 16,
+      fontSize: 20,
       fontWeight: FontWeight.bold,
     ),
     displayMedium: const TextStyle(
-      fontSize: 14,
+      fontSize: 18,
       fontWeight: FontWeight.bold,
     ),
-    displaySmall: GoogleFonts.pacifico(),
+    displaySmall: GoogleFonts.pacifico(fontSize: 18),
   );
 }
 

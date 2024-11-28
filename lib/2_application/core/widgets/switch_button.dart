@@ -15,7 +15,6 @@ class SwitchButton extends StatefulWidget {
 
 class _SwitchButtonState extends State<SwitchButton> {
   void onChanged(bool value) {
-    //  Toggle the theme
     Provider.of<ThemeService>(context, listen: false).toggleTheme();
   }
 
@@ -24,10 +23,10 @@ class _SwitchButtonState extends State<SwitchButton> {
     //  Listen to the SwitchState change notification
     return Consumer<ThemeService>(builder: ((context, themeService, child) {
       return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Switch(
-            value: themeService.getTheme(),
-            splashRadius: 40,
+        padding: const EdgeInsets.all(2.0),
+        child: Switch.adaptive(
+            value: themeService.getTheme(), //  service theme
+            splashRadius: 20,
             activeColor: Theme.of(context).colorScheme.inversePrimary,
             thumbIcon: const WidgetStatePropertyAll(Icon(Icons.play_arrow)),
             inactiveThumbColor: Theme.of(context).colorScheme.primary,

@@ -15,6 +15,7 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
   go_router: ^14.2.8
+# go_router: ^12.0.0
 
   flutter_adaptive_scaffold: ^0.3.1
   uuid: ^4.5.1
@@ -37,6 +38,14 @@ dependencies:
   percent_indicator: ^4.2.3
   responsive_card: ^0.0.4
   pie_chart: ^5.4.0
+  firebase_core: ^3.8.0
+  firebase_auth: ^5.3.3
+  meta: ^1.15.0
+  flutter_ui_auth: ^1.0.0
+  firebase_dynamic_links: ^6.0.10
+  firebase_ui_shared: ^1.4.1
+  firebase_ui_localizations: ^1.13.0
+  firebase_ui_auth: ^1.16.0
 
 dev_dependencies:
   flutter_test:
@@ -83,3 +92,7 @@ assets:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+fonts:
+  - family: SocialIcons
+    fonts:
+      - asset: packages/firebase_ui_auth/fonts/SocialIcons.ttf

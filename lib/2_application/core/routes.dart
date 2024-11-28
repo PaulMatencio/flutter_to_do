@@ -1,3 +1,4 @@
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/1_domain/entities/unique_id.dart';
@@ -6,14 +7,15 @@ import 'package:todo_app/2_application/pages/create_todo_collection/create_todo_
 import 'package:todo_app/2_application/pages/create_todo_entry/create_todo_entry_page.dart';
 import 'package:todo_app/2_application/pages/dashboard/dashboard_page.dart';
 import 'package:todo_app/2_application/pages/detail/todo_detail_page.dart';
-
 import 'package:todo_app/2_application/pages/home/home_page.dart';
 import 'package:todo_app/2_application/pages/modify_todo_entry/modify_todo_entry_page.dart';
 import 'package:todo_app/2_application/pages/overview/overview_page.dart';
 import 'package:todo_app/2_application/pages/settings/settings_page.dart';
 
-final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
-final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'shell');
+final GlobalKey<NavigatorState> _rootNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'root');
+final GlobalKey<NavigatorState> _shellNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'shell');
 const String _basePath = '/home';
 
 final routes = GoRouter(
@@ -21,6 +23,60 @@ final routes = GoRouter(
   initialLocation: '$_basePath/${DashboardPage.pageConfig.name}',
   observers: [GoRouterObserver()],
   routes: [
+
+
+    GoRoute(
+        name: 'login',
+        path: '/login',
+        builder: (BuildContext context, GoRouterState state) {
+          return SignInScreen(
+            showPasswordVisibilityToggle: true,
+            showAuthActionSwitch: true,
+            actions: [
+              AuthStateChangeAction<SignedIn>((context, signedIn) {
+                context.goNamed(HomePage.pageConfig.name,
+                    pathParameters: {'tab': OverviewPage.pageConfig.name});
+              }),
+              AuthStateChangeAction<UserCreated>(
+                (context, userCreated) {
+                  context.goNamed(HomePage.pageConfig.name, pathParameters: {
+                    'tab': DashboardPage.pageConfig.name,
+                  });
+                },
+              ),
+              AuthStateChangeAction<AuthFailed>((context, state) {
+                ErrorText.localizeError = (BuildContext context, Exception e) {
+                  return e.toString();
+                };
+              }),
+
+            ],
+          );
+        }),
+
+    GoRoute(
+        name: 'profile',
+        path: '/profile',
+        builder: (BuildContext context, GoRouterState state) {
+          return ProfileScreen(
+            appBar: AppBar(
+              actions: [
+                BackButton(
+                  onPressed: () {
+                    context.canPop() ? context.pop() : null;
+                  },
+                )
+              ],
+            ),
+            actions: [
+              SignedOutAction((context) {
+                // context.goNamed('login');
+                context.goNamed(HomePage.pageConfig.name,
+                    pathParameters: {'tab': OverviewPage.pageConfig.name});
+              }),
+            ],
+          );
+        }),
     GoRoute(
       name: SettingsPage.pageConfig.name,
       path: '$_basePath/${SettingsPage.pageConfig.name}',
@@ -30,12 +86,14 @@ final routes = GoRouter(
     ),
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
-      builder: (BuildContext context, GoRouterState state, Widget child) => child,
+      builder: (BuildContext context, GoRouterState state, Widget child) =>
+          child,
       routes: <RouteBase>[
         GoRoute(
           name: HomePage.pageConfig.name, //
           path: '$_basePath/:tab',
-          builder: (BuildContext context, GoRouterState state) => HomePageProvider(
+          builder: (BuildContext context, GoRouterState state) =>
+              HomePageProvider(
             key: state.pageKey,
             //  tab: state.pathParameters['tab'] ?? 'dashboard',
             tab: state.pathParameters['tab']!,
@@ -48,7 +106,7 @@ final routes = GoRouter(
       path: '$_basePath/overview/${CreateToDoCollectionPage.pageConfig.name}',
       builder: (context, state) => Scaffold(
         appBar: AppBar(
-          title: const Text('create collection'),
+          title: Text('create collection',style: Theme.of(context).textTheme.titleMedium ),
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           leading: BackButton(
             onPressed: () {
@@ -76,7 +134,7 @@ final routes = GoRouter(
         final castedExtras = state.extra as CreateToDoEntryPageExtra;
         return Scaffold(
           appBar: AppBar(
-            title: const Text('create entry'),
+            title: Text('create entry', style: Theme.of(context).textTheme.titleMedium ),
             backgroundColor: Theme.of(context).colorScheme.primaryContainer,
             leading: BackButton(
               onPressed: () {
@@ -93,7 +151,8 @@ final routes = GoRouter(
           ),
           body: SafeArea(
               child: CreateToDoEntryPageProvider(
-                  toDoEntryItemAddedCallback: castedExtras.toDoEntryItemAddedCallback,
+                  toDoEntryItemAddedCallback:
+                      castedExtras.toDoEntryItemAddedCallback,
                   collectionId: castedExtras.collectionId)),
         );
       },
@@ -123,7 +182,8 @@ final routes = GoRouter(
           ),
           body: SafeArea(
               child: ModifyToDoEntryPageProvider(
-                  toDoEntryItemModifiedCallback: castedExtras.toDoEntryItemModifiedCallback,
+                  toDoEntryItemModifiedCallback:
+                      castedExtras.toDoEntryItemModifiedCallback,
                   todoEntry: castedExtras.toDoEntry,
                   collectionId: castedExtras.collectionId)),
         );
@@ -136,13 +196,15 @@ final routes = GoRouter(
           final collectionId = state.pathParameters['collectionId'];
           return Scaffold(
             appBar: AppBar(
-                title: Text('Details'),
+                title: Text('Details', style: Theme.of(context).textTheme.displayMedium ),
                 backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                 leading: BackButton(
                     onPressed: () => context.canPop()
                         ? context.pop()
-                        : context
-                            .goNamed(HomePage.pageConfig.name, pathParameters: {'tab': OverviewPage.pageConfig.name}))),
+                        : context.goNamed(HomePage.pageConfig.name,
+                            pathParameters: {
+                                'tab': OverviewPage.pageConfig.name
+                              }))),
             body: ToDoDetailPageProvider(
               collectionId: CollectionId.fromUniqueString(collectionId ?? ''),
             ),

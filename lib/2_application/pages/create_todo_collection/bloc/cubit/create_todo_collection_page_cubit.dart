@@ -20,7 +20,6 @@ class CreateToDoCollectionPageCubit extends Cubit<CreateToDoCollectionPageState>
   }
 
   void colorChanged(String color) {
-    print(color);
     emit(state.copyWith(color: color));
   }
 
