@@ -105,6 +105,7 @@
 
 
 ###  Task-B02  Add a top navigation bar (small breakpoint)
-  - It was done in Task-B01 
+  - Add the login button to the top navigation bar
+  - Customize SignInScreen & ProfileScreen
 
 
