@@ -26,7 +26,8 @@ class LoginButton extends StatelessWidget {
         }
 
         return ElevatedButton(
-          onPressed: () => callBack(),
+          onPressed: () => callBack(),///
+          // onPressed: callBack.call(),  /// cause an  error
           style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(color)),
           child: Text(text,style: Theme.of(context).textTheme.displaySmall),
         );

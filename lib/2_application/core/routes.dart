@@ -1,6 +1,7 @@
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:todo_app/1_domain/entities/unique_id.dart';
 import 'package:todo_app/2_application/core/go_router_observer.dart';
 import 'package:todo_app/2_application/pages/create_todo_collection/create_todo_collection_page.dart';
@@ -23,37 +24,57 @@ final routes = GoRouter(
   initialLocation: '$_basePath/${DashboardPage.pageConfig.name}',
   observers: [GoRouterObserver()],
   routes: [
-
-
     GoRoute(
         name: 'login',
         path: '/login',
         builder: (BuildContext context, GoRouterState state) {
-          return SignInScreen(
-            showPasswordVisibilityToggle: true,
-            showAuthActionSwitch: true,
-            actions: [
-              AuthStateChangeAction<SignedIn>((context, signedIn) {
-                context.goNamed(HomePage.pageConfig.name,
-                    pathParameters: {'tab': OverviewPage.pageConfig.name});
-              }),
-              AuthStateChangeAction<UserCreated>(
-                (context, userCreated) {
-                  context.goNamed(HomePage.pageConfig.name, pathParameters: {
-                    'tab': DashboardPage.pageConfig.name,
-                  });
+           return
+             /*
+             MaterialApp(
+             theme: ThemeData(
+                 textTheme: TextTheme(displayMedium: GoogleFonts.pacifico(
+                   fontSize: 32,
+                   fontStyle: FontStyle.normal,
+                 ),),
+             ),
+
+              */
+             SignInScreen(
+                showPasswordVisibilityToggle: true,
+                showAuthActionSwitch: true,
+                breakpoint: 600,
+                footerBuilder: (context, constraint) {
+                  return Container(
+                      height: 100,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    child: Center(
+                      child: Text('Thank you for Sign in',
+                      style: Theme.of(context).textTheme.titleMedium),
+                    ),
+
+                  );
                 },
-              ),
-              AuthStateChangeAction<AuthFailed>((context, state) {
-                ErrorText.localizeError = (BuildContext context, Exception e) {
-                  return e.toString();
-                };
-              }),
+                actions: [
+                  AuthStateChangeAction<SignedIn>((context, signedIn) {
+                    context.goNamed(HomePage.pageConfig.name,
+                        pathParameters: {'tab': OverviewPage.pageConfig.name});
+                  }),
+                  AuthStateChangeAction<UserCreated>(
+                    (context, userCreated) {
+                      context.goNamed(HomePage.pageConfig.name, pathParameters: {
+                        'tab': DashboardPage.pageConfig.name,
+                      });
+                    },
+                  ),
+                  AuthStateChangeAction<AuthFailed>((context, state) {
+                    ErrorText.localizeError = (BuildContext context, Exception e) {
+                      return e.toString();
+                    };
+                  }),
+                ],
+           );
 
-            ],
-          );
         }),
-
     GoRoute(
         name: 'profile',
         path: '/profile',
@@ -106,7 +127,8 @@ final routes = GoRouter(
       path: '$_basePath/overview/${CreateToDoCollectionPage.pageConfig.name}',
       builder: (context, state) => Scaffold(
         appBar: AppBar(
-          title: Text('create collection',style: Theme.of(context).textTheme.titleMedium ),
+          title: Text('create collection',
+              style: Theme.of(context).textTheme.titleMedium),
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           leading: BackButton(
             onPressed: () {
@@ -134,7 +156,8 @@ final routes = GoRouter(
         final castedExtras = state.extra as CreateToDoEntryPageExtra;
         return Scaffold(
           appBar: AppBar(
-            title: Text('create entry', style: Theme.of(context).textTheme.titleMedium ),
+            title: Text('create entry',
+                style: Theme.of(context).textTheme.titleMedium),
             backgroundColor: Theme.of(context).colorScheme.primaryContainer,
             leading: BackButton(
               onPressed: () {
@@ -196,7 +219,8 @@ final routes = GoRouter(
           final collectionId = state.pathParameters['collectionId'];
           return Scaffold(
             appBar: AppBar(
-                title: Text('Details', style: Theme.of(context).textTheme.displayMedium ),
+                title: Text('Details',
+                    style: Theme.of(context).textTheme.displayMedium),
                 backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                 leading: BackButton(
                     onPressed: () => context.canPop()

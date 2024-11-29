@@ -103,3 +103,8 @@
   - Add an email-authentication provider in addtion to the phone-authentication provider because it is easier to test the redirection. 
   - Redirection exception-> (!keyReservation.contains(key)is not true). Fix it by replacing $${\color{red}context.pushNamed()}$$  with $${\color{green}context.goNamed()}$$ 
 
+
+###  Task-B02  Add a top navigation bar (small breakpoint)
+  - It was done in Task-B01 
+
+
