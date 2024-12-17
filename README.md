@@ -120,8 +120,8 @@
    - auth  stream
 
    #### Screenshots:
-   - create an account page 
-   - Login with email/password page 
-   - Login with phone/number page
-   - Confirmation code page 
+   - create an account page https://github.com/PaulMatencio/flutter_to_do/blob/task_bo3/register_page.png
+   - Login with email/password page  https://github.com/PaulMatencio/flutter_to_do/blob/task_b03/Login-email_password_page.png
+   - Login with phone/number page  https://github.com/PaulMatencio/flutter_to_do/blob/task_b03/Login-email_password_page.png
+   - Confirmation code page https://github.com/PaulMatencio/flutter_to_do/blob/task_b03/Confirmation_code.png
    - Profile page ( under construction)
