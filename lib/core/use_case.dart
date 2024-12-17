@@ -3,8 +3,10 @@ import 'package:equatable/equatable.dart';
 import 'package:todo_app/1_domain/entities/todo_collection.dart';
 import 'package:todo_app/1_domain/entities/todo_entry.dart';
 import 'package:todo_app/1_domain/failures/failures.dart';
-
+import 'package:todo_app/2_application/core/models/phone_number.dart';
 import '../1_domain/entities/unique_id.dart';
+import '../2_application/core/models/models.dart';
+
 
 // <Type>    ->   List<TodoCollection>
 abstract class UseCase<Type, Params> {
@@ -63,3 +65,49 @@ class ToDoCollectionParams extends Params {
   @override
   List<Object> get props => [collection];
 }
+
+class EmailAndPassWordParams extends Params {
+  EmailAndPassWordParams({
+    required this.email,
+    required this.password,
+  }) : super();
+
+  final Email email;
+  final Password password;
+
+  @override
+  List<Object> get props => [email, password];
+}
+
+class PhoneNumberParam extends Params {
+  PhoneNumberParam({
+    required this.phoneNumber,
+  }) : super();
+  final PhoneNumber  phoneNumber ;
+
+  @override
+  List<Object> get props => [phoneNumber];
+}
+
+class VerificationParam extends Params {
+    VerificationParam({
+      required  this.phoneNumber,
+      required this.verificationCompleted,
+      required this.verificationFailed,
+      required this.codeSent,
+      required this.codeAutoRetrievalTimeout,
+});
+    final PhoneNumber phoneNumber;
+    final Function verificationCompleted;
+    final Function verificationFailed;
+    final Function codeSent;
+    final Function codeAutoRetrievalTimeout;
+
+
+    @override
+    List<Object> get props => [phoneNumber, verificationCompleted,verificationFailed,codeSent,codeAutoRetrievalTimeout];
+}
+
+
+
+

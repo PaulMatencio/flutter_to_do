@@ -31,7 +31,7 @@ class AppTheme {
   static final ThemeData darkTheme = ThemeData(
       useMaterial3: true,
       appBarTheme: const AppBarTheme(
-        centerTitle: false,
+        centerTitle: true,
       ),
       colorScheme: ColorScheme.fromSeed(
         seedColor: _primaryColorDark,

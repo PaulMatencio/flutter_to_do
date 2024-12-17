@@ -21,7 +21,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_app/0_data/data_sources/firebase/firebase_authentication.dart';
 import 'package:todo_app/0_data/data_sources/local/hive_local_data_source.dart';
+import 'package:todo_app/0_data/repositories/firebase_authentication_repository.dart';
 import 'package:todo_app/0_data/repositories/todo_repository_local.dart';
 import 'package:todo_app/2_application/app/cubit/auth_cubit.dart';
 import 'package:todo_app/2_application/core/services/theme_service.dart';
@@ -30,47 +32,54 @@ import '1_domain/repositories/todo_repository.dart';
 import '2_application/app/basic_app.dart';
 
 Future<void> main() async {
+  GoRouter.optionURLReflectsImperativeAPIs = true;
 
- GoRouter.optionURLReflectsImperativeAPIs=true;
+  final  firebaseAuth = FirebaseAuthentication();
+  ///  initialize firebase
+  try {
+    await firebaseAuth.init();
+  } on Exception  catch(e)  {
+    debugPrint(e.toString());
+  }
+  ///  get Firebase authentication
+  FirebaseAuth auth = firebaseAuth.auth;
+  ///   keep it for  switching  between  firebase auth-ui login and  our firebase login
+  ui_auth.FirebaseUIAuth.configureProviders(
+      [ui_auth.EmailAuthProvider(), ui_auth.PhoneAuthProvider()]);
+  ///  create an instance of AuthCubit
+  final authCubit =
+  AuthCubit(authenticationRepository: FirebaseAuthenticationRepository(authentication: firebaseAuth));
 
-  FirebaseApp app = await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  ///  listen to firebase authentication user stream
+  ///   update user state ( login or logout)
+  /*
+  auth.authStateChanges().listen((user) {
+    if (user != null ){
+      debugPrint(user.uid);
+    }
+    authCubit.authStateChanged(user: user);
+  });
+  */
 
-  FirebaseAuth auth = FirebaseAuth.instanceFor(app: app);
-
-  ui_auth.FirebaseUIAuth.configureProviders([
-    ui_auth.EmailAuthProvider(
-
-    ),
-    ui_auth.PhoneAuthProvider()
-  ]);
 
   ///final localDataSource =  MemoryLocalDataSource() ;
   final localDataSource = HiveLocalDataSource();
   await localDataSource.init();
-
-  final authCubit = AuthCubit();
-
- ///
- ///   listen  to FirebaseAuth stream which
- ///   notifies about changes to the user's sign-in state
- ///   (such as sign-in or sign-out).
- ///
-  FirebaseAuth.instance.authStateChanges().listen((user) {
-    debugPrint('user: $user');
-    authCubit.authStateChanged(user: user);
-  });
-
-
   runApp(RepositoryProvider<ToDoRepository>(
       create: (BuildContext context) => ToDoRepositoryLocal(
             localDataSource: localDataSource,
             // localDataSource: HiveLocalDataSource(),
           ),
-      child: ChangeNotifierProvider(create: (context) => ThemeService(),
+      child: ChangeNotifierProvider(
+          create: (context) => ThemeService(),
           child: BlocProvider<AuthCubit>(
-              create: (context) => authCubit ,
-              child: const BasicApp())))
-  );
+              create: (context) => authCubit,
+              child:  BasicApp(firebaseAuth: firebaseAuth,)))));
 }
+
+
+
+
+
+
+

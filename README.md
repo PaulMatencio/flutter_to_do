@@ -100,7 +100,7 @@
   - If the user is logged in, the user is redirected to the profile page
   - If the user is not logged in, the user is redirected to the login  page
   
-  - Add an email-authentication provider in addtion to the phone-authentication provider because it is easier to test the redirection. 
+  - Add an email-authentication provider in addition to the phone-authentication provider because it is easier to test the redirection. 
   - Redirection exception-> (!keyReservation.contains(key)is not true). Fix it by replacing $${\color{red}context.pushNamed()}$$  with $${\color{green}context.goNamed()}$$ 
 
 
@@ -109,3 +109,19 @@
   - Customize SignInScreen & ProfileScreen
 
 
+###  Task-B03  Encapsulate Firebase auth
+
+   - Implement an interface  for 
+   - Create an account (register a user ) 
+   - login with email/password
+   - login with phone number/ confirmation code 
+   - profile page with account deletion  
+   - logout 
+   - auth  stream
+
+   #### Screenshots:
+   - create an account page 
+   - Login with email/password page 
+   - Login with phone/number page
+   - Confirmation code page 
+   - Profile page ( under construction)

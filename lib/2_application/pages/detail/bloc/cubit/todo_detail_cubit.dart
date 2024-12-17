@@ -14,7 +14,6 @@ class ToDoDetailCubit extends Cubit<ToDoDetailCubitState> {
     this.collectionId,
     required this.loadToDoEntryIdsForCollection,
     required this.deleteToDoEntries,
-    //! required this.removeToDoEntry
   }) : super(ToDoDetailCubitLoadingState()); //! initial
 
   final CollectionId? collectionId;
