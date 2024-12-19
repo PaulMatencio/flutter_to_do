@@ -27,7 +27,6 @@ import 'package:todo_app/0_data/repositories/firebase_authentication_repository.
 import 'package:todo_app/0_data/repositories/todo_repository_local.dart';
 import 'package:todo_app/2_application/app/cubit/auth_cubit.dart';
 import 'package:todo_app/2_application/core/services/theme_service.dart';
-import 'package:todo_app/firebase_options.dart';
 import '1_domain/repositories/todo_repository.dart';
 import '2_application/app/basic_app.dart';
 

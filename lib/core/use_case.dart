@@ -1,5 +1,6 @@
 import 'package:either_dart/either.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:todo_app/1_domain/entities/todo_collection.dart';
 import 'package:todo_app/1_domain/entities/todo_entry.dart';
 import 'package:todo_app/1_domain/failures/failures.dart';
@@ -89,23 +90,16 @@ class PhoneNumberParam extends Params {
   List<Object> get props => [phoneNumber];
 }
 
-class VerificationParam extends Params {
-    VerificationParam({
-      required  this.phoneNumber,
-      required this.verificationCompleted,
-      required this.verificationFailed,
-      required this.codeSent,
-      required this.codeAutoRetrievalTimeout,
+class VerificationCodeParam extends Params {
+    VerificationCodeParam({
+      required  this.verificationCode,
+      required this.confirmationResult,
+
 });
-    final PhoneNumber phoneNumber;
-    final Function verificationCompleted;
-    final Function verificationFailed;
-    final Function codeSent;
-    final Function codeAutoRetrievalTimeout;
-
-
+    final String verificationCode;
+    final ConfirmationResult  confirmationResult;
     @override
-    List<Object> get props => [phoneNumber, verificationCompleted,verificationFailed,codeSent,codeAutoRetrievalTimeout];
+    List<Object> get props => [];
 }
 
 

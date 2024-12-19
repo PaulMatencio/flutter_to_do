@@ -16,7 +16,7 @@ class SignInButton extends StatelessWidget {
           backgroundColor: WidgetStatePropertyAll(theme.colorScheme.onPrimary)),
       onPressed: isValid
           ? () async {
-        print(login.name);
+        // print(login.name);
         switch (login.name)  {
           case 'mail':
             await context.read<LoginCubit>().signInWithEmailAndPassword();
@@ -25,7 +25,7 @@ class SignInButton extends StatelessWidget {
             await context.read<LoginCubit>().logInWithPhoneNumber();
             return;
           default:
-             await context.read<LoginCubit>().confirmResult();
+             await context.read<LoginCubit>().confirmationCode();
         }
       }
           : null,

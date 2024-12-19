@@ -18,4 +18,9 @@ abstract class FirebaseAuthenticationInterface {
     required String phoneNumber,
     Duration timeout,
   });
+
+  Future<UserCredential> confirmationCode({
+    required String verificationCode,
+    required ConfirmationResult confirmationResult,
+  });
 }

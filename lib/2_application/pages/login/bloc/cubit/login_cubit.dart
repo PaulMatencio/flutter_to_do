@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,13 +17,15 @@ class LoginCubit extends Cubit<LoginCubitState> {
       required this.signInWithPhoneNumber,
 
       /// repository sigInWithPhoneNumber
-      required this.verifyPhoneNumber})
+      required this.verifyPhoneNumber,
+      required this.verificationCode})
       : super(const LoginCubitState());
 
   final LoginWithEmailAndPassword loginWithEmailAndPassword;
   final SignOut signOut;
   final LoginWithPhoneNumber signInWithPhoneNumber;
   final VerifyPhoneNumber verifyPhoneNumber;
+  final VerificationCode verificationCode;
 
   ///
   ///  email
@@ -81,7 +84,6 @@ class LoginCubit extends Cubit<LoginCubitState> {
     emit(state.copyWith(passwordVisible: !state.passwordVisible));
   }
 
-
   ///
   ///    PhoneNumber
   ///
@@ -125,16 +127,19 @@ class LoginCubit extends Cubit<LoginCubitState> {
       ),
     );
   }
+
   void confirmationCodeUnfocused(ConfirmationCode? confirmationCode) {
-    final confirmationCode = ConfirmationCode.dirty(state.confirmationCode.value);
+    final confirmationCode =
+        ConfirmationCode.dirty(state.confirmationCode.value);
     emit(
       state.copyWith(
-       confirmationCode: confirmationCode,
-        isValid: Formz.validate([state.confirmationCode,confirmationCode]),
+        confirmationCode: confirmationCode,
+        isValid: Formz.validate([state.confirmationCode, confirmationCode]),
         status: FormzSubmissionStatus.initial,
       ),
     );
   }
+
   ///
   ///  call  use case loginWithEmailAndPassword
   ///
@@ -164,13 +169,12 @@ class LoginCubit extends Cubit<LoginCubitState> {
     }
   }
 
-
   ///
   ///  signInWithPhoneNumber send back  confirmationResult
   ///  The application need to conform  with a code ( confirmation Code)
   ///
   Future<void> logInWithPhoneNumber() async {
-    if (!state.isValid) return ;
+    if (!state.isValid) return;
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
     try {
       final result = await signInWithPhoneNumber
@@ -192,20 +196,18 @@ class LoginCubit extends Cubit<LoginCubitState> {
     } catch (_) {
       emit(state.copyWith(status: FormzSubmissionStatus.failure));
     }
-
   }
 
   ///
   ///   confirmation result was returned by loginWithPhoneNumber()
   ///
-  Future<UserCredential?> confirmResult()  async{
-    UserCredential?  userCredential;
+  Future<UserCredential?> confirmationCode() async {
+    UserCredential? userCredential;
     final confirmationResult = state.confirmationResult;
-
-    if (confirmationResult != null ) {
+    if (confirmationResult != null) {
       emit(state.copyWith(status: FormzSubmissionStatus.initial));
       try {
-        print('sent confirm code');
+        /*
         userCredential = await confirmationResult.confirm(state.confirmationCode.value);
         if (userCredential.user  != null) {
           emit(state.copyWith(status: FormzSubmissionStatus.success));
@@ -213,6 +215,24 @@ class LoginCubit extends Cubit<LoginCubitState> {
           emit(state.copyWith(
               errorMessage:state.loginError, status: FormzSubmissionStatus.failure));
         }
+        */
+        final result = await verificationCode.call(VerificationCodeParam(
+            verificationCode: state.confirmationCode.value,
+            confirmationResult: confirmationResult));
+        result.fold((failure) {
+          emit(state.copyWith(
+              errorMessage: _mapFailureToMessage(failure),
+              status: FormzSubmissionStatus.failure));
+        }, (userCredential) {
+          if (userCredential.user != null) {
+            emit(state.copyWith(status: FormzSubmissionStatus.success));
+          } else {
+            emit(state.copyWith(
+                errorMessage: state.loginError,
+                status: FormzSubmissionStatus.failure));
+          }
+        });
+
       } on Exception catch (e) {
         emit(state.copyWith(
             errorMessage: e.toString(), status: FormzSubmissionStatus.failure));
@@ -220,6 +240,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
     }
     return userCredential;
   }
+
   ///
   ///
   /// Android
@@ -231,7 +252,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
       await verifyPhoneNumber
           .call(PhoneNumberParam(phoneNumber: param.phoneNumber));
     } on Exception catch (e) {
-      emit(state.copyWith(errorMessage:  e.toString()));
+      emit(state.copyWith(errorMessage: e.toString()));
       emit(state.copyWith(status: FormzSubmissionStatus.failure));
     }
   }

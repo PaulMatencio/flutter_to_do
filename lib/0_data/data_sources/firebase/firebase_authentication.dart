@@ -96,7 +96,7 @@ class FirebaseAuthentication implements FirebaseAuthenticationInterface {
   void verificationFailed(FirebaseAuthException e) {
     throw VerificationException(stackTrace: e.code);
   }
-
+  ///   todo for Android
   void codeSent( String verificationId , int ? resendToken) async {
     String smsCode = 'xxxx';
     // Create a PhoneAuthCredential with the code
@@ -106,8 +106,8 @@ class FirebaseAuthentication implements FirebaseAuthenticationInterface {
   }
 
   ///
-  ///   After verification
   ///   Web platform
+  ///   return   confirmation result
   ///
   @override
   Future<ConfirmationResult> signInWithPhoneNumber(
@@ -122,6 +122,24 @@ class FirebaseAuthentication implements FirebaseAuthenticationInterface {
   }
 
   @override
+  Future<UserCredential>  confirmationCode({required String verificationCode, required ConfirmationResult confirmationResult}) async {
+    // TODO: implement confirmationCode
+    UserCredential userCredential;
+    try {
+     userCredential= await confirmationResult.confirm(verificationCode);
+    }  on FirebaseException catch (e) {
+      debugPrint(e.code);
+      throw SignUpWithPhoneNumberException(stackTrace: e.code);
+    }
+    return userCredential;
+  }
+
+
+
+  ///
+  /// logout
+  ///
+  @override
   Future<void> signOut() async {
     try {
       await auth.signOut();
@@ -130,6 +148,10 @@ class FirebaseAuthentication implements FirebaseAuthenticationInterface {
     }
   }
 
+
+  ///
+  /// delete account
+  ///
   @override
   Future<void> deleteUser() async {
     try {

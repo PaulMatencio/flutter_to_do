@@ -29,4 +29,9 @@ abstract class AuthenticationRepository {
   Future<Either<Failure, bool>> signInWithCredential(
       {required PhoneAuthCredential credential});
 
+
+  Future<Either<Failure,UserCredential>> confirmationCode( {
+    required ConfirmationResult confirmationResult, required String verificationCode});
+
 }
+

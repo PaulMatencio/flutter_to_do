@@ -54,13 +54,26 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
     try {
       final confirmationResult =
           await authentication.signInWithPhoneNumber(phoneNumber: phoneNumber);
-          print('Result .... $confirmationResult');
+        //  print('Result .... $confirmationResult');
       return Right(confirmationResult);
     } on SignInWithEmailAndPasswordException catch (e) {
       debugPrint(e.stackTrace);
       return Left(SignInWithEmailAndPasswordFailure(stackTrace: e.stackTrace));
     }
   }
+
+  @override
+  Future<Either<Failure, UserCredential>> confirmationCode(
+      {required ConfirmationResult confirmationResult, required String verificationCode}) async {
+    try {
+       final result = await confirmationResult.confirm(verificationCode);
+      return Right(result);
+    } on SignInWithEmailAndPasswordException catch (e) {
+      debugPrint(e.stackTrace);
+      return Left(SignInWithEmailAndPasswordFailure(stackTrace: e.stackTrace));
+    }
+  }
+
 
   @override
   Future<Either<Failure, bool>> signInWithCredential(

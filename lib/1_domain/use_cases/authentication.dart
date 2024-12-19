@@ -79,7 +79,7 @@ class LoginWithPhoneNumber implements UseCase<ConfirmationResult,PhoneNumberPara
   ///   signIn with phone number (web)
   ///
   Future<Either<Failure,ConfirmationResult>> call(PhoneNumberParam  param) async {
-    print('login with ${param.phoneNumber.value}');
+   //  print('login with ${param.phoneNumber.value}');
     try {
       final  result = await authenticationRepository.signInWithPhoneNumber(
           phoneNumber: param.phoneNumber.value);
@@ -94,6 +94,25 @@ class LoginWithPhoneNumber implements UseCase<ConfirmationResult,PhoneNumberPara
   }
 }
 
+class VerificationCode implements UseCase<UserCredential,VerificationCodeParam> {
+  const VerificationCode({required  this.authenticationRepository});
+  final  AuthenticationRepository  authenticationRepository;
+  @override
+  Future<Either<Failure,UserCredential>> call(VerificationCodeParam  param) async {
+    //  print('login with ${param.phoneNumber.value}');
+    try {
+      final  result = await authenticationRepository.confirmationCode(
+          confirmationResult: param.confirmationResult, verificationCode: param.verificationCode);
+
+      return result.fold(
+            (left) => Left(left),
+            (right) => Right(right)
+      );
+    } on Exception catch(e){
+      return Left(ServerFailure(stackTrace: e.toString()));
+    }
+  }
+}
 
 
 ///
@@ -104,7 +123,6 @@ class VerifyPhoneNumber implements UseCase<bool,PhoneNumberParam> {
 
   const VerifyPhoneNumber({required  this.authenticationRepository});
   final  AuthenticationRepository  authenticationRepository;
-
   @override
   Future<Either<Failure,bool>> call(
       PhoneNumberParam  param,
@@ -123,7 +141,6 @@ class VerifyPhoneNumber implements UseCase<bool,PhoneNumberParam> {
       return Left(ServerFailure(stackTrace: e.toString()));
     }
   }
-
 }
 
 

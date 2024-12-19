@@ -6,6 +6,7 @@ import 'package:todo_app/0_data/data_sources/firebase/firebase_authentication.da
 import 'package:todo_app/0_data/repositories/firebase_authentication_repository.dart';
 
 import 'package:todo_app/2_application/app/cubit/auth_cubit.dart';
+import 'package:todo_app/2_application/core/models/confirmation_code.dart';
 import 'package:todo_app/2_application/core/routes.dart';
 import 'package:todo_app/2_application/core/services/theme_service.dart';
 import 'package:todo_app/2_application/pages/login/bloc/cubit/login_cubit.dart';
@@ -35,7 +36,7 @@ class BasicApp extends StatelessWidget {
     */
 
     authenticationRepository.authStateChanges().listen((userEntity) {
-      print('......   authStateChanged');
+    //  print('......   authStateChanged');
       if (userEntity.uid != null) {
         debugPrint(userEntity.uid);
       }
@@ -55,7 +56,8 @@ class BasicApp extends StatelessWidget {
                   SignOut(authenticationRepository: authenticationRepository),
               signInWithPhoneNumber: LoginWithPhoneNumber(
                   authenticationRepository: authenticationRepository),
-              verifyPhoneNumber: VerifyPhoneNumber(authenticationRepository: authenticationRepository)
+              verifyPhoneNumber: VerifyPhoneNumber(authenticationRepository: authenticationRepository),
+              verificationCode: VerificationCode(authenticationRepository: authenticationRepository ),
           ),
         ),
         BlocProvider(
