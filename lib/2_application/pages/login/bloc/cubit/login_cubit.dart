@@ -228,7 +228,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
             emit(state.copyWith(status: FormzSubmissionStatus.success));
           } else {
             emit(state.copyWith(
-                errorMessage: state.loginError,
+                errorMessage: '${state.loginError}:  user is null',
                 status: FormzSubmissionStatus.failure));
           }
         });
@@ -237,6 +237,10 @@ class LoginCubit extends Cubit<LoginCubitState> {
         emit(state.copyWith(
             errorMessage: e.toString(), status: FormzSubmissionStatus.failure));
       }
+    }  else {
+      emit(state.copyWith(
+          errorMessage: '${state.loginError}: confirmation result is null',
+          status: FormzSubmissionStatus.failure));
     }
     return userCredential;
   }
