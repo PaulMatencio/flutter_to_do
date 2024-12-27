@@ -12,5 +12,5 @@ void main() {
   final  firebaseAuth = FirebaseAuthentication();
   runApp(RepositoryProvider<ToDoRepository>(
       create: (BuildContext context) => ToDoRepositoryMock(),
-      child: ChangeNotifierProvider(create: (context) => ThemeService(), child: BasicApp(firebaseAuth: firebaseAuth,))));
+      child: ChangeNotifierProvider(create: (context) => ThemeService(), child: BasicApp(firebaseAuth: firebaseAuth,),)));
 }

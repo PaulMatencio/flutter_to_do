@@ -125,3 +125,36 @@
    - Login with phone/number page  https://github.com/PaulMatencio/flutter_to_do/blob/task_b03/Login-email_password_page.png
    - Confirmation code page https://github.com/PaulMatencio/flutter_to_do/blob/task_b03/Confirmation_code.png
    - Profile page ( under construction)
+
+
+###  task-B04  implement of  fireStore methods 
+  ####  implementation of the following methods  for fireStore remote datasource  
+  ####  Class FireStoreRemoteDatasource implements ToDoRemoteDataSourceInterface 
+
+   - init       ( Not requested)
+   - getToDoEntryIds
+   - getToDoEntry
+   - createToDoEntry
+   - deleteToDoEntry   ( Not requested)
+   - updateToDoEntry   ( Not requested)
+   - modifyToDoEntry   ( Not requested)
+   - deleteToDoCollection  ( Not requested)
+
+  ####  (not requested) implementation of the ToDoRepositoryRemote for firestore  ( Not requested)
+  ####  class ToDoRepositoryRemote implements ToDoRepository  (  User must be logged in)  
+  ####  user must be logged in to test   
+       - createToDoCollection(ToDoCollection todoCollection);
+       - readToDoCollections();
+       - createToDoEntry({required CollectionId collectionId, required ToDoEntry toDoEntry});
+       - readToDoEntryIds(CollectionId collectionId);
+       - readToDoEntry(CollectionId collectionId, EntryId entryId);
+       - updateToDoEntry({required CollectionId collectionId, required EntryId entryId});
+       - deleteToDoEntry({required CollectionId collectionId, required EntryId entryId});
+       - deleteToDoEntries(CollectionId collectionId);
+       - deleteToDoCollection(CollectionId collectionId);
+       - modifyToDoEntry({required CollectionId collectionId, required ToDoEntry toDoEntry});
+       - createToDoDashboard();
+
+  ####  (not requested) Update the repository provider to use fireStore 
+  ####   run  todo app with fireStare
+        

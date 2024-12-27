@@ -1,4 +1,5 @@
 import 'package:either_dart/either.dart';
+import 'package:todo_app/1_domain/entities/auth_user.dart';
 import 'package:todo_app/1_domain/entities/todo_collection.dart';
 import 'package:todo_app/1_domain/entities/todo_dashboard.dart';
 import 'package:todo_app/1_domain/entities/unique_id.dart';

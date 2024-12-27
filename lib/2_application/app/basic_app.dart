@@ -16,10 +16,17 @@ import 'package:todo_app/theme.dart';
 import '../../1_domain/use_cases/authentication.dart';
 
 class BasicApp extends StatelessWidget {
+
   const BasicApp({super.key, required this.firebaseAuth});
   final FirebaseAuthentication firebaseAuth;
+
+  /*
+  const BasicApp({super.key, this.authenticationRepository});
+  final   FirebaseAuthenticationRepository  ? authenticationRepository;
+  */
   @override
   Widget build(BuildContext context) {
+
     final authenticationRepository =
         FirebaseAuthenticationRepository(authentication: firebaseAuth);
 
@@ -36,7 +43,6 @@ class BasicApp extends StatelessWidget {
     */
 
     authenticationRepository.authStateChanges().listen((userEntity) {
-    //  print('......   authStateChanged');
       if (userEntity.uid != null) {
         debugPrint(userEntity.uid);
       }
@@ -57,7 +63,7 @@ class BasicApp extends StatelessWidget {
               signInWithPhoneNumber: LoginWithPhoneNumber(
                   authenticationRepository: authenticationRepository),
               verifyPhoneNumber: VerifyPhoneNumber(authenticationRepository: authenticationRepository),
-              verificationCode: VerificationCode(authenticationRepository: authenticationRepository ),
+              verificationCode: VerificationCode(authenticationRepository: authenticationRepository),
           ),
         ),
         BlocProvider(

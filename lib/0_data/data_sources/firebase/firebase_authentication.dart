@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class FirebaseAuthentication implements FirebaseAuthenticationInterface {
   bool isInitialized = false;
   late FirebaseApp app;
   late FirebaseAuth auth;
+
 
   ///
   /// The AuthenticationRepository exposes a Stream<UserModel> which we can subscribe to in order to be notified of when a User changes.
@@ -35,6 +37,12 @@ class FirebaseAuthentication implements FirebaseAuthenticationInterface {
       app = await Firebase.initializeApp(
           options: DefaultFirebaseOptions.currentPlatform);
       auth = FirebaseAuth.instanceFor(app: app);
+      FirebaseFirestore.instance.settings = const Settings(
+        persistenceEnabled: true,
+      );
+      ///  initialize  Cloud FireStore
+
+
       isInitialized = true;
     } else {
       debugPrint('Firebase was already initialized!');

@@ -10,8 +10,8 @@ class UserModel extends Equatable {
 
   const UserModel(
       {required this.email,
-      required this.displayName,
-      required this.uid,
+      this.displayName,
+      this.uid,
       this.photoURL,
       this.phoneNumber});
 
@@ -35,5 +35,5 @@ class UserModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [email, uid, phoneNumber, photoURL];
+  List<Object?> get props => [email, uid, displayName, phoneNumber, photoURL];
 }

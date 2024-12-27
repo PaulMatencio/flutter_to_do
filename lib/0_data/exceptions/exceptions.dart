@@ -3,6 +3,9 @@ class ServerException implements Exception {
   ServerException({required this.stackTrace});
 }
 
+
+
+
 class CacheException implements Exception {
   final String? stackTrace;
   CacheException({this.stackTrace});
