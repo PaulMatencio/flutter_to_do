@@ -5,6 +5,14 @@ import 'package:todo_app/0_data/exceptions/firebase_firestore.dart';
 import 'package:todo_app/0_data/models/todo_collection_model.dart';
 import 'package:todo_app/0_data/models/todo_entry_model.dart';
 
+
+///
+///  https://firebase.google.com/docs/firestore/manage-data/add-data
+///
+/// https://firebase.google.com/docs/firestore/query-data/get-data
+///
+
+
 ///
 ///   collection(String(collectionPath)  ->  CollectionReference
 ///   Gets a CollectionReference instance that refers to the collection at the specified path.
@@ -53,16 +61,13 @@ class FireStoreRemoteDatasource implements ToDoRemoteDataSourceInterface {
         .set(entryModel.toJson())
         .then((value) => true)
         .catchError((error) => false);
-    throw UnimplementedError();
+
   }
 
   @override
   Future<ToDoCollectionModel> getToDoCollection(
       {required String userId, required String collectionId}) async {
-    // TODO: implement getToDoCollection
-
     final docSnapshot = await db.collection(userId).doc(collectionId).get();
-
     if (docSnapshot.exists || docSnapshot.data() != null) {
       return ToDoCollectionModel.fromJson(docSnapshot.data()!);
     } else {
@@ -74,7 +79,6 @@ class FireStoreRemoteDatasource implements ToDoRemoteDataSourceInterface {
 
   @override
   Future<List<String>> getToDoCollectionIds({required String userId}) async {
-    // TODO: implement getToDoCollectionIds
     try {
       final querySnapshot = await db.collection(userId).get();
       return querySnapshot.docs.map((doc) => doc.id).toList();
@@ -158,7 +162,7 @@ class FireStoreRemoteDatasource implements ToDoRemoteDataSourceInterface {
         .doc(collectionId)
         .collection('entries')
         .doc(entryModel.id)
-        .set(entryModel.toJson())
+        .set(entryModel.toJson(),SetOptions(merge: true))
         .then((value) => true)
         .catchError((error) => false);
   }
@@ -168,12 +172,15 @@ class FireStoreRemoteDatasource implements ToDoRemoteDataSourceInterface {
       {required String userId,
       required String collectionId,
       required String entryId}) async {
+
+    // Read the document
     final docSnapshot = await db
         .collection(userId)
         .doc(collectionId)
         .collection('entries')
         .doc(entryId)
         .get();
+    /// update tge document
     if (docSnapshot.exists || docSnapshot.data() != null) {
       final entry = ToDoEntryModel.fromJson(docSnapshot.data()!);
       final updatedEntry = ToDoEntryModel(
@@ -181,6 +188,7 @@ class FireStoreRemoteDatasource implements ToDoRemoteDataSourceInterface {
         description: entry.description,
         isDone: !entry.isDone,
       );
+      /// write the document
       await db
           .collection(userId)
           .doc(collectionId)
@@ -195,4 +203,30 @@ class FireStoreRemoteDatasource implements ToDoRemoteDataSourceInterface {
       throw FireStoreEntryNotFoundException(stackTrace: '$entryId not found');
     }
   }
+
+  @override
+  Future<ToDoEntryModel> updateTodoEntry({
+    required String userId,
+    required String collectionId,
+    required ToDoEntryModel entryModel,
+  }) async {
+    await FirebaseFirestore.instance
+        .collection(userId)
+        .doc(collectionId)
+        .collection('entries')
+        .doc(entryModel.id)
+        .set(entryModel.toJson(), SetOptions(merge: true));
+    return entryModel;
+  }
+
+
+
+
 }
+
+
+
+
+
+
+

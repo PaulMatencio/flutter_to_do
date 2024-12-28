@@ -16,6 +16,7 @@ class ToDoEntryItemCubit extends Cubit<ToDoEntryItemState> {
     required this.entryId,
     required this.collectionId,
     required this.updateToDoEntry,
+    required this.updateTodoEntry,
     required this.deleteToDoEntry,
     //!  useCase UpdateToDoEntry
   }) : super(ToDoEntryItemLoadingState()); //! initial state
@@ -24,6 +25,7 @@ class ToDoEntryItemCubit extends Cubit<ToDoEntryItemState> {
   final CollectionId collectionId;
   final LoadToDoEntry loadToDoEntry;
   final UpdateToDoEntry updateToDoEntry; //  update status
+  final UpdateTodoEntry updateTodoEntry; //
   final DeleteToDoEntry deleteToDoEntry;
 
   // update field
@@ -51,8 +53,10 @@ class ToDoEntryItemCubit extends Cubit<ToDoEntryItemState> {
   ///
   ///
   ///   update the status of a current entryId
+  //!    This function is replaced by  the update function below
+  ///   todo  This function is going to  be phased out
   ///
-  Future<void> update() async {
+  Future<void> updateEntryId() async {
     // print('todo_entry_item_cubit: update entryId  $entryId');
     try {
       if (state is ToDoEntryItemLoadedState) {
@@ -62,7 +66,6 @@ class ToDoEntryItemCubit extends Cubit<ToDoEntryItemState> {
           collectionId: collectionId,
           entryId: entryToUpdate.id,
         ));
-
         updatedEntry.fold(
           (left) {
             String message = 'Error: ${_mapFailureToMessage(left)}';
@@ -79,6 +82,41 @@ class ToDoEntryItemCubit extends Cubit<ToDoEntryItemState> {
       ));
     }
   }
+
+
+  ///
+  ///
+  ///   update the status of a current TodoEntry
+  ///
+
+  Future<void> update() async {
+    // print('todo_entry_item_cubit: update entryId  $entryId');
+    try {
+      if (state is ToDoEntryItemLoadedState) {
+        final currentToDoEntry = (state as ToDoEntryItemLoadedState).toDoEntry;
+        final entryToUpdate = currentToDoEntry.copyWith(isDone: !currentToDoEntry.isDone);
+        final updatedEntry = await updateTodoEntry.call(ToDoEntryParams(
+          collectionId: collectionId,
+          entry: entryToUpdate,
+        ));
+        updatedEntry.fold(
+              (left) {
+            String message = 'Error: ${_mapFailureToMessage(left)}';
+            emit(ToDoEntryItemErrorState(stackTrace: message));
+          },
+              (right) => emit(
+            ToDoEntryItemLoadedState(toDoEntry: right),
+          ),
+        );
+      }
+    } on Exception {
+      emit(ToDoEntryItemErrorState(
+        stackTrace: 'Could not update item!',
+      ));
+    }
+  }
+
+
   ///
   /// Delete an EntryId of a given collection id
   ///

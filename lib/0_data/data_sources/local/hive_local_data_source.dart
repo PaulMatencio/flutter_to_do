@@ -135,6 +135,14 @@ class HiveLocalDataSource implements ToDoLocalDataSourceInterface {
     return updatedEntry;
   }
 
+
+  @override
+  Future<ToDoEntryModel> updateTodoEntry({required String collectionId, required ToDoEntryModel entryModel}) {
+    // TODO: implement updateTodoEntry
+    throw UnimplementedError();
+  }
+
+
   ///
   ///   delete an entry
   ///

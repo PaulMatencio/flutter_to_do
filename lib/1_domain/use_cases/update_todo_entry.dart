@@ -25,3 +25,26 @@ class UpdateToDoEntry implements UseCase<ToDoEntry, ToDoEntryIdsParam> {
     }
   }
 }
+
+
+class UpdateTodoEntry implements UseCase<ToDoEntry, ToDoEntryParams> {
+  const UpdateTodoEntry({required this.toDoRepository});
+
+  final ToDoRepository toDoRepository;
+
+  @override
+  Future<Either<Failure, ToDoEntry>> call(ToDoEntryParams params) async {
+    try {
+      final loadedEntry = await toDoRepository.updateTodoEntry(
+        collectionId: params.collectionId,
+        todoEntry: params.entry,
+      );
+      return loadedEntry.fold(
+            (left) => Left(left),
+            (right) => Right(right),
+      );
+    } on Exception catch (e) {
+      return Left(ServerFailure(stackTrace: e.toString()));
+    }
+  }
+}

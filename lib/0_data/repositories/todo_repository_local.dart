@@ -238,6 +238,25 @@ class ToDoRepositoryLocal implements ToDoRepository {
     }
   }
 
+
+  ///
+  ///   updateToDoEntry
+  ///   update an entry status for a given entry id
+  ///
+  @override
+  Future<Either<Failure, ToDoEntry>> updateTodoEntry(
+      {required CollectionId collectionId, required ToDoEntry todoEntry}) async {
+    final entryModel = toDoEntryToModel(todoEntry);
+    try {
+      final entry = await localDataSource.updateTodoEntry(collectionId: collectionId.value,entryModel: entryModel);
+      return Right(toDoEntryModelToEntity(entry));
+    } on CacheException catch (e) {
+      return Future.value(Left(CacheFailure(stackTrace: e.toString())));
+    } on Exception catch (e) {
+      return Future.value(Left(ServerFailure(stackTrace: e.toString())));
+    }
+  }
+
   ///
   ///    modifyToDoEntry
   ///    modify an entry  for  a given entry id

@@ -11,6 +11,7 @@ abstract class ToDoRepository {
   Future<Either<Failure, List<ToDoCollection>>> readToDoCollections();
   Future<Either<Failure, ToDoEntry>> readToDoEntry(CollectionId collectionId, EntryId entryId);
   Future<Either<Failure, ToDoEntry>> updateToDoEntry({required CollectionId collectionId, required EntryId entryId});
+  Future<Either<Failure, ToDoEntry>> updateTodoEntry({required CollectionId collectionId, required ToDoEntry todoEntry});
   Future<Either<Failure, bool>> deleteToDoEntry({required CollectionId collectionId, required EntryId entryId});
   Future<Either<Failure, List<EntryId>>> readToDoEntryIds(CollectionId collectionId);
   Future<Either<Failure, List<EntryId>>> deleteToDoEntries(CollectionId collectionId);

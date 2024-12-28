@@ -303,6 +303,27 @@ class ToDoRepositoryRemote implements ToDoRepository {
     }
   }
 
+  @override
+  Future<Either<Failure, ToDoEntry>> updateTodoEntry(
+      {required CollectionId collectionId, required ToDoEntry todoEntry}) async {
+    final entryModel = toDoEntryToModel(todoEntry);
+    if (isLoggedIn) {
+      try {
+        final entry = await remoteDataSource.updateTodoEntry(userId: userId!,
+            collectionId: collectionId.value,
+            entryModel: entryModel);
+
+        return Right(toDoEntryModelToEntity(entry));
+      } on CacheException catch (e) {
+        return Future.value(Left(CacheFailure(stackTrace: e.toString())));
+      } on Exception catch (e) {
+        return Future.value(Left(ServerFailure(stackTrace: e.toString())));
+      }
+    } else {
+      return Left(GeneralFailure(stackTrace: 'please login first'));
+    }
+  }
+
   ///
   ///    modifyToDoEntry
   ///    modify an entry  for  a given entry id

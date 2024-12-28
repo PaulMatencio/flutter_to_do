@@ -36,6 +36,12 @@ abstract class ToDoRemoteDataSourceInterface {
       required String collectionId,
       required String entryId});
 
+  Future<ToDoEntryModel> updateTodoEntry(
+      {required String userId,
+        required String collectionId,
+        required ToDoEntryModel entryModel });
+
+
   Future<bool> modifyToDoEntry(
       {required String userId,
       required String collectionId,

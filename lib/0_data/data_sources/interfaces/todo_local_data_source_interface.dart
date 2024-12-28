@@ -10,8 +10,9 @@ abstract class ToDoLocalDataSourceInterface {
 
   Future<List<String>> getToDoCollectionIds();
 
+  /*   todo merge updateTodoEntry and modifyToDoEntry */
   Future<ToDoEntryModel> updateToDoEntry({required String collectionId, required String entryId});
-
+  Future<ToDoEntryModel> updateTodoEntry({required String collectionId, required ToDoEntryModel  entryModel});
   Future<bool> modifyToDoEntry({required String collectionId, required ToDoEntryModel entryModel});
 
   Future<bool> createToDoEntry({required String collectionId, required ToDoEntryModel entryModel});
