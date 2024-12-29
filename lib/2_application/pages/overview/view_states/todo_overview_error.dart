@@ -3,11 +3,12 @@
  */
 import 'package:flutter/material.dart';
 class ToDoOverviewError extends StatelessWidget {
-  const ToDoOverviewError({super.key});
+  const ToDoOverviewError({super.key,this.message});
+  final String ? message   ;
   @override
   Widget build(BuildContext context) {
-    return const Card(
-      child: Center(child: Text('ERROR, please try again')),
+    return  Card(
+      child: Center(child: Text(message ?? 'ERROR, please try again')),
     );
   }
 }

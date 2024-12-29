@@ -12,7 +12,13 @@ abstract class ToDoDetailCubitState extends Equatable {
 
 class ToDoDetailCubitLoadingState extends ToDoDetailCubitState {}
 
-class ToDoDetailCubitErrorState extends ToDoDetailCubitState {}
+class ToDoDetailCubitErrorState extends ToDoDetailCubitState {
+  const ToDoDetailCubitErrorState({this.message});
+  final String ?message;
+  @override
+  List<Object> get props => [message ?? ''];
+
+}
 
 //
 //    Cubit to manage the list<entryId>

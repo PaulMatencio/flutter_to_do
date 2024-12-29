@@ -136,7 +136,8 @@
    - getToDoEntry
    - createToDoEntry
    - deleteToDoEntry   ( Not requested)
-   - updateToDoEntry   ( Not requested)
+   - updateToDoEntry   ( ot requested)
+   - updateTodoEntry to replace  updateToDoEntry   ( Not requested)   
    - modifyToDoEntry   ( Not requested)
    - deleteToDoCollection  ( Not requested)
 
@@ -157,4 +158,12 @@
 
   ####  (not requested) Update the repository provider to use fireStore 
   ####   run  todo app with fireStare
-        
+
+
+
+###  task-B05  implement update in remote repository 
+  ####   Already implemented in task_b04 
+  - improve handling of error message when user is not logged in 
+  - revisit
+    - updateTodoEntry to replace  updateToDoEntry 
+

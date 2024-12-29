@@ -82,6 +82,11 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
     throw UnimplementedError();
   }
 
+
+  ///
+  ///
+  ///  todd
+  ///
   @override
   Future<Either<Failure, bool>> verifyPhoneNumber({
     required String phoneNumber,
@@ -97,6 +102,9 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
     }
   }
 
+  ///
+  ///  todo
+  ///
   verificationFailed(FirebaseAuthException e) {
     if (e.code == 'invalid-phone-number') {
       print('The provided phone number is not valid.');

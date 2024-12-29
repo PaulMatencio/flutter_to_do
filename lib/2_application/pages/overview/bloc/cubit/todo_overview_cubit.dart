@@ -57,6 +57,7 @@ class ToDoOverviewCubit extends Cubit<ToDoOverviewCubitState> {
 }
 
 String _mapFailureToMessage(Failure failure) {
+
   switch (failure) {
     case final ServerFailure e:
       return (e.stackTrace ?? serverFailureMessage);

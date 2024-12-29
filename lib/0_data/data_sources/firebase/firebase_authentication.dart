@@ -143,7 +143,6 @@ class FirebaseAuthentication implements FirebaseAuthenticationInterface {
   }
 
 
-
   ///
   /// logout
   ///

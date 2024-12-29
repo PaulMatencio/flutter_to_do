@@ -25,3 +25,11 @@ class GeneralFailure extends Failure with EquatableMixin {
   @override
   List<Object?> get props => [stackTrace];
 }
+
+class LoginFailure extends Failure with EquatableMixin {
+  LoginFailure({this.stackTrace});
+  final String? stackTrace;
+  @override
+  List<Object?> get props => [stackTrace];
+}
+

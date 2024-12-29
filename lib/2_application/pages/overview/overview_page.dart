@@ -43,7 +43,7 @@ class OverviewPage extends StatelessWidget {
           } else if (state is ToDoOverviewCubitLoadedState) {
             return ToDoOverviewLoaded(collections: state.collections);
           } else if (state is ToDoOverviewCubitErrorState) {
-            return ToDoOverviewError();
+            return ToDoOverviewError(message: state.message);
           } else {
             return const SizedBox();
           }

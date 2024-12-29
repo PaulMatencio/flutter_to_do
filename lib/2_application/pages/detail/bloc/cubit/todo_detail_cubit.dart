@@ -35,7 +35,7 @@ class ToDoDetailCubit extends Cubit<ToDoDetailCubitState> {
           CollectionIdParam(collectionId: collectionId!),
         );
         if (entryIds.isLeft) {
-          emit(ToDoDetailCubitErrorState());
+          emit(ToDoDetailCubitErrorState(message: _mapFailureToMessage(entryIds.left)));
         } else {
           emit(ToDoDetailCubitLoadedState(entryIds: entryIds.right));
         }
@@ -81,12 +81,11 @@ class ToDoDetailCubit extends Cubit<ToDoDetailCubitState> {
 String _mapFailureToMessage(Failure failure) {
   switch (failure) {
     case final ServerFailure e:
-      return e.stackTrace ?? generalFailureMessage;
+      return e.stackTrace ?? serverFailureMessage;
     case final CacheFailure _:
       return 'Cache failure';
     case final GeneralFailure e:
-      String? message = (e.stackTrace == null) ? 'Check the log' : e.stackTrace;
-      return message!;
+      return e.stackTrace ?? generalFailureMessage;
     default:
       return 'Ups unhandled error';
   }

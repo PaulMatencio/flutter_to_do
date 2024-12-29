@@ -101,7 +101,7 @@ class FireStoreRemoteDatasource implements ToDoRemoteDataSourceInterface {
     if (docSnapshot.exists || docSnapshot.data() != null) {
       return ToDoEntryModel.fromJson(docSnapshot.data()!);
     } else {
-      throw FireStoreEntryNotFoundException(stackTrace: '$entryId not found');
+      throw FireStoreEntryNotFoundException(stackTrace: '$collectionId . $entryId} not found');
     }
   }
 

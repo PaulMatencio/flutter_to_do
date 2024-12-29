@@ -189,7 +189,7 @@ class ToDoRepositoryRemote implements ToDoRepository {
   ///
   @override
   Future<Either<Failure, List<ToDoCollection>>> readToDoCollections() async {
-
+    print('is logged in? $isLoggedIn');
     if (isLoggedIn) {
       try {
         final collectionIds = await remoteDataSource.getToDoCollectionIds(

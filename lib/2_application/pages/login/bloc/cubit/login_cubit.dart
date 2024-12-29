@@ -273,7 +273,8 @@ class LoginCubit extends Cubit<LoginCubitState> {
 
   Future<bool> logOut() async {
     bool result = false;
-    if (!state.isValid) return result;
+    //!  After a restart , the state is not valid
+    // if (!state.isValid) return result;
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
     try {
       await signOut.call(NoParams());
