@@ -1,3 +1,5 @@
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,7 +24,6 @@ class ToDoOverviewLoaded extends StatelessWidget {
   });
 
   final List<ToDoCollection> collections;
-
   //final Function()  onDeleted;
 
   @override
@@ -79,7 +80,6 @@ class ToDoOverviewLoaded extends StatelessWidget {
                               selectedTileColor: colorScheme.surfaceContainerHighest,
                               iconColor: item.color.getColor(),
                               selectedColor: item.color.getColor(),
-
                               ///
                               ///  selected is set to TRUE
                               ///     when the item.id is the same

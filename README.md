@@ -167,3 +167,24 @@
   - revisit
     - updateTodoEntry to replace  updateToDoEntry 
 
+
+
+###  Task-B06   Update firestore rules
+  - Only the todo collection owner should be able to read his collection
+  - An unregistered or different user should not be able to access the data
+    from another user!
+
+rules_version = '2';
+service cloud.firestore {
+   match /databases/{database}/documents {
+     match /{userId}/{document = **} {
+        // allow create: if request.auth.uid != null;
+        allow read, write: if request.auth.uid != null && request.auth.uid == userId ;
+        }
+    }
+}
+
+## task-b07  Create a hybrid repository 
+
+   - If a user is logged in we want that his data stored in our database  ( Firestore )
+   - If a user is not logged in the data should be stored on our device ( Hive )

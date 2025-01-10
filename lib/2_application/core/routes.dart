@@ -32,13 +32,11 @@ final routes = GoRouter(
         name: 'login',
         path: '/login',
         builder: (context, state) {
-          final theme  = Theme.of(context);
+          final theme = Theme.of(context);
           return Scaffold(
               appBar: AppBar(
-                title: Text('Login Page',style: theme.textTheme.titleMedium),
-                actions: [
-                  const GoBackButton()
-                ],
+                title: Text('Login Page', style: theme.textTheme.titleMedium),
+                actions: [const GoBackButton()],
               ),
               body: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -49,13 +47,12 @@ final routes = GoRouter(
         name: 'login_phone',
         path: '/login_phone',
         builder: (context, state) {
-          final theme  = Theme.of(context);
+          final theme = Theme.of(context);
           return Scaffold(
               appBar: AppBar(
-                title: Text('Login with Phone Page',style: theme.textTheme.titleMedium),
-                actions: [
-                  const GoBackButton()
-                ],
+                title: Text('Login with Phone Page',
+                    style: theme.textTheme.titleMedium),
+                actions: [const GoBackButton()],
               ),
               body: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -66,25 +63,23 @@ final routes = GoRouter(
         name: 'confirmation_result',
         path: '/confirmation_result',
         builder: (context, state) {
-          final theme  = Theme.of(context);
+          final theme = Theme.of(context);
           return Scaffold(
               body: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ConfirmationResultPage(),
-              ));
+            padding: const EdgeInsets.all(8.0),
+            child: ConfirmationResultPage(),
+          ));
         }),
-
     GoRoute(
         name: 'register',
         path: '/register',
         builder: (context, state) {
-          final theme  = Theme.of(context);
+          final theme = Theme.of(context);
           return Scaffold(
               appBar: AppBar(
-                title: Text('Register Page',style: theme.textTheme.titleMedium),
-                actions: [
-                  const GoBackButton()
-                ],
+                title:
+                    Text('Register Page', style: theme.textTheme.titleMedium),
+                actions: [const GoBackButton()],
               ),
               body: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -92,7 +87,8 @@ final routes = GoRouter(
               ));
         }),
     GoRoute(
-      /// login with Firebase Auth_ui  ( not used)
+
+        /// login with Firebase Auth_ui  ( not used)
         name: 'login_ui',
         path: '/login_ui',
         builder: (BuildContext context, GoRouterState state) {
@@ -131,15 +127,14 @@ final routes = GoRouter(
           );
         }),
     GoRoute(
-      ///   profile page of firebase auth_ui
+
+        ///   profile page of firebase auth_ui
         name: 'profile',
         path: '/profile',
         builder: (BuildContext context, GoRouterState state) {
           return ProfileScreen(
             appBar: AppBar(
-              actions: [
-                const GoBackButton()
-              ],
+              actions: [const GoBackButton()],
             ),
             actions: [
               SignedOutAction((context) {
@@ -165,50 +160,46 @@ final routes = GoRouter(
         GoRoute(
           name: HomePage.pageConfig.name, //
           path: '$_basePath/:tab',
-          builder: (BuildContext context, GoRouterState state) =>
-              HomePageProvider(
-            key: state.pageKey,
-            //  tab: state.pathParameters['tab'] ?? 'dashboard',
-            tab: state.pathParameters['tab']!,
-          ),
+          builder: (BuildContext context, GoRouterState state) {
+           // debugPrint( 'path :${state.pathParameters['tab']}');
+            return HomePageProvider(
+              key: state.pageKey,
+              //  tab: state.pathParameters['tab'] ?? 'dashboard',
+              tab: state.pathParameters['tab']!,
+            );
+          },
         ),
       ],
     ),
     GoRoute(
-      name: CreateToDoCollectionPage.pageConfig.name,
-      path: '$_basePath/overview/${CreateToDoCollectionPage.pageConfig.name}',
-      builder: (context, state) {
-        final theme =  Theme.of(context);
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('create collection',
-                style: theme
-                    .textTheme
-                    .titleMedium),
-            backgroundColor: theme
-                .colorScheme
-                .primaryContainer,
-            leading:GoBackButton(),
-          ),
-          body: SafeArea(
-            child: CreateToDoCollectionPage.pageConfig.child,
-          ),
-        );
-      }),
+        name: CreateToDoCollectionPage.pageConfig.name,
+        path: '$_basePath/overview/${CreateToDoCollectionPage.pageConfig.name}',
+        builder: (context, state) {
+          final theme = Theme.of(context);
+          return Scaffold(
+            appBar: AppBar(
+              title:
+                  Text('create collection', style: theme.textTheme.titleMedium),
+              backgroundColor: theme.colorScheme.primaryContainer,
+              leading: GoBackButton(),
+            ),
+            body: SafeArea(
+              child: CreateToDoCollectionPage.pageConfig.child,
+            ),
+          );
+        }),
     GoRoute(
       name: CreateToDoEntryPage.pageConfig.name,
       path: '$_basePath/overview/${CreateToDoEntryPage.pageConfig.name}',
       builder: (context, state) {
         // final collectionId = state.extra as CollectionId;
         final castedExtras = state.extra as CreateToDoEntryPageExtra;
-        final theme =  Theme.of(context);
+        final theme = Theme.of(context);
         return Scaffold(
           appBar: AppBar(
-            title: Text('create entry',
-                style: theme.textTheme.titleMedium),
-            backgroundColor: theme.colorScheme.primaryContainer,
-            leading: GoBackButton()
-          ),
+              title: Text('create entry', style: theme.textTheme.titleMedium),
+              backgroundColor: theme.colorScheme.primaryContainer,
+              leading: GoBackButton()),
           body: SafeArea(
               child: CreateToDoEntryPageProvider(
                   toDoEntryItemAddedCallback:
@@ -223,13 +214,12 @@ final routes = GoRouter(
       builder: (context, state) {
         // final collectionId = state.extra as CollectionId;
         final castedExtras = state.extra as ModifyToDoEntryPageExtra;
-        final theme =  Theme.of(context);
+        final theme = Theme.of(context);
         return Scaffold(
           appBar: AppBar(
-            title: const Text('update entry'),
-            backgroundColor: theme.colorScheme.primaryContainer,
-            leading: GoBackButton()
-          ),
+              title: const Text('update entry'),
+              backgroundColor: theme.colorScheme.primaryContainer,
+              leading: GoBackButton()),
           body: SafeArea(
               child: ModifyToDoEntryPageProvider(
                   toDoEntryItemModifiedCallback:
@@ -244,11 +234,10 @@ final routes = GoRouter(
         path: '$_basePath/overview/:collectionId',
         builder: (context, state) {
           final collectionId = state.pathParameters['collectionId'];
-          final theme =  Theme.of(context);
+          final theme = Theme.of(context);
           return Scaffold(
             appBar: AppBar(
-                title: Text('Details',
-                    style: theme.textTheme.displayMedium),
+                title: Text('Details', style: theme.textTheme.displayMedium),
                 backgroundColor: theme.colorScheme.primaryContainer,
                 leading: GoBackButton()),
             body: ToDoDetailPageProvider(
@@ -258,4 +247,3 @@ final routes = GoRouter(
         }),
   ],
 );
-

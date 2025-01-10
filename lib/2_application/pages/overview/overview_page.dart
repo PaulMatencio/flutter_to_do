@@ -12,12 +12,14 @@ class OverviewPageProvider extends StatelessWidget {
   const OverviewPageProvider({super.key});
   @override
   Widget build(BuildContext context) {
+    debugPrint('Overview page provider');
     return BlocProvider(
       create: (context) => ToDoOverviewCubit(
         loadToDoCollections: LoadToDoCollections(
           toDoRepository: RepositoryProvider.of(context), //!  main.dart
         ),
-        deleteToDoCollection: DeleteToDoCollection(toDoRepository: RepositoryProvider.of(context)),
+        deleteToDoCollection: DeleteToDoCollection(
+            toDoRepository: RepositoryProvider.of(context)),
       )..readToDoCollections(),
       child: const OverviewPage(),
     );
@@ -33,6 +35,7 @@ class OverviewPage extends StatelessWidget {
   );
   @override
   Widget build(BuildContext context) {
+    debugPrint('Overview page');
     return Container(
       color: Colors.tealAccent,
       child: BlocBuilder<ToDoOverviewCubit, ToDoOverviewCubitState>(
@@ -52,6 +55,3 @@ class OverviewPage extends StatelessWidget {
     );
   }
 }
-
-
-

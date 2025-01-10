@@ -337,19 +337,6 @@ class ToDoRepositoryLocal implements ToDoRepository {
 
               }
           );
-
-          /*
-          await localDataSource.getToDoEntryIds(collectionId: collectionId).then((entryIds) async{
-            for (int j = 0; j < entryIds.length; j++) {
-              final entryId = entryIds[j];
-              await localDataSource.getToDoEntry(collectionId: collectionId, entryId: entryId).then((entry) async{
-               entry.isDone ? areDone +=1  : areNotDone +=1;
-              });
-            }
-          });
-
-           */
-
         }
       });
       return Right(ToDoDashboard(collections: collections, areDone: areDone, areNotDone: areNotDone));

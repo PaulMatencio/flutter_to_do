@@ -25,6 +25,7 @@ import 'package:todo_app/0_data/data_sources/firebase/firebase_authentication.da
 import 'package:todo_app/0_data/data_sources/local/hive_local_data_source.dart';
 import 'package:todo_app/0_data/data_sources/remote/firestore_remote_data_source.dart';
 import 'package:todo_app/0_data/repositories/firebase_authentication_repository.dart';
+import 'package:todo_app/0_data/repositories/todo_repository_hybrid.dart';
 import 'package:todo_app/0_data/repositories/todo_repository_local.dart';
 import 'package:todo_app/0_data/repositories/todo_repository_remote.dart';
 import 'package:todo_app/2_application/app/cubit/auth_cubit.dart';
@@ -89,9 +90,14 @@ Future<void> main() async {
         return ToDoRepositoryLocal(
           localDataSource: localDataSource,
         );
-         */
+
         return ToDoRepositoryRemote(
           remoteDataSource: remoteDataSource,
+        );
+        */
+        return ToDoRepositoryHybrid(
+          remoteDataSource: remoteDataSource,
+          localDataSource: localDataSource
         );
       },
       child: ChangeNotifierProvider(

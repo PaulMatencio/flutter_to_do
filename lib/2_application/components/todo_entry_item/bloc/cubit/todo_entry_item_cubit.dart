@@ -54,7 +54,8 @@ class ToDoEntryItemCubit extends Cubit<ToDoEntryItemState> {
   ///
   ///   update the status of a current entryId
   //!    This function is replaced by  the update function below
-  ///   todo  This function is going to  be phased out
+  ///   todo     ----->   This function is not used any longer and will
+  ///   todo     -----> be  phased out
   ///
   Future<void> updateEntryId() async {
     // print('todo_entry_item_cubit: update entryId  $entryId');
@@ -84,7 +85,6 @@ class ToDoEntryItemCubit extends Cubit<ToDoEntryItemState> {
   }
 
 
-  ///
   ///
   ///   update the status of a current TodoEntry
   ///

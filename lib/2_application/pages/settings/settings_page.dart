@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/2_application/core/page_config.dart';
 import 'package:go_router/go_router.dart';
+import 'package:todo_app/2_application/core/widgets/profile_button.dart';
 import 'package:todo_app/2_application/core/widgets/switch_button.dart';
 import 'package:todo_app/2_application/pages/overview/overview_page.dart';
 
@@ -26,7 +27,7 @@ class SettingsPage extends StatelessWidget {
             onPressed: () => context.canPop()
                 ? context.pop()
                 : context.goNamed(HomePage.pageConfig.name, pathParameters: {'tab': OverviewPage.pageConfig.name})),
-        actions: [SwitchButton()],
+        actions: [ProfileButton(),SwitchButton()],
       ),
       body: Container(color: theme.colorScheme.inversePrimary),
     );

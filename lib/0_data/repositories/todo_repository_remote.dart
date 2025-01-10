@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:todo_app/0_data/data_sources/interfaces/todo_local_data_source_interface.dart';
 import 'package:todo_app/0_data/data_sources/interfaces/todo_remote_data_source_interface.dart';
 import 'package:todo_app/0_data/exceptions/exceptions.dart';
+import 'package:todo_app/0_data/exceptions/firebase_firestore.dart';
 import 'package:todo_app/0_data/models/todo_collection_model.dart';
 import 'package:todo_app/0_data/models/todo_entry_model.dart';
 import 'package:todo_app/0_data/repositories/todo_repository_local.dart';
@@ -99,11 +100,11 @@ class ToDoRepositoryRemote implements ToDoRepository {
       } on Exception catch (e) {
         switch (e) {
           case final CollectionNotFoundException e:
-            return Left(GeneralFailure(stackTrace: e.toString()));
+            return Left(GeneralFailure(stackTrace: e.stackTrace));
           case final CollectionNotEmptyException e:
-            return Left(GeneralFailure(stackTrace: e.toString()));
+            return Left(GeneralFailure(stackTrace: e.stackTrace));
           case final CacheException e:
-            return Left(CacheFailure(stackTrace: e.toString()));
+            return Left(CacheFailure(stackTrace: e.stackTrace));
           default:
             return Left(ServerFailure(stackTrace: e.toString()));
         }
@@ -138,11 +139,11 @@ class ToDoRepositoryRemote implements ToDoRepository {
       } on Exception catch (e) {
         switch (e) {
           case final CollectionNotFoundException e:
-            return Left(GeneralFailure(stackTrace: e.toString()));
+            return Left(GeneralFailure(stackTrace: e.stackTrace));
           case final CollectionNotEmptyException e:
-            return Left(GeneralFailure(stackTrace: e.toString()));
+            return Left(GeneralFailure(stackTrace: e.stackTrace));
           case final CacheException e:
-            return Left(CacheFailure(stackTrace: e.toString()));
+            return Left(CacheFailure(stackTrace: e.stackTrace));
           default:
             return Left(ServerFailure(stackTrace: e.toString()));
         }
@@ -171,9 +172,9 @@ class ToDoRepositoryRemote implements ToDoRepository {
       } on Exception catch (e) {
         switch (e) {
           case final CollectionNotFoundException e:
-            return Left(GeneralFailure(stackTrace: e.toString()));
+            return Left(GeneralFailure(stackTrace: e.stackTrace));
           case final CacheException e:
-            return Left(CacheFailure(stackTrace: e.toString()));
+            return Left(CacheFailure(stackTrace: e.stackTrace));
           default:
             return Left(GeneralFailure(stackTrace: e.toString()));
         }
@@ -201,10 +202,16 @@ class ToDoRepositoryRemote implements ToDoRepository {
           collections.add(toDoCollectionModelToEntity(collection));
         }
         return Right(collections);
-      } on CacheException catch (e) {
-        return Future.value(Left(CacheFailure(stackTrace: e.toString())));
       } on Exception catch (e) {
-        return Future.value(Left(ServerFailure(stackTrace: e.toString())));
+        switch (e) {
+          case final FirebaseFireStoreException  e:
+            return Left(ServerFailure(stackTrace: e.stackTrace));
+          case final CacheException e:
+            return Left(CacheFailure(stackTrace: e.stackTrace));
+          default:
+            return Left(ServerFailure(stackTrace: e.toString()));
+        }
+        // return Future.value(Left(ServerFailure(stackTrace: e.toString())));
       }
     } else {
       return Left(GeneralFailure(stackTrace: 'please login first'));
@@ -228,7 +235,7 @@ class ToDoRepositoryRemote implements ToDoRepository {
       } on Exception catch (e) {
         switch (e) {
           case final ServerException e:
-            return Left(ServerFailure(stackTrace: e.toString()));
+            return Left(ServerFailure(stackTrace: e.stackTrace));
           case final CollectionNotFoundException e:
             return Left(GeneralFailure(stackTrace: e.stackTrace));
           case final CacheException _:
@@ -294,7 +301,7 @@ class ToDoRepositoryRemote implements ToDoRepository {
 
         return Right(toDoEntryModelToEntity(entry));
       } on CacheException catch (e) {
-        return Future.value(Left(CacheFailure(stackTrace: e.toString())));
+        return Future.value(Left(CacheFailure(stackTrace: e.stackTrace)));
       } on Exception catch (e) {
         return Future.value(Left(ServerFailure(stackTrace: e.toString())));
       }
@@ -315,7 +322,7 @@ class ToDoRepositoryRemote implements ToDoRepository {
 
         return Right(toDoEntryModelToEntity(entry));
       } on CacheException catch (e) {
-        return Future.value(Left(CacheFailure(stackTrace: e.toString())));
+        return Future.value(Left(CacheFailure(stackTrace: e.stackTrace)));
       } on Exception catch (e) {
         return Future.value(Left(ServerFailure(stackTrace: e.toString())));
       }
@@ -342,11 +349,11 @@ class ToDoRepositoryRemote implements ToDoRepository {
       } on Exception catch (e) {
         switch (e) {
           case final ServerException e:
-            return Left(ServerFailure(stackTrace: e.toString()));
+            return Left(ServerFailure(stackTrace: e.stackTrace));
           case final CollectionNotFoundException e:
-            return Left(GeneralFailure(stackTrace: e.toString()));
+            return Left(GeneralFailure(stackTrace: e.stackTrace));
           case final CacheException e:
-            return Left(CacheFailure(stackTrace: e.toString()));
+            return Left(CacheFailure(stackTrace: e.stackTrace));
           default:
             return Left(GeneralFailure(stackTrace: e.toString()));
         }
@@ -374,9 +381,9 @@ class ToDoRepositoryRemote implements ToDoRepository {
       } on Exception catch (e) {
         switch (e) {
           case final CollectionNotFoundException e:
-            return Left(GeneralFailure(stackTrace: e.toString()));
+            return Left(GeneralFailure(stackTrace: e.stackTrace));
           case final CacheException e:
-            return Left(CacheFailure(stackTrace: e.toString()));
+            return Left(CacheFailure(stackTrace: e.stackTrace));
           default:
             return Left(GeneralFailure(stackTrace: e.toString()));
         }
@@ -446,10 +453,12 @@ class ToDoRepositoryRemote implements ToDoRepository {
             areNotDone: areNotDone));
       } on Exception catch (e) {
         switch (e) {
+          case final FirebaseFireStoreException  e:
+            return Left(ServerFailure(stackTrace: e.stackTrace));
           case final CollectionNotFoundException e:
-            return Left(GeneralFailure(stackTrace: e.toString()));
+            return Left(ServerFailure(stackTrace: e.stackTrace));
           case final CacheException e:
-            return Left(CacheFailure(stackTrace: e.toString()));
+            return Left(CacheFailure(stackTrace: e.stackTrace));
           default:
             return Left(GeneralFailure(stackTrace: e.toString()));
         }

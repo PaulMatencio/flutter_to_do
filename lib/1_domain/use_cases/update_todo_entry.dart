@@ -4,6 +4,11 @@ import 'package:todo_app/1_domain/failures/failures.dart';
 import 'package:todo_app/1_domain/repositories/todo_repository.dart';
 import 'package:todo_app/core/use_case.dart';
 
+
+///
+///   Update TodDoEntry
+///
+///
 class UpdateToDoEntry implements UseCase<ToDoEntry, ToDoEntryIdsParam> {
   const UpdateToDoEntry({required this.toDoRepository});
 
@@ -26,6 +31,11 @@ class UpdateToDoEntry implements UseCase<ToDoEntry, ToDoEntryIdsParam> {
   }
 }
 
+
+///
+///  update todoEntry
+///
+///
 
 class UpdateTodoEntry implements UseCase<ToDoEntry, ToDoEntryParams> {
   const UpdateTodoEntry({required this.toDoRepository});

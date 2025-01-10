@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:formz/formz.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/2_application/app/cubit/auth_cubit.dart';
+import 'package:todo_app/2_application/pages/dashboard/dashboard_page.dart';
+import 'package:todo_app/2_application/pages/home/home_page.dart';
 import 'package:todo_app/2_application/pages/login/bloc/cubit/login_cubit.dart';
 
 class LoginButton extends StatelessWidget {
@@ -34,6 +35,10 @@ class LoginButton extends StatelessWidget {
                 ..showSnackBar(
                   SnackBar(content: Text(message)),
                 );
+              context.goNamed(
+                HomePage.pageConfig.name,
+                pathParameters: {'tab': DashboardPage.pageConfig.name},
+              );
             });
           };
         } else {

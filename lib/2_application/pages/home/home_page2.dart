@@ -10,16 +10,19 @@ import 'package:todo_app/2_application/pages/home/bloc/cubit/navigation_todo_cub
 import 'package:todo_app/2_application/pages/overview/overview_page.dart';
 import 'package:todo_app/2_application/pages/settings/settings_page.dart';
 
+
 class HomePageProvider extends StatelessWidget {
   const HomePageProvider({super.key, required this.tab});
-
   final String tab;
-
   @override
   Widget build(BuildContext context) {
     debugPrint('tab: $tab');
-    return BlocProvider<NavigationToDoCubit>(
-      create: (_) => NavigationToDoCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<NavigationToDoCubit>(
+          create: (_) => NavigationToDoCubit(),
+        ),
+      ],
       child: HomePage(tab: tab),
     );
   }
@@ -38,7 +41,9 @@ class HomePage extends StatefulWidget {
 
   final int index;
 
-  // list of all tabs that should be displayed inside our navigation bar
+  ///
+  ///  list of all tabs that should be displayed inside our navigation bar
+  ///
   static const tabs = [
     DashboardPage.pageConfig,
     OverviewPage.pageConfig,
@@ -52,25 +57,29 @@ class _HomePageState extends State<HomePage> {
   final destinations = HomePage.tabs
       .map(
         (page) => NavigationDestination(
-      icon: Icon(page.icon),
-      label: page.name,
-      tooltip: page.name,
-    ),
-  )
+          icon: Icon(page.icon),
+          label: page.name,
+          tooltip: page.name,
+        ),
+      )
       .toList();
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Scaffold(
-      body: SafeArea(
-        child: BlocListener<NavigationToDoCubit, NavigationToDoCubitState>(
-          listenWhen: (previous, current) => previous.isSecondBodyDisplayed != current.isSecondBodyDisplayed,
-          listener: (context, state) {
-            if (context.canPop() && (state.isSecondBodyDisplayed ?? false)) {
-              context.pop();
-            }
-          },
+    debugPrint('index ${widget.index}');
+    // print(SettingsPage.pageConfig.name);
+    return BlocListener<NavigationToDoCubit, NavigationToDoCubitState>(
+      listenWhen: (previous, current) =>
+          previous.isSecondBodyDisplayed != current.isSecondBodyDisplayed,
+      listener: (context, state) {
+        if (context.canPop() && (state.isSecondBodyDisplayed ?? false)) {
+          context.pop();
+        }
+      },
+      child: Scaffold(
+        body: SafeArea(
+
           child: AdaptiveLayout(
             primaryNavigation: SlotLayout(
               config: <Breakpoint, SlotLayoutConfig>{
@@ -90,9 +99,9 @@ class _HomePageState extends State<HomePage> {
                     ),
                     backgroundColor: colorScheme.inversePrimary,
                     selectedLabelTextStyle:
-                    TextStyle(color: colorScheme.onSurface),
+                        TextStyle(color: colorScheme.onSurface),
                     selectedIconTheme:
-                    IconThemeData(color: colorScheme.onSurface),
+                        IconThemeData(color: colorScheme.onSurface),
                     unselectedIconTheme: IconThemeData(
                         color: colorScheme.onSurface.withOpacity(0.5)),
                     onDestinationSelected: (index) =>
@@ -101,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                     destinations: destinations
                         .map(
                           (_) => AdaptiveScaffold.toRailDestination(_),
-                    )
+                        )
                         .toList(),
                   ),
                 ),
@@ -137,11 +146,16 @@ class _HomePageState extends State<HomePage> {
                   builder: (_) => AdaptiveScaffold.standardBottomNavigationBar(
                     destinations: destinations,
                     currentIndex: widget.index,
-                    onDestinationSelected: (value) => _tapOnNavigationDestination(context, value),
+                    onDestinationSelected: (value) =>
+                        _tapOnNavigationDestination(context, value),
                   ),
                 ),
               },
             ),
+
+            ///
+            ///
+            ///
             body: SlotLayout(
               config: <Breakpoint, SlotLayoutConfig>{
                 Breakpoints.smallAndUp: SlotLayout.from(
@@ -156,6 +170,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
   SlotLayout secondaryBodyLayout() {
     final colorScheme = Theme.of(context).colorScheme;
     return SlotLayout(
@@ -169,15 +184,15 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
-  void _tapOnNavigationDestination(BuildContext context, int index) => context.goNamed(
-    HomePage.pageConfig.name,
-    pathParameters: {
-      'tab': HomePage.tabs[index].name,
-    },
-  );
+
+  //void _tapOnNavigationDestination(BuildContext context, int index) => context.go('/home/${HomePage.tabs[index].name.toLowerCase()}');
+  void _tapOnNavigationDestination(BuildContext context, int index) {
+    //   HomePage.pageConfig.name/:tab
+    debugPrint(HomePage.tabs[index].name);
+    context.goNamed(HomePage.pageConfig.name,
+        pathParameters: {'tab': HomePage.tabs[index].name});
+  }
 }
-
-
 
 class DetailPageProvider extends StatelessWidget {
   const DetailPageProvider({
@@ -199,8 +214,8 @@ class DetailPageProvider extends StatelessWidget {
         ///    for mediumAndUp
         ///----------------------------------------------------------
         context.read<NavigationToDoCubit>().secondBodyHasChanged(
-          isSecondBodyDisplayed: isSecondBodyDisplayed,
-        );
+              isSecondBodyDisplayed: isSecondBodyDisplayed,
+            );
 
         if (selectedId == null) {
           //return const Placeholder();
@@ -214,9 +229,9 @@ class DetailPageProvider extends StatelessWidget {
             appBar: AppBar(
               title: Center(
                   child: Text(
-                    'Details',
-                    style: theme.textTheme.titleMedium,
-                  )),
+                'Details',
+                style: theme.textTheme.titleMedium,
+              )),
               backgroundColor: colorScheme.primaryContainer,
             ),
             body: ToDoDetailPageProvider(
