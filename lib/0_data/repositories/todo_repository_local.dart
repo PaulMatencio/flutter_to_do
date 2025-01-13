@@ -38,9 +38,9 @@ class ToDoRepositoryLocal implements ToDoRepository {
     } on Exception catch (e) {
       switch (e) {
         case final CollectionNotFoundException e:
-          return Left(GeneralFailure(stackTrace: e.toString()));
+          return Left(GeneralFailure(stackTrace: e.stackTrace));
         case final CacheException e:
-          return Left(CacheFailure(stackTrace: e.toString()));
+          return Left(CacheFailure(stackTrace: e.stackTrace));
         default:
           return Left(ServerFailure(stackTrace: e.toString()));
       }
@@ -77,11 +77,11 @@ class ToDoRepositoryLocal implements ToDoRepository {
     } on Exception catch (e) {
       switch (e) {
         case final CollectionNotFoundException e:
-          return Left(GeneralFailure(stackTrace: e.toString()));
+          return Left(GeneralFailure(stackTrace: e.stackTrace));
         case final CollectionNotEmptyException e:
-          return Left(GeneralFailure(stackTrace: e.toString()));
+          return Left(GeneralFailure(stackTrace: e.stackTrace));
         case final CacheException e:
-          return Left(CacheFailure(stackTrace: e.toString()));
+          return Left(CacheFailure(stackTrace: e.stackTrace));
         default:
           return Left(ServerFailure(stackTrace: e.toString()));
       }
@@ -110,11 +110,11 @@ class ToDoRepositoryLocal implements ToDoRepository {
     } on Exception catch (e) {
       switch (e) {
         case final CollectionNotFoundException e:
-          return Left(GeneralFailure(stackTrace: e.toString()));
+          return Left(GeneralFailure(stackTrace: e.stackTrace));
         case final CollectionNotEmptyException e:
-          return Left(GeneralFailure(stackTrace: e.toString()));
+          return Left(GeneralFailure(stackTrace: e.stackTrace));
         case final CacheException e:
-          return Left(CacheFailure(stackTrace: e.toString()));
+          return Left(CacheFailure(stackTrace: e.stackTrace));
         default:
           return Left(ServerFailure(stackTrace: e.toString()));
       }
@@ -137,9 +137,9 @@ class ToDoRepositoryLocal implements ToDoRepository {
     } on Exception catch (e) {
       switch (e) {
         case final CollectionNotFoundException e:
-          return Left(GeneralFailure(stackTrace: e.toString()));
+          return Left(GeneralFailure(stackTrace: e.stackTrace));
         case final CacheException e:
-          return Left(CacheFailure(stackTrace: e.toString()));
+          return Left(CacheFailure(stackTrace: e.stackTrace));
         default:
           return Left(GeneralFailure(stackTrace: e.toString()));
       }
@@ -163,7 +163,7 @@ class ToDoRepositoryLocal implements ToDoRepository {
       }
       return Right(collections);
     } on CacheException catch (e) {
-      return Future.value(Left(CacheFailure(stackTrace: e.toString())));
+      return Future.value(Left(CacheFailure(stackTrace: e.stackTrace)));
     } on Exception catch (e) {
       return Future.value(Left(ServerFailure(stackTrace: e.toString())));
     }
@@ -182,7 +182,7 @@ class ToDoRepositoryLocal implements ToDoRepository {
     } on Exception catch (e) {
       switch (e) {
         case final ServerException e:
-          return Left(ServerFailure(stackTrace: e.toString()));
+          return Left(ServerFailure(stackTrace: e.stackTrace));
         case final CollectionNotFoundException e:
           return Left(GeneralFailure(stackTrace: e.stackTrace));
         case final CacheException _:
@@ -232,7 +232,7 @@ class ToDoRepositoryLocal implements ToDoRepository {
 
       return Right(toDoEntryModelToEntity(entry));
     } on CacheException catch (e) {
-      return Future.value(Left(CacheFailure(stackTrace: e.toString())));
+      return Future.value(Left(CacheFailure(stackTrace: e.stackTrace)));
     } on Exception catch (e) {
       return Future.value(Left(ServerFailure(stackTrace: e.toString())));
     }
@@ -251,7 +251,7 @@ class ToDoRepositoryLocal implements ToDoRepository {
       final entry = await localDataSource.updateTodoEntry(collectionId: collectionId.value,entryModel: entryModel);
       return Right(toDoEntryModelToEntity(entry));
     } on CacheException catch (e) {
-      return Future.value(Left(CacheFailure(stackTrace: e.toString())));
+      return Future.value(Left(CacheFailure(stackTrace: e.stackTrace)));
     } on Exception catch (e) {
       return Future.value(Left(ServerFailure(stackTrace: e.toString())));
     }
@@ -273,11 +273,11 @@ class ToDoRepositoryLocal implements ToDoRepository {
     } on Exception catch (e) {
       switch (e) {
         case final ServerException e:
-          return Left(ServerFailure(stackTrace: e.toString()));
+          return Left(ServerFailure(stackTrace: e.stackTrace));
         case final CollectionNotFoundException e:
-          return Left(GeneralFailure(stackTrace: e.toString()));
+          return Left(GeneralFailure(stackTrace: e.stackTrace));
         case final CacheException e:
-          return Left(CacheFailure(stackTrace: e.toString()));
+          return Left(CacheFailure(stackTrace: e.stackTrace));
         default:
           return Left(GeneralFailure(stackTrace: e.toString()));
       }
@@ -297,9 +297,9 @@ class ToDoRepositoryLocal implements ToDoRepository {
     } on Exception catch (e) {
       switch (e) {
         case final CollectionNotFoundException e:
-          return Left(GeneralFailure(stackTrace: e.toString()));
+          return Left(GeneralFailure(stackTrace: e.stackTrace));
         case final CacheException e:
-          return Left(CacheFailure(stackTrace: e.toString()));
+          return Left(CacheFailure(stackTrace: e.stackTrace));
         default:
           return Left(GeneralFailure(stackTrace: e.toString()));
       }
@@ -343,9 +343,9 @@ class ToDoRepositoryLocal implements ToDoRepository {
     } on Exception catch (e) {
       switch (e) {
         case final CollectionNotFoundException e:
-          return Left(GeneralFailure(stackTrace: e.toString()));
+          return Left(GeneralFailure(stackTrace: e.stackTrace));
         case final CacheException e:
-          return Left(CacheFailure(stackTrace: e.toString()));
+          return Left(CacheFailure(stackTrace: e.stackTrace));
         default:
           return Left(GeneralFailure(stackTrace: e.toString()));
       }

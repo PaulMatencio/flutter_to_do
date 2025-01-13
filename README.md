@@ -184,7 +184,7 @@ service cloud.firestore {
     }
 }
 
-## task-b07  Create a hybrid repository 
+## task_B07  Create a hybrid repository 
 
    - If a user is logged in we want that his data stored in our database  ( Firestore )
    - If a user is not logged in the data should be stored on our device ( Hive )
