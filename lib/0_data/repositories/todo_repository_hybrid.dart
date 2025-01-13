@@ -51,9 +51,9 @@ class ToDoRepositoryHybrid implements ToDoRepository {
       } on Exception catch (e) {
         switch (e) {
           case final CollectionNotFoundException e:
-            return Left(GeneralFailure(stackTrace: e.toString()));
+            return Left(GeneralFailure(stackTrace: e.stackTrace));
           case final CacheException e:
-            return Left(CacheFailure(stackTrace: e.toString()));
+            return Left(CacheFailure(stackTrace: e.stackTrace));
           default:
             return Left(ServerFailure(stackTrace: e.toString()));
         }
@@ -67,9 +67,9 @@ class ToDoRepositoryHybrid implements ToDoRepository {
       } on Exception catch (e) {
         switch (e) {
           case final CollectionNotFoundException e:
-            return Left(GeneralFailure(stackTrace: e.toString()));
+            return Left(GeneralFailure(stackTrace: e.stackTrace));
           case final CacheException e:
-            return Left(CacheFailure(stackTrace: e.toString()));
+            return Left(CacheFailure(stackTrace: e.stackTrace));
           default:
             return Left(ServerFailure(stackTrace: e.toString()));
         }
@@ -119,11 +119,11 @@ class ToDoRepositoryHybrid implements ToDoRepository {
       } on Exception catch (e) {
         switch (e) {
           case final CollectionNotFoundException e:
-            return Left(GeneralFailure(stackTrace: e.toString()));
+            return Left(GeneralFailure(stackTrace: e.stackTrace));
           case final CollectionNotEmptyException e:
-            return Left(GeneralFailure(stackTrace: e.toString()));
+            return Left(GeneralFailure(stackTrace: e.stackTrace));
           case final CacheException e:
-            return Left(CacheFailure(stackTrace: e.toString()));
+            return Left(CacheFailure(stackTrace: e.stackTrace));
           default:
             return Left(ServerFailure(stackTrace: e.toString()));
         }
@@ -153,11 +153,11 @@ class ToDoRepositoryHybrid implements ToDoRepository {
       } on Exception catch (e) {
         switch (e) {
           case final CollectionNotFoundException e:
-            return Left(GeneralFailure(stackTrace: e.toString()));
+            return Left(GeneralFailure(stackTrace: e.stackTrace));
           case final CollectionNotEmptyException e:
-            return Left(GeneralFailure(stackTrace: e.toString()));
+            return Left(GeneralFailure(stackTrace: e.stackTrace));
           case final CacheException e:
-            return Left(CacheFailure(stackTrace: e.toString()));
+            return Left(CacheFailure(stackTrace: e.stackTrace));
           default:
             return Left(ServerFailure(stackTrace: e.toString()));
         }
@@ -190,11 +190,11 @@ class ToDoRepositoryHybrid implements ToDoRepository {
       } on Exception catch (e) {
         switch (e) {
           case final CollectionNotFoundException e:
-            return Left(GeneralFailure(stackTrace: e.toString()));
+            return Left(GeneralFailure(stackTrace: e.stackTrace));
           case final CollectionNotEmptyException e:
-            return Left(GeneralFailure(stackTrace: e.toString()));
+            return Left(GeneralFailure(stackTrace: e.stackTrace));
           case final CacheException e:
-            return Left(CacheFailure(stackTrace: e.toString()));
+            return Left(CacheFailure(stackTrace: e.stackTrace));
           default:
             return Left(ServerFailure(stackTrace: e.toString()));
         }
@@ -217,11 +217,11 @@ class ToDoRepositoryHybrid implements ToDoRepository {
       } on Exception catch (e) {
         switch (e) {
           case final CollectionNotFoundException e:
-            return Left(GeneralFailure(stackTrace: e.toString()));
+            return Left(GeneralFailure(stackTrace: e.stackTrace));
           case final CollectionNotEmptyException e:
-            return Left(GeneralFailure(stackTrace: e.toString()));
+            return Left(GeneralFailure(stackTrace: e.stackTrace));
           case final CacheException e:
-            return Left(CacheFailure(stackTrace: e.toString()));
+            return Left(CacheFailure(stackTrace: e.stackTrace));
           default:
             return Left(ServerFailure(stackTrace: e.toString()));
         }
@@ -252,9 +252,9 @@ class ToDoRepositoryHybrid implements ToDoRepository {
       } on Exception catch (e) {
         switch (e) {
           case final CollectionNotFoundException e:
-            return Left(GeneralFailure(stackTrace: e.toString()));
+            return Left(GeneralFailure(stackTrace: e.stackTrace));
           case final CacheException e:
-            return Left(CacheFailure(stackTrace: e.toString()));
+            return Left(CacheFailure(stackTrace: e.stackTrace));
           default:
             return Left(GeneralFailure(stackTrace: e.toString()));
         }
@@ -268,9 +268,9 @@ class ToDoRepositoryHybrid implements ToDoRepository {
       } on Exception catch (e) {
         switch (e) {
           case final CollectionNotFoundException e:
-            return Left(GeneralFailure(stackTrace: e.toString()));
+            return Left(GeneralFailure(stackTrace: e.stackTrace));
           case final CacheException e:
-            return Left(CacheFailure(stackTrace: e.toString()));
+            return Left(CacheFailure(stackTrace: e.stackTrace));
           default:
             return Left(GeneralFailure(stackTrace: e.toString()));
         }
@@ -343,7 +343,7 @@ class ToDoRepositoryHybrid implements ToDoRepository {
       } on Exception catch (e) {
         switch (e) {
           case final ServerException e:
-            return Left(ServerFailure(stackTrace: e.toString()));
+            return Left(ServerFailure(stackTrace: e.stackTrace));
           case final CollectionNotFoundException e:
             return Left(GeneralFailure(stackTrace: e.stackTrace));
           case final CacheException _:
@@ -363,7 +363,7 @@ class ToDoRepositoryHybrid implements ToDoRepository {
       } on Exception catch (e) {
         switch (e) {
           case final ServerException e:
-            return Left(ServerFailure(stackTrace: e.toString()));
+            return Left(ServerFailure(stackTrace: e.stackTrace));
           case final CollectionNotFoundException e:
             return Left(GeneralFailure(stackTrace: e.stackTrace));
           case final CacheException _:
