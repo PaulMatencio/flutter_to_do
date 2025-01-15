@@ -9,22 +9,22 @@ class ProfileButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    String text ='login';
     return BlocBuilder<AuthCubit, AuthCubitState>(
       builder: (context, state) {
         if (state is AuthCubitInitial && state.isLoggedIn) {
-          return TextButton(
-            style: ButtonStyle(
-              backgroundColor:
-              WidgetStatePropertyAll<Color>(theme.colorScheme.onPrimary),
-            ),
-            onPressed: () {
-                context.pushNamed('profile');
-            },
-            child: Text('profile', style: theme.textTheme.displayMedium),
-          );
+          text = 'profile';
         }
-        else {
-          return const SizedBox();}
+        return TextButton(
+          style: ButtonStyle(
+            backgroundColor:
+            WidgetStatePropertyAll<Color>(theme.colorScheme.onPrimary),
+          ),
+          onPressed: () {
+            context.pushNamed(text);
+          },
+          child: Text(text, style: theme.textTheme.displayMedium),
+        );
       },
     );
   }

@@ -15,8 +15,9 @@
 //!  https://github.com/SKHDev195/dart-initial-learning/tree/main/todo_app/lib
 //
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart' as ui_auth;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -26,23 +27,47 @@ import 'package:todo_app/0_data/data_sources/local/hive_local_data_source.dart';
 import 'package:todo_app/0_data/data_sources/remote/firestore_remote_data_source.dart';
 import 'package:todo_app/0_data/repositories/firebase_authentication_repository.dart';
 import 'package:todo_app/0_data/repositories/todo_repository_hybrid.dart';
-import 'package:todo_app/0_data/repositories/todo_repository_local.dart';
-import 'package:todo_app/0_data/repositories/todo_repository_remote.dart';
 import 'package:todo_app/2_application/app/cubit/auth_cubit.dart';
 import 'package:todo_app/2_application/core/services/theme_service.dart';
 import '1_domain/repositories/todo_repository.dart';
 import '2_application/app/basic_app.dart';
 
 Future<void> main() async {
+
   GoRouter.optionURLReflectsImperativeAPIs = true;
   final firebaseAuth = FirebaseAuthentication();
   WidgetsFlutterBinding.ensureInitialized();
 
+  ///
   ///  initialize firebase
+  ///   init()   will  initialize the app
+  ///   Firebase.initializeApp()
+  ///
   try {
     await firebaseAuth.init();
   } on Exception catch (e) {
     debugPrint(e.toString());
+  }
+
+  ///
+  ///  Configure crash handler
+  ///  for non Web platform
+  ///  since it is not working on web platform
+  ///
+
+  if (!kIsWeb) {
+    //! Catch all errors that are thrown within the Flutter framework
+    //! by overriding FlutterError.onError with
+    //! FirebaseCrashlytics.instance.recordFlutterFatalError:
+    FlutterError.onError = (errorDetails) {
+      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+    };
+    //! To catch asynchronous errors that aren't handled by the Flutter framework,
+    //!  use PlatformDispatcher.instance.onError
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
   }
 
   ///  get Firebase authentication

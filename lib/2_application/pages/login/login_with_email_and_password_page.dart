@@ -112,54 +112,57 @@ class _LoginWithEmailAndPasswordPageState extends State<LoginWithEmailAndPasswor
           color: theme.colorScheme.onError,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text("Don't have an account?",  style: theme.textTheme.titleMedium),
-                const SizedBox(
-                  height: 10,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text("Don't have an account?",  style: theme.textTheme.titleMedium),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      ElevatedButton(
+                        onPressed: () =>
+                            context.pushNamed(RegisterPage.pageConfig.name),
+                        style:
+                        ButtonStyle(backgroundColor: WidgetStatePropertyAll(theme.colorScheme.onPrimary)),
+                        child: Text('Register',
+                            style: theme.textTheme.titleMedium),
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      EmailInput(focusNode: _emailFocusNode),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      PasswordInput(focusNode: _passwordFocusNode),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          const GoBackButton(),
+                          const SignInButton(login: Login.mail,),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                       ElevatedButton(
+                          onPressed: () => context.pushNamed(LoginWithPhoneNumberPage.pageConfig.name),
+                          style:
+                          ButtonStyle(backgroundColor: WidgetStatePropertyAll(theme.colorScheme.onPrimary)),
+                          child: Text('Login with phone number',
+                              style: theme.textTheme.titleSmall),
+                        ),
+                  
+                    ],
+                  ),
                 ),
-                ElevatedButton(
-                  onPressed: () =>
-                      context.pushNamed(RegisterPage.pageConfig.name),
-                  style:
-                  ButtonStyle(backgroundColor: WidgetStatePropertyAll(theme.colorScheme.onPrimary)),
-                  child: Text('Register',
-                      style: theme.textTheme.titleMedium),
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
-                EmailInput(focusNode: _emailFocusNode),
-                const SizedBox(
-                  height: 20,
-                ),
-                PasswordInput(focusNode: _passwordFocusNode),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    const GoBackButton(),
-                    const SignInButton(login: Login.mail,),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                  onPressed: () => context.pushNamed(LoginWithPhoneNumberPage.pageConfig.name),
-                  style:
-                  ButtonStyle(backgroundColor: WidgetStatePropertyAll(theme.colorScheme.onPrimary)),
-                  child: Text('Login with phone number',
-                      style: theme.textTheme.titleSmall),
-                )
-              ],
+              ),
             ),
           ),
-        ),
-      ),
     );
   }
 }

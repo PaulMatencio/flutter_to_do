@@ -184,7 +184,12 @@ service cloud.firestore {
     }
 }
 
-## task_B07  Create a hybrid repository 
+## task-B07  Create a hybrid repository 
 
    - If a user is logged in we want that his data stored in our database  ( Firestore )
    - If a user is not logged in the data should be stored on our device ( Hive )
+
+
+##  task-B08   Add a crash button to the App
+   - Test crashlytics configuration 
+       - Add a button that throws an exception 

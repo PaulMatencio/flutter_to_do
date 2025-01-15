@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app/2_application/core/page_config.dart';
 import 'package:go_router/go_router.dart';
+import 'package:todo_app/2_application/core/widgets/crash_button.dart';
 import 'package:todo_app/2_application/core/widgets/profile_button.dart';
 import 'package:todo_app/2_application/core/widgets/switch_button.dart';
 import 'package:todo_app/2_application/pages/overview/overview_page.dart';
@@ -9,9 +11,8 @@ import '../home/home_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
-
   static const pageConfig = PageConfig(icon: Icons.settings, name: 'settings', child: SettingsPage());
-
+  bool get isLoggedIn => FirebaseAuth.instance.currentUser != null;
   @override
   Widget build(BuildContext context) {
     //PageConfig settingsPageConfig = SettingsPage.pageConfig;
@@ -29,7 +30,7 @@ class SettingsPage extends StatelessWidget {
                 : context.goNamed(HomePage.pageConfig.name, pathParameters: {'tab': OverviewPage.pageConfig.name})),
         actions: [ProfileButton(),SwitchButton()],
       ),
-      body: Container(color: theme.colorScheme.inversePrimary),
+      body: Center(child: CrashButton())
     );
   }
 

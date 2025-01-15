@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/1_domain/entities/todo_collection.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/1_domain/failures/failures.dart';
+import 'package:todo_app/2_application/core/widgets/crash_button.dart';
 import 'package:todo_app/2_application/core/widgets/profile_button.dart';
 import 'package:todo_app/2_application/core/widgets/switch_button.dart';
 import 'package:todo_app/2_application/pages/create_todo_collection/create_todo_collection_page.dart';
@@ -36,12 +36,15 @@ class ToDoOverviewLoaded extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: colorScheme.primaryContainer,
-          title: Center(child: Text(OverviewPage.pageConfig.name, style: theme.textTheme.titleMedium)),
-          actions: [ProfileButton(),SwitchButton()],
+          title: Center(
+              child: Text(OverviewPage.pageConfig.name,
+                  style: theme.textTheme.titleMedium)),
+          actions: [ProfileButton(), SwitchButton()],
           leading: BackButton(
               onPressed: () => context.canPop()
                   ? context.pop()
-                  : context.goNamed(HomePage.pageConfig.name, pathParameters: {'tab': DashboardPage.pageConfig.name}))),
+                  : context.goNamed(HomePage.pageConfig.name,
+                      pathParameters: {'tab': DashboardPage.pageConfig.name}))),
       body: Container(
         color: colorScheme.onPrimary,
         child: Padding(
@@ -52,13 +55,17 @@ class ToDoOverviewLoaded extends StatelessWidget {
               itemBuilder: (context, index) {
                 final item = collections[index];
                 // final colorScheme = Theme.of(context).colorScheme;
-                return BlocBuilder<NavigationToDoCubit, NavigationToDoCubitState>(
+                return BlocBuilder<NavigationToDoCubit,
+                    NavigationToDoCubitState>(
                   ///  ----------------------------------------------------------------
                   ///  condition to rebuild the overview page
                   ///  Only rebuild the  overview  page when
                   ///        another collection is selected
                   ///------------------------------------------------------------------
-                  buildWhen: (previous, current) => (previous.selectedCollectionId != current.selectedCollectionId) && collections.isNotEmpty,
+                  buildWhen: (previous, current) =>
+                      (previous.selectedCollectionId !=
+                          current.selectedCollectionId) &&
+                      collections.isNotEmpty,
                   builder: (context, state) {
                     // debugPrint('build item ${item.id.value}');
                     return Card.outlined(
@@ -68,8 +75,10 @@ class ToDoOverviewLoaded extends StatelessWidget {
                               message: 'delete',
                               child: TextButton(
                                   onPressed: () {
-                                    final navigationCubit = context.read<NavigationToDoCubit>();
-                                    showAlertDialog(context: context,
+                                    final navigationCubit =
+                                        context.read<NavigationToDoCubit>();
+                                    showAlertDialog(
+                                        context: context,
                                         navigationCubit: navigationCubit,
                                         collection: item);
                                   },
@@ -77,9 +86,11 @@ class ToDoOverviewLoaded extends StatelessWidget {
                           Expanded(
                             child: ListTile(
                               tileColor: colorScheme.surface,
-                              selectedTileColor: colorScheme.surfaceContainerHighest,
+                              selectedTileColor:
+                                  colorScheme.surfaceContainerHighest,
                               iconColor: item.color.getColor(),
                               selectedColor: item.color.getColor(),
+
                               ///
                               ///  selected is set to TRUE
                               ///     when the item.id is the same
@@ -97,18 +108,24 @@ class ToDoOverviewLoaded extends StatelessWidget {
                                 ///        a collectionId is changed
                                 ///    see   buildWhen  previous != current
                                 ///-----------------------------------------------
-                                context.read<NavigationToDoCubit>().selectedToDoCollectionChanged(item.id);
+                                context
+                                    .read<NavigationToDoCubit>()
+                                    .selectedToDoCollectionChanged(item.id);
                                 //--------------------------------------------
                                 //   if screen is small  =>  display the
                                 //   detailPage of the selected collection
                                 //-----------------------------------------------
                                 if (Breakpoints.small.isActive(context)) {
-                                  context.pushNamed(ToDoDetailPage.pageConfig.name,
-                                      pathParameters: {'collectionId': item.id.value});
+                                  context.pushNamed(
+                                      ToDoDetailPage.pageConfig.name,
+                                      pathParameters: {
+                                        'collectionId': item.id.value
+                                      });
                                 }
                               },
-                              leading:
-                                  Tooltip(message: 'click anywhere to see the detail', child: const Icon(Icons.circle)),
+                              leading: Tooltip(
+                                  message: 'click anywhere to see the detail',
+                                  child: const Icon(Icons.circle)),
                               title: Text(item.title),
                             ),
                           ),
@@ -131,11 +148,15 @@ class ToDoOverviewLoaded extends StatelessWidget {
                   heroTag: 'create-todo-collection',
                   tooltip: 'add_new_collection',
                   onPressed: () {
-                    context.pushNamed(CreateToDoCollectionPage.pageConfig.name).then((value) {
+                    context
+                        .pushNamed(CreateToDoCollectionPage.pageConfig.name)
+                        .then((value) {
                       if (value == true) {
                         // it was == null
                         if (context.mounted) {
-                          context.read<ToDoOverviewCubit>().readToDoCollections();
+                          context
+                              .read<ToDoOverviewCubit>()
+                              .readToDoCollections();
                         }
                       }
                     });
@@ -157,32 +178,38 @@ showAlertDialog({
   required NavigationToDoCubit navigationCubit,
 }) {
   /// set up the Cancel button
-  Widget cancelButton = TextButton(child: Text('Cancel'), onPressed: () => context.pop());
+  Widget cancelButton =
+      TextButton(child: Text('Cancel'), onPressed: () => context.pop());
 
   ///  Setup the continue button
   Widget continueButton = TextButton(
       child: Text('Continue'),
       onPressed: () async {
         final overviewCubit = context.read<ToDoOverviewCubit>();
-        final message = 'Please using the checkButton on the right to check all the detail items then delete again';
+        final message =
+            'Please using the checkButton on the right to check all the detail items then delete again';
         try {
-          await overviewCubit.deleteCollection(collectionId: collection.id).then((value) async {
+          await overviewCubit
+              .deleteCollection(collectionId: collection.id)
+              .then((value) async {
             if (value) {
               ///  remove the given collection from the collections
               navigationCubit.selectedToDoCollectionChanged(null);
               await overviewCubit.readToDoCollections();
-
             } else {
               showScaffoldMessage(context: context, message: message);
             }
           });
         } on GeneralFailure catch (e) {
           if (context.mounted) {
-            showScaffoldMessage(context: context, message: e.stackTrace ?? message);
+            showScaffoldMessage(
+                context: context, message: e.stackTrace ?? message);
           }
         } on ServerFailure catch (e) {
           if (context.mounted) {
-            showScaffoldMessage(context: context, message: e.stackTrace ?? 'Ups server a failure!');
+            showScaffoldMessage(
+                context: context,
+                message: e.stackTrace ?? 'Ups server a failure!');
           }
         }
         if (context.mounted) context.pop();
@@ -213,7 +240,8 @@ showAlertDialog({
   );
 }
 
-void showScaffoldMessage({required BuildContext context, required String message}) {
+void showScaffoldMessage(
+    {required BuildContext context, required String message}) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text(message, style: TextStyle(fontSize: 18)),
     duration: const Duration(milliseconds: 3000),
