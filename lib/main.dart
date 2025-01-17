@@ -57,8 +57,9 @@ Future<void> main() async {
   ///  for non Web platform
   ///  since it is not working on web platform
   ///
-
+  String translations_assets = 'translations';
   if (!kIsWeb) {
+    translations_assets = 'assets/translations';
     //! Catch all errors that are thrown within the Flutter framework
     //! by overriding FlutterError.onError with
     //! FirebaseCrashlytics.instance.recordFlutterFatalError:
@@ -74,7 +75,7 @@ Future<void> main() async {
   }
 
   ///  get Firebase authentication
-  FirebaseAuth auth = firebaseAuth.auth;
+  ///  FirebaseAuth auth = firebaseAuth.auth;
 
   ///
   ///   keep it for  switching  between  firebase auth-ui login and  our firebase login
@@ -109,15 +110,16 @@ Future<void> main() async {
   ///
   ///    init fireStore  database
   ///
+  ///
   final remoteDataSource = FireStoreRemoteDatasource();
   await remoteDataSource.init();
 
   runApp(EasyLocalization(
     useOnlyLangCode: true,
     supportedLocales: const [Locale('en', 'US'), Locale('fr', 'FR')],
-    path: 'translations',
-    startLocale: Locale('fr', 'FR'),
-    fallbackLocale: const Locale('en', 'US'),
+    path: translations_assets,
+    startLocale: Locale('en', 'US'),
+    fallbackLocale: const Locale('fr', 'FR'),
     child: RepositoryProvider<ToDoRepository>(
         create: (BuildContext context) {
           return ToDoRepositoryHybrid(

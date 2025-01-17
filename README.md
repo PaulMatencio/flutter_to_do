@@ -197,3 +197,5 @@ service cloud.firestore {
 ##  task-Completed   Localisation &  Testing 
    - Add  easy-localisation 
    - Add  tests
+   - Upgrade flutter to version 3.24.5 
+   - Todo application  is working on both Mobile & Web 
