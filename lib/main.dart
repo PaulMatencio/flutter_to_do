@@ -57,9 +57,9 @@ Future<void> main() async {
   ///  for non Web platform
   ///  since it is not working on web platform
   ///
-  String translations_assets = 'translations';
+  String translationsAssets = 'translations';
   if (!kIsWeb) {
-    translations_assets = 'assets/translations';
+    translationsAssets = 'assets/translations';
     //! Catch all errors that are thrown within the Flutter framework
     //! by overriding FlutterError.onError with
     //! FirebaseCrashlytics.instance.recordFlutterFatalError:
@@ -117,7 +117,7 @@ Future<void> main() async {
   runApp(EasyLocalization(
     useOnlyLangCode: true,
     supportedLocales: const [Locale('en', 'US'), Locale('fr', 'FR')],
-    path: translations_assets,
+    path: translationsAssets,
     startLocale: Locale('en', 'US'),
     fallbackLocale: const Locale('fr', 'FR'),
     child: RepositoryProvider<ToDoRepository>(
