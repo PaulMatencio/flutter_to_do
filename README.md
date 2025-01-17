@@ -193,3 +193,7 @@ service cloud.firestore {
 ##  task-B08   Add a crash button to the App
    - Test crashlytics configuration 
        - Add a button that throws an exception 
+
+##  task-Completed   Localisation &  Testing 
+   - Add  easy-localisation 
+   - Add  tests
