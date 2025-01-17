@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
@@ -37,7 +38,7 @@ class ToDoOverviewLoaded extends StatelessWidget {
       appBar: AppBar(
           backgroundColor: colorScheme.primaryContainer,
           title: Center(
-              child: Text(OverviewPage.pageConfig.name,
+              child: Text(context.tr(OverviewPage.pageConfig.name),
                   style: theme.textTheme.titleMedium)),
           actions: [ProfileButton(), SwitchButton()],
           leading: BackButton(
@@ -72,7 +73,7 @@ class ToDoOverviewLoaded extends StatelessWidget {
                       child: Row(
                         children: [
                           Tooltip(
-                              message: 'delete',
+                              message: context.tr('todo_delete'),
                               child: TextButton(
                                   onPressed: () {
                                     final navigationCubit =
@@ -124,7 +125,7 @@ class ToDoOverviewLoaded extends StatelessWidget {
                                 }
                               },
                               leading: Tooltip(
-                                  message: 'click anywhere to see the detail',
+                                  message: context.tr('click_for_details'),
                                   child: const Icon(Icons.circle)),
                               title: Text(item.title),
                             ),
@@ -146,7 +147,7 @@ class ToDoOverviewLoaded extends StatelessWidget {
                 child: FloatingActionButton(
                   key: const Key('create-todo-collection'),
                   heroTag: 'create-todo-collection',
-                  tooltip: 'add_new_collection',
+                  tooltip: context.tr('overview_add_collection'),
                   onPressed: () {
                     context
                         .pushNamed(CreateToDoCollectionPage.pageConfig.name)
@@ -179,15 +180,15 @@ showAlertDialog({
 }) {
   /// set up the Cancel button
   Widget cancelButton =
-      TextButton(child: Text('Cancel'), onPressed: () => context.pop());
+      TextButton(child: Text('cancel'.tr()), onPressed: () => context.pop());
 
   ///  Setup the continue button
   Widget continueButton = TextButton(
-      child: Text('Continue'),
+      child: Text(context.tr('continue')),
       onPressed: () async {
         final overviewCubit = context.read<ToDoOverviewCubit>();
         final message =
-            'Please using the checkButton on the right to check all the detail items then delete again';
+            context.tr('todo_check_every');
         try {
           await overviewCubit
               .deleteCollection(collectionId: collection.id)
@@ -220,7 +221,7 @@ showAlertDialog({
   ///
   AlertDialog alert = AlertDialog(
     title: Text('AlertDialog'),
-    content: Text('Are you sure you want to delete'),
+    content: Text(context.tr('delete_confirmation_message')),
     actions: [
       cancelButton,
       continueButton,

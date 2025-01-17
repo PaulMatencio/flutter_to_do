@@ -3,6 +3,7 @@
 
 
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -116,7 +117,7 @@ class _LoginWithEmailAndPasswordPageState extends State<LoginWithEmailAndPasswor
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Text("Don't have an account?",  style: theme.textTheme.titleMedium),
+                      Text(context.tr('no_account'),  style: theme.textTheme.titleMedium),
                       const SizedBox(
                         height: 10,
                       ),
@@ -125,7 +126,7 @@ class _LoginWithEmailAndPasswordPageState extends State<LoginWithEmailAndPasswor
                             context.pushNamed(RegisterPage.pageConfig.name),
                         style:
                         ButtonStyle(backgroundColor: WidgetStatePropertyAll(theme.colorScheme.onPrimary)),
-                        child: Text('Register',
+                        child: Text(context.tr('register'),
                             style: theme.textTheme.titleMedium),
                       ),
                       const SizedBox(
@@ -153,7 +154,7 @@ class _LoginWithEmailAndPasswordPageState extends State<LoginWithEmailAndPasswor
                           onPressed: () => context.pushNamed(LoginWithPhoneNumberPage.pageConfig.name),
                           style:
                           ButtonStyle(backgroundColor: WidgetStatePropertyAll(theme.colorScheme.onPrimary)),
-                          child: Text('Login with phone number',
+                          child: Text(context.tr('login_with_phone_number'),
                               style: theme.textTheme.titleSmall),
                         ),
                   

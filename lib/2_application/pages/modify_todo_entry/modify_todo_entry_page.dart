@@ -1,3 +1,5 @@
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -112,8 +114,8 @@ class _EntryDescriptionField extends StatelessWidget {
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(width: 1.0, color: theme.colorScheme.inversePrimary),
               ),
-              labelText: 'description',
-              helperText: 'should exceed 2 characters long',
+              labelText: context.tr('todo_description'),
+              helperText: context.tr('todo_description_helper_text'),
             ),
             onChanged: (value) => context.read<ModifyToDoEntryPageCubit>().descriptionChanged(description: value),
             validator: (value) {
@@ -122,11 +124,11 @@ class _EntryDescriptionField extends StatelessWidget {
                       ValidationStatus.pending;
               switch (currentValidationState) {
                 case ValidationStatus.error:
-                  return 'This field needs at least two characters to be valid';
+                  return context.tr('todo_description_validation_error');
                 case ValidationStatus.success:
                   return null;
                 case ValidationStatus.pending:
-                  return 'This field is empty';
+                  return context.tr('todo_description_validation_pending');
               }
             });
       },
@@ -155,11 +157,11 @@ class _SubmissionButton extends StatelessWidget {
           final isValid = _formKey.currentState?.validate();
           if (isValid == true) {
             context.read<ModifyToDoEntryPageCubit>().submit();
-            print('calling  toDoEntryItemModifiedCallback.  ');
+            //debugPrint('calling  toDoEntryItemModifiedCallback.  ');
             toDoEntryItemModifiedCallback.call();
             context.pop();
           }
         },
-        child: Text('Modify entry'));
+        child: Text('todo_save'.tr()));
   }
 }

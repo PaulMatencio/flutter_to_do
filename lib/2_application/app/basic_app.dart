@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -75,10 +76,16 @@ class BasicApp extends StatelessWidget {
       child: Consumer<ThemeService>(builder: ((context, themeService, child) {
         return MaterialApp.router(
           title: 'Todo App',
+          /*
           localizationsDelegates: [
             ...GlobalMaterialLocalizations.delegates,
             GlobalWidgetsLocalizations.delegate,
-          ],
+          ]
+           */
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
+
           themeMode:
               themeService.isDarkModeOn ? ThemeMode.dark : ThemeMode.light,
           theme: AppTheme.lightTheme,

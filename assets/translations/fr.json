@@ -1,0 +1,56 @@
+{
+  "Settings": "Paramètres",
+"login": "Connexion",
+"profile": "Profil",
+"logout": "Déconnexion",
+"dashboard": "Tableau de bord",
+"overview": "Vue d'ensemble",
+"cancel": "Annuler",
+"continue": "Continuer",
+"delete_confirmation_message": "Êtes-vous sûr de vouloir supprimer",
+"overview_add_collection": "Ajouter une collection",
+
+"collection_title": "Créer une collection",
+"collection_title_label": "Titre",
+"collection_title_helper_text": "Le titre ne doit pas être vide",
+"collection_title_empty": "Veuillez saisir un titre",
+
+"collection_color_label": "Couleur",
+"collection_color_assignment": "attribution de couleur",
+"collection_color_helper_text": "doit être une valeur de couleur valide -> FF....",
+"color_picker_title": "Sélecteur de couleurs",
+"color_selector": "sélecteur de couleurs",
+"collection_color_picker": "Choisissez une couleur",
+"collection_color_selected": "Ceci est votre couleur sélectionnée",
+"select_color": "Sélectionnez une couleur",
+"collection_color_invalid": "Veuillez saisir une couleur valide",
+"collection_save": "Enregistrer la collection",
+
+
+"detail_title": "Détails de la collection",
+"detail_add_todo": "Ajouter une tâche",
+"detail_modify_todo": "Mettre à jour la tâche à faire",
+"click_for_details": "cliquez n'importe où pour plus de détails",
+
+"todo_title": "Créer une tâche",
+"todo_description_label": "description",
+"todo_save": "Enregistrer l'entrée",
+"todo_delete": "supprimer",
+"todo_check_every": "Veuillez terminer chaque tâche avant de supprimer la collection",
+"todo_description": "description",
+"todo_description_validation_error": "Ce champ doit contenir au moins deux caractères pour être valide",
+"todo_description_validation_pending": "Ce champ est vide",
+"todo_description_helper_text": "doit dépasser 2 caractères de long",
+"collection_color_failure": "Seuls les nombres compris entre 0 et {numbers} sont autorisés",
+
+"no_account": "Vous n'avez pas de compte ?",
+"register": "Créer un compte",
+"login_page_title": "Page de Connexion",
+"register_page_title": "S'inscrire",
+"login_with_phone_page_title": "Se connecter avec un téléphone",
+"login_with_phone_number": "Connectez-vous avec votre numéro de téléphone",
+"successful_sign_up": "Le compte a été créé avec succès",
+
+"dashboard_tasks_done": "#tâches effectuées",
+"dashboard_tasks_not_done": "#tâches non effectuées"
+}

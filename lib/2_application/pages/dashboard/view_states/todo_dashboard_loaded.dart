@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pie_chart/pie_chart.dart';
@@ -76,13 +77,13 @@ class TodoDashboardLoaded extends StatelessWidget {
     }
 
     Map<String, double> dataMap = {
-      '#Tasks areDone': toDoDashboard.areDone.toDouble(),
-      '#Tasks areNotDone': toDoDashboard.areNotDone.toDouble(),
+      context.tr('dashboard_tasks_done'): toDoDashboard.areDone.toDouble(),
+      context.tr('dashboard_tasks_not_done'): toDoDashboard.areNotDone.toDouble(),
     };
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            pageConfig.name,
+            context.tr(pageConfig.name),
             style: theme.textTheme.titleMedium,
           ),
           backgroundColor: theme.colorScheme.primaryContainer,

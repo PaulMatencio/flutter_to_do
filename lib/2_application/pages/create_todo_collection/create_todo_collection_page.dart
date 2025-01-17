@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -69,14 +70,14 @@ class _CreateToDoCollectionPageState extends State<CreateToDoCollectionPage> {
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(width: 1.0, color: theme.colorScheme.inversePrimary),
                   ),
-                  labelText: 'Title',
-                  helperText: 'Title should not be empty',
+                  labelText: 'collection_title_label'.tr(),
+                  helperText: 'collection_title_helper_text'.tr(),
                 ),
                 onChanged: (value) {
                   context.read<CreateToDoCollectionPageCubit>().titleChanged(value);
                 },
                 validator: (value) {
-                  return (value == null || value.isEmpty) ? 'Please enter a title' : null;
+                  return (value == null || value.isEmpty) ? 'collection_title_empty'.tr() : null;
                 }),
             SizedBox(
               height: 20,
@@ -91,12 +92,12 @@ class _CreateToDoCollectionPageState extends State<CreateToDoCollectionPage> {
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(width: 1.0, color: theme.colorScheme.inversePrimary),
                     ),
-                    labelText: 'color assignment',
-                    helperText: 'should be a valid color value->  FF.... ',
+                    labelText: 'collection_color_assignment'.tr(),
+                    helperText: 'collection_color_helper_text'.tr(),
                     suffixIcon: IconButton(
                         onPressed: () => _openColorPicker(context),
                         icon: Tooltip(
-                            message: 'color selector',
+                            message: 'color_selector'.tr(),
                             child: Icon(
                               Icons.color_lens,
                               color: selectedColor,
@@ -107,7 +108,7 @@ class _CreateToDoCollectionPageState extends State<CreateToDoCollectionPage> {
                   // context.read<CreateToDoCollectionPageCubit>().colorChanged(value);
                 },
                 validator: (value) {
-                  String invalidColor = 'Please enter valid color';
+                  String invalidColor = 'collection_color_invalid'.tr();
                   if (value != null && value.isNotEmpty) {
                     if (checkColor(value)) {
                       return null;
@@ -136,7 +137,7 @@ class _CreateToDoCollectionPageState extends State<CreateToDoCollectionPage> {
                         .then((_) => context.pop(true));
                   }
                 },
-                child: Text('Save Collection')),
+                child: Text('collection_save'.tr())),
           ])),
     );
   }
@@ -155,8 +156,8 @@ class _CreateToDoCollectionPageState extends State<CreateToDoCollectionPage> {
       borderRadius: 20,
       spacing: 10,
       runSpacing: 10,
-      heading: const Text('Pick a color'),
-      subheading: const Text('This is your Selected color'),
+      heading: Text('collection_color_picker'.tr()),
+      subheading: Text('collection_color_selected'.tr()),
       wheelDiameter: 200,
       wheelWidth: 20,
       customColorSwatchesAndNames: colorsNameMap,

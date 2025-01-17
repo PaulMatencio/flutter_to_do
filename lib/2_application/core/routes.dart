@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -33,9 +34,10 @@ final routes = GoRouter(
         path: '/login',
         builder: (context, state) {
           final theme = Theme.of(context);
+          context.setLocale(Locale('en', 'US'));
           return Scaffold(
               appBar: AppBar(
-                title: Text('Login Page', style: theme.textTheme.titleMedium),
+                title: Text(context.tr('login_page_title'), style: theme.textTheme.titleMedium),
                 actions: [const GoBackButton()],
               ),
               body: Padding(
@@ -50,7 +52,7 @@ final routes = GoRouter(
           final theme = Theme.of(context);
           return Scaffold(
               appBar: AppBar(
-                title: Text('Login with Phone Page',
+                title: Text(context.tr('login_with_phone'),
                     style: theme.textTheme.titleMedium),
                 actions: [const GoBackButton()],
               ),
@@ -78,7 +80,7 @@ final routes = GoRouter(
           return Scaffold(
               appBar: AppBar(
                 title:
-                    Text('Register Page', style: theme.textTheme.titleMedium),
+                    Text(context.tr('register_page_title'), style: theme.textTheme.titleMedium),
                 actions: [const GoBackButton()],
               ),
               body: Padding(
@@ -179,7 +181,7 @@ final routes = GoRouter(
           return Scaffold(
             appBar: AppBar(
               title:
-                  Text('create collection', style: theme.textTheme.titleMedium),
+                  Text(context.tr('collection_title'), style: theme.textTheme.titleMedium),
               backgroundColor: theme.colorScheme.primaryContainer,
               leading: GoBackButton(),
             ),
@@ -197,7 +199,7 @@ final routes = GoRouter(
         final theme = Theme.of(context);
         return Scaffold(
           appBar: AppBar(
-              title: Text('create entry', style: theme.textTheme.titleMedium),
+              title: Text(context.tr('detail_add_todo'), style: theme.textTheme.titleMedium),
               backgroundColor: theme.colorScheme.primaryContainer,
               leading: GoBackButton()),
           body: SafeArea(
@@ -217,7 +219,7 @@ final routes = GoRouter(
         final theme = Theme.of(context);
         return Scaffold(
           appBar: AppBar(
-              title: const Text('update entry'),
+              title: Text(context.tr('modify_todo')),
               backgroundColor: theme.colorScheme.primaryContainer,
               leading: GoBackButton()),
           body: SafeArea(
@@ -237,7 +239,7 @@ final routes = GoRouter(
           final theme = Theme.of(context);
           return Scaffold(
             appBar: AppBar(
-                title: Text('Details', style: theme.textTheme.displayMedium),
+                title: Text(context.tr('detail_title'), style: theme.textTheme.displayMedium),
                 backgroundColor: theme.colorScheme.primaryContainer,
                 leading: GoBackButton()),
             body: ToDoDetailPageProvider(

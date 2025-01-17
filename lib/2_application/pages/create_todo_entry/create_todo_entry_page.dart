@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -103,7 +104,7 @@ class _EntryDescriptionField extends StatelessWidget {
                 borderSide: BorderSide(width: 1.0, color: theme.colorScheme.inversePrimary),
               ),
               labelText: 'description',
-              helperText: 'should exceed 2 characters long',
+              helperText: 'todo_description_helper_text'.tr(),
             ),
             onChanged: (value) => context.read<CreateToDoEntryPageCubit>().descriptionChanged(description: value),
             validator: (value) {
@@ -112,11 +113,11 @@ class _EntryDescriptionField extends StatelessWidget {
                       ValidationStatus.pending;
               switch (currentValidationState) {
                 case ValidationStatus.error:
-                  return 'This field needs at least two characters to be valid';
+                  return 'todo_description_validation_error'.tr();
                 case ValidationStatus.success:
                   return null;
                 case ValidationStatus.pending:
-                  return 'This field is empty';
+                  return 'todo_description_validation_pending'.tr();
               }
             });
       },
@@ -149,6 +150,6 @@ class _SubmissionButton extends StatelessWidget {
             context.pop();
           }
         },
-        child: Text('Save entry'));
+        child: Text('todo_save'.tr()));
   }
 }

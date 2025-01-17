@@ -1,6 +1,7 @@
 
 
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -96,7 +97,7 @@ class _RegisterPageState extends State<RegisterPage> {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              const SnackBar(content: Text('Account is successfully created')),
+              SnackBar(content: Text(context.tr('successful_signup'))),
             );
           context.goNamed(HomePage.pageConfig.name,
               pathParameters: {'tab': DashboardPage.pageConfig.name});

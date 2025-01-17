@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class FailureDialog extends StatelessWidget {
@@ -26,7 +27,7 @@ class FailureDialog extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: Text(
-                      'Form submitted with error! $message',
+                      context.tr('Form submitted with error! ') + message,
                       softWrap: true,
                     ),
                   ),

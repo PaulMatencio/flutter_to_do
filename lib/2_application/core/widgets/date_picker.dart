@@ -16,12 +16,12 @@ class CreateOrderFormState extends State<CreateOrderForm> {
   void initState() {
     super.initState();
     selectedDate = DateTime.now();
-    print('initState selectedDate = ${selectedDate.toLocal()}');
+    // debugPrint('initState selectedDate = ${selectedDate.toLocal()}');
   }
 
   @override
   Widget build(BuildContext context) {
-    print('build prepare selectedDate: ${selectedDate.toLocal()}');
+    //debugPrint('build prepare selectedDate: ${selectedDate.toLocal()}');
 
     return Form(
         key: _formKey,
@@ -58,7 +58,7 @@ class CreateOrderFormState extends State<CreateOrderForm> {
       if (value != null && value != selectedDate) {
         setState(() {
           selectedDate = value;
-          print('New date ${selectedDate.toLocal()}');
+          debugPrint('New date ${selectedDate.toLocal()}');
         });
       }
     });

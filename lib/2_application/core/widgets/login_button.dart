@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -12,7 +13,7 @@ class LoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthCubitState>(
       builder: (context, state) {
-        String text;
+        String text,route;
         final theme = Theme.of(context).colorScheme;
         Color color = theme.onTertiary;
         Function callBack;
@@ -23,8 +24,9 @@ class LoginButton extends StatelessWidget {
           //             ..hideCurrentSnackBar()
           //             ..showSnackBar(
           //               const SnackBar(content: Text('Sign in successfully')),
-          //             );
-          text = 'logout';
+          //            );
+          route = 'logout';
+          text = context.tr(route);
           callBack = () async {
            await context.read<LoginCubit>().logOut().then((result) {
             // await context.read<LoginCubit>().signOut().then((result) {
@@ -42,9 +44,11 @@ class LoginButton extends StatelessWidget {
             });
           };
         } else {
-          text = 'login';
+          route =  'login';
+          text = context.tr(route);
+
           color = theme.onPrimary;
-          callBack = () => context.pushNamed(text);
+          callBack = () => context.pushNamed(route);
         }
 
         return ElevatedButton(

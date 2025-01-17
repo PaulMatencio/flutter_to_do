@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -9,11 +10,13 @@ class ProfileButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    String text ='login';
+    String route = 'login';
+    String text = context.tr(route);
     return BlocBuilder<AuthCubit, AuthCubitState>(
       builder: (context, state) {
         if (state is AuthCubitInitial && state.isLoggedIn) {
-          text = 'profile';
+          route ='profile';
+          text = context.tr(route);
         }
         return TextButton(
           style: ButtonStyle(
@@ -21,9 +24,9 @@ class ProfileButton extends StatelessWidget {
             WidgetStatePropertyAll<Color>(theme.colorScheme.onPrimary),
           ),
           onPressed: () {
-            context.pushNamed(text);
+            context.pushNamed(route);
           },
-          child: Text(text, style: theme.textTheme.displayMedium),
+          child: Text(context.tr(text), style: theme.textTheme.displayMedium),
         );
       },
     );

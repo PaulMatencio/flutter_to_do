@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +18,7 @@ class _ToDoColorPickerState extends State<ToDoColorPicker> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       //scrollBehavior: AppScrollBehavior(),
-      title: 'ColorPicker',
+      title: 'color_picker_title'.tr(),
       theme: ThemeData(useMaterial3: true),
       home: const ToDoColorPickerPage(),
     );
@@ -71,7 +72,7 @@ class _ColorPickerPageState extends State<ToDoColorPickerPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Pick a color'),
+        title: Text('collection_color_picker'.tr()),
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
@@ -98,7 +99,7 @@ class _ColorPickerPageState extends State<ToDoColorPickerPage> {
                     height: 44,
                     borderRadius: 22,
                     heading: Text(
-                      'Select color',
+                      'select_color'.tr(),
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     customColorSwatchesAndNames: colorsNameMap,

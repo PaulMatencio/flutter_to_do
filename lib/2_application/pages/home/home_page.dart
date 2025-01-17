@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
                 Breakpoints.mediumAndUp: SlotLayout.from(
                   key: const Key('primary-navigation-medium'),
                   builder: (context) => AdaptiveScaffold.standardNavigationRail(
-                    width: 100,
+                    width: 110,
                     padding: EdgeInsets.symmetric(horizontal: 5),
                     leading: const LoginButton(),
                     trailing: Tooltip(

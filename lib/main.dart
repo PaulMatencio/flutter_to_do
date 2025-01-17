@@ -14,6 +14,7 @@
 //!   https://github.com/fabioychinen/todo_app
 //!  https://github.com/SKHDev195/dart-initial-learning/tree/main/todo_app/lib
 //
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart' as ui_auth;
@@ -48,6 +49,8 @@ Future<void> main() async {
   } on Exception catch (e) {
     debugPrint(e.toString());
   }
+
+  await EasyLocalization.ensureInitialized();
 
   ///
   ///  Configure crash handler
@@ -109,28 +112,26 @@ Future<void> main() async {
   final remoteDataSource = FireStoreRemoteDatasource();
   await remoteDataSource.init();
 
-  runApp(RepositoryProvider<ToDoRepository>(
-      create: (BuildContext context) {
-        /*
-        return ToDoRepositoryLocal(
-          localDataSource: localDataSource,
-        );
+  runApp(EasyLocalization(
+    useOnlyLangCode: true,
+    supportedLocales: const [Locale('en', 'US'), Locale('fr', 'FR')],
+    path: 'translations',
+    startLocale: Locale('fr', 'FR'),
+    fallbackLocale: const Locale('en', 'US'),
+    child: RepositoryProvider<ToDoRepository>(
+        create: (BuildContext context) {
+          return ToDoRepositoryHybrid(
+            remoteDataSource: remoteDataSource,
+            localDataSource: localDataSource
+          );
+        },
+        child: ChangeNotifierProvider(
+            create: (context) => ThemeService(),
+            child: BlocProvider<AuthCubit>(
+                create: (context) => authCubit,
+                child: BasicApp(
+                  firebaseAuth: firebaseAuth,
+                )))),
+  ));
 
-        return ToDoRepositoryRemote(
-          remoteDataSource: remoteDataSource,
-        );
-        */
-        return ToDoRepositoryHybrid(
-          remoteDataSource: remoteDataSource,
-          localDataSource: localDataSource
-        );
-      },
-      child: ChangeNotifierProvider(
-          create: (context) => ThemeService(),
-          child: BlocProvider<AuthCubit>(
-              create: (context) => authCubit,
-              child: BasicApp(
-                firebaseAuth: firebaseAuth,
-              )))));
-  //  child:  BasicApp(authenticationRepository: authenticationRepository,)))));
 }
