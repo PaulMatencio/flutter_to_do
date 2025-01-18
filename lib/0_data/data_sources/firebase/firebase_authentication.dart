@@ -70,7 +70,11 @@ class FirebaseAuthentication implements FirebaseAuthenticationInterface {
       final user = await auth
           .signInWithEmailAndPassword(email: email, password: password)
           .then((userCredential) => userCredential.user);
-      return Future.value(user);
+      if (user!.emailVerified){
+        return Future.value(user);
+      } else {
+        throw SignInWithEmailAndPasswordException(stackTrace: 'the email is not verified. Use the profile button to verify');
+      }
     } on FirebaseException catch (e) {
       //debugPrint(e.code);
       throw SignInWithEmailAndPasswordException(stackTrace: e.code);

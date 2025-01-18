@@ -10,24 +10,26 @@ class ProfileButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    String route = 'login';
-    String text = context.tr(route);
+    String route;
+    String text;
     return BlocBuilder<AuthCubit, AuthCubitState>(
       builder: (context, state) {
         if (state is AuthCubitInitial && state.isLoggedIn) {
-          route ='profile';
+          route = 'profile';
           text = context.tr(route);
+          return TextButton(
+            style: ButtonStyle(
+              backgroundColor:
+                  WidgetStatePropertyAll<Color>(theme.colorScheme.onPrimary),
+            ),
+            onPressed: () {
+              context.pushNamed(route);
+            },
+            child: Text(context.tr(text), style: theme.textTheme.displayMedium),
+          );
+        } else {
+          return SizedBox();
         }
-        return TextButton(
-          style: ButtonStyle(
-            backgroundColor:
-            WidgetStatePropertyAll<Color>(theme.colorScheme.onPrimary),
-          ),
-          onPressed: () {
-            context.pushNamed(route);
-          },
-          child: Text(context.tr(text), style: theme.textTheme.displayMedium),
-        );
       },
     );
   }
