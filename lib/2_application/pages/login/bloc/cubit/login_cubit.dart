@@ -156,8 +156,11 @@ class LoginCubit extends Cubit<LoginCubitState> {
                   errorMessage: _mapFailureToMessage(failure),
                   status: FormzSubmissionStatus.failure)),
               (user) {
-                  emit(state.copyWith(status: FormzSubmissionStatus.success)
-                  );
+                  emit(state.copyWith(
+                      status: FormzSubmissionStatus.success,
+                      emailVerified:  user.emailVerified
+                  ));
+
               }
       ));
     } on Exception catch (e) {

@@ -6,7 +6,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app/0_data/data_sources/interfaces/firebase_authentication_interface.dart';
 import 'package:todo_app/0_data/exceptions/authentication.dart';
+import 'package:todo_app/0_data/exceptions/firebase_firestore.dart';
 import 'package:todo_app/0_data/models/user_model.dart';
+import 'package:todo_app/1_domain/entities/auth_user.dart';
 import 'package:todo_app/firebase_options.dart';
 
 class FirebaseAuthentication implements FirebaseAuthenticationInterface {
@@ -31,6 +33,21 @@ class FirebaseAuthentication implements FirebaseAuthenticationInterface {
       return user;
     });
   }
+
+  ///
+  ///   function to track  auth changes
+  ///
+  Stream<UserModel> get authStateChange {
+    ///  convert the authStateChanges stream of  User to return of stream UserModel
+
+    return auth.authStateChanges().map((firebaseUser) {
+      final user = (firebaseUser == null)
+          ? UserModel.empty()
+          : UserModel.fromFirebaseUser(firebaseUser);
+      return user;
+    });
+  }
+
 
   Future<void> init() async {
     if (!isInitialized) {
@@ -57,7 +74,7 @@ class FirebaseAuthentication implements FirebaseAuthenticationInterface {
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((userCredential) => userCredential.user);
       return Future.value(user);
-    } on FirebaseException catch (e) {
+    } on FirebaseAuthException catch (e) {
       // debugPrint(e.code);
       throw SignUpWithEmailAndPasswordException(stackTrace: e.code);
     }
@@ -67,15 +84,19 @@ class FirebaseAuthentication implements FirebaseAuthenticationInterface {
   Future<User> signInWithEmailAndPassword(
       {required String email, required String password}) async {
     try {
-      final user = await auth
+      return
+        await auth
           .signInWithEmailAndPassword(email: email, password: password)
-          .then((userCredential) => userCredential.user);
+          .then((userCredential) => userCredential.user).then ((user) => Future.value(user));
+      /*
       if (user!.emailVerified){
         return Future.value(user);
       } else {
         throw SignInWithEmailAndPasswordException(stackTrace: 'the email is not verified. Use the profile button to verify');
       }
-    } on FirebaseException catch (e) {
+       */
+
+    } on FirebaseAuthException catch (e) {
       //debugPrint(e.code);
       throw SignInWithEmailAndPasswordException(stackTrace: e.code);
     }
@@ -127,7 +148,7 @@ class FirebaseAuthentication implements FirebaseAuthenticationInterface {
     try {
       final confirmationResult = await auth.signInWithPhoneNumber(phoneNumber);
       return confirmationResult;
-    } on FirebaseException catch (e) {
+    } on FirebaseAuthException catch (e) {
       debugPrint(e.code);
       throw SignUpWithPhoneNumberException(stackTrace: e.code);
     }
@@ -139,7 +160,7 @@ class FirebaseAuthentication implements FirebaseAuthenticationInterface {
     UserCredential userCredential;
     try {
      userCredential= await confirmationResult.confirm(verificationCode);
-    }  on FirebaseException catch (e) {
+    }  on FirebaseAuthException catch (e) {
       debugPrint(e.code);
       throw SignUpWithPhoneNumberException(stackTrace: e.code);
     }
@@ -154,10 +175,45 @@ class FirebaseAuthentication implements FirebaseAuthenticationInterface {
   Future<void> signOut() async {
     try {
       await auth.signOut();
-    } on FirebaseException catch (e) {
+    } on FirebaseAuthException catch (e) {
       throw SignOutException(stackTrace: e.code);
     }
   }
+
+  ///
+  ///
+  ///   create user profile in fireStore after the account is created in
+  ///   firebase
+  ///
+  ///
+
+
+  @override
+  Future<void> createUserProfile({required UserModel user}) async {
+    print('Create Profile');
+    print(user.toJson());
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .set(user.toJson())
+        .then( (value) =>true)
+        .catchError((error) =>
+    throw FirebaseFireStoreException(stackTrace: error.toString()));
+
+  }
+
+  ///
+  ///   password reset
+  ///
+  @override
+  Future<void> resetPassword({required String email}) async {
+    try {
+      await auth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      throw ResetPasswordException(stackTrace: e.code);
+    }
+  }
+
 
 
   ///
@@ -167,8 +223,10 @@ class FirebaseAuthentication implements FirebaseAuthenticationInterface {
   Future<void> deleteUser() async {
     try {
       await auth.currentUser?.delete();
-    } on FirebaseException catch (e) {
+    } on FirebaseAuthException catch (e) {
       throw DeleteUserException(stackTrace: e.code);
     }
   }
+
+
 }

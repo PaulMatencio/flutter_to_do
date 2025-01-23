@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app/0_data/data_sources/firebase/firebase_authentication.dart';
 import 'package:todo_app/0_data/exceptions/authentication.dart';
+import 'package:todo_app/0_data/models/user_model.dart';
 import 'package:todo_app/1_domain/entities/auth_user.dart';
 import 'package:todo_app/1_domain/failures/failures.dart';
 import 'package:todo_app/1_domain/repositories/authentication_repository.dart';
@@ -22,6 +23,7 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
     });
   }
 
+
   @override
   Future<Either<Failure, UserEntity>> signUpWithEmailAndPassword(
       {required String email, required String password}) async {
@@ -40,9 +42,9 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
   Future<Either<Failure, UserEntity>> signInWithEmailAndPassword(
       {required String email, required String password}) async {
     try {
-      final result = await authentication.signInWithEmailAndPassword(
+      final user = await authentication.signInWithEmailAndPassword(
           email: email, password: password);
-      return Right(userToUserEntity(result));
+      return Right(userToUserEntity(user));
     } on SignInWithEmailAndPasswordException catch (e) {
       return Left(SignInWithEmailAndPasswordFailure(stackTrace: e.stackTrace));
     }
@@ -53,8 +55,8 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
       {required String phoneNumber}) async {
     try {
       final confirmationResult =
-          await authentication.signInWithPhoneNumber(phoneNumber: phoneNumber);
-        //  print('Result .... $confirmationResult');
+      await authentication.signInWithPhoneNumber(phoneNumber: phoneNumber);
+      //  print('Result .... $confirmationResult');
       return Right(confirmationResult);
     } on SignInWithEmailAndPasswordException catch (e) {
       debugPrint(e.stackTrace);
@@ -66,7 +68,7 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
   Future<Either<Failure, UserCredential>> confirmationCode(
       {required ConfirmationResult confirmationResult, required String verificationCode}) async {
     try {
-       final result = await confirmationResult.confirm(verificationCode);
+      final result = await confirmationResult.confirm(verificationCode);
       return Right(result);
     } on SignInWithEmailAndPasswordException catch (e) {
       debugPrint(e.stackTrace);
@@ -81,7 +83,6 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
     // TODO: implement signInWithCredential
     throw UnimplementedError();
   }
-
 
   ///
   ///
@@ -107,7 +108,7 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
   ///
   verificationFailed(FirebaseAuthException e) {
     if (e.code == 'invalid-phone-number') {
-      print('The provided phone number is not valid.');
+      debugPrint('The provided phone number is not valid.');
     }
   }
 
@@ -126,19 +127,36 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
     try {
       await authentication.deleteUser();
       return Right(true);
-    } on SignOutException catch (e) {
-      return Left(SignOutFailure(stackTrace: e.stackTrace));
+    } on DeleteUserException catch (e) {
+      return Left(GeneralFailure(stackTrace: e.stackTrace));
     }
   }
-}
+  ///
+  ///
+  ///  Create user profile in fire store
+  ///
+  @override
+  Future<Either<Failure, bool>> createUserProfile(
+      {required UserEntity  user}) async {
+    try {
+      await authentication.createUserProfile(
+          user: UserModel.fromUserEntity(user));
+      return Right(true);
+    } on CreateUserProfileException catch (e) {
+      return Left(CreateUserProfileFailure(stackTrace: e.stackTrace));
+    }
+  }
 
-///
-///
-///
-UserEntity userToUserEntity(User user) {
-  return UserEntity(
-      email: user.email ?? '',
-      displayName: user.displayName,
-      uid: user.uid,
-      photoURL: user.photoURL ?? '');
+  ///
+  ///   firebase user to UserEntity
+  ///
+  UserEntity userToUserEntity(User user) {
+    return UserEntity(
+        email: user.email ?? '',
+        emailVerified: user.emailVerified?? false,
+        displayName: user.displayName ?? '',
+        uid: user.uid,
+        photoURL: user.photoURL ?? '');
+  }
+
 }

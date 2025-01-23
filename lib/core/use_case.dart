@@ -1,9 +1,11 @@
 import 'package:either_dart/either.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:todo_app/1_domain/entities/auth_user.dart';
 import 'package:todo_app/1_domain/entities/todo_collection.dart';
 import 'package:todo_app/1_domain/entities/todo_entry.dart';
 import 'package:todo_app/1_domain/failures/failures.dart';
+import 'package:todo_app/2_application/core/models/display_name.dart';
 import 'package:todo_app/2_application/core/models/phone_number.dart';
 import '../1_domain/entities/unique_id.dart';
 import '../2_application/core/models/models.dart';
@@ -71,14 +73,26 @@ class EmailAndPassWordParams extends Params {
   EmailAndPassWordParams({
     required this.email,
     required this.password,
+    this.displayName,
   }) : super();
 
   final Email email;
   final Password password;
+  final DisplayName  ? displayName;
 
   @override
   List<Object> get props => [email, password];
 }
+
+class UserParam extends Params {
+  UserParam({
+    required this.user,
+  }) : super();
+  final UserEntity user;
+  @override
+  List<Object> get props => [user];
+}
+
 
 class PhoneNumberParam extends Params {
   PhoneNumberParam({

@@ -10,6 +10,7 @@ final class LoginCubitState extends Equatable {
     this.phoneNumber = const PhoneNumber.pure(),
     this.status = FormzSubmissionStatus.initial,
     this.isValid = false,
+    this.emailVerified = false,
     this.confirmationCode = const ConfirmationCode.pure(),
     this.loginError = 'Login error',
     this.confirmationResult,
@@ -17,6 +18,7 @@ final class LoginCubitState extends Equatable {
   });
 
   final Email email;
+  final bool emailVerified;
   final Password password;
   final bool passwordVisible;
   final PhoneNumber phoneNumber;
@@ -33,6 +35,7 @@ final class LoginCubitState extends Equatable {
     PhoneNumber? phoneNumber,
     ConfirmationCode? confirmationCode,
     bool? passwordVisible,
+    bool?  emailVerified,
     FormzSubmissionStatus? status,
     ConfirmationResult? confirmationResult,
     bool? isValid,
@@ -40,6 +43,7 @@ final class LoginCubitState extends Equatable {
   }) {
     return LoginCubitState(
       email: email ?? this.email,
+      emailVerified: emailVerified??  this.emailVerified,
       password: password ?? this.password,
       passwordVisible: passwordVisible ?? this.passwordVisible,
       confirmationCode: confirmationCode ?? this.confirmationCode,
@@ -54,6 +58,7 @@ final class LoginCubitState extends Equatable {
   @override
   List<Object?> get props => [
         email,
+        emailVerified,
         password,
         passwordVisible,
         phoneNumber,

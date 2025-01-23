@@ -6,12 +6,11 @@ import 'package:formz/formz.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/2_application/core/models/login.dart';
 import 'package:todo_app/2_application/core/page_config.dart';
+import 'package:todo_app/2_application/core/widgets/confirmation_code_input.dart';
 import 'package:todo_app/2_application/core/widgets/failure_dialog.dart';
 import 'package:todo_app/2_application/core/widgets/go_back_button.dart';
 import 'package:todo_app/2_application/pages/home/home_page.dart';
 import 'package:todo_app/2_application/pages/login/bloc/cubit/login_cubit.dart';
-import 'package:todo_app/2_application/pages/login/widgets/confirmation_code_input.dart';
-import 'package:todo_app/2_application/pages/login/widgets/phone_number_input.dart';
 import 'package:todo_app/2_application/pages/login/widgets/sign_in_button.dart';
 import 'package:todo_app/2_application/pages/overview/overview_page.dart';
 
@@ -55,7 +54,6 @@ class _ConfirmationResultPageState extends State<ConfirmationResultPage> {
     final theme = Theme.of(context);
     return BlocListener<LoginCubit, LoginCubitState>(
         listener: (BuildContext context, LoginCubitState state) {
-          print('.....  ${state.status}');
           if (state.status.isFailure) {
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
             showDialog<void>(
@@ -99,7 +97,7 @@ class _ConfirmationResultPageState extends State<ConfirmationResultPage> {
                   const SizedBox(
                     height: 40,
                   ),
-                 ConfirmationCodeInput(focusNode: _confirmationResultFocusNode),
+                 ConfirmationCodeInput(focusNode: _confirmationResultFocusNode,cubit:context.read<LoginCubit>),
                   const SizedBox(
                     height: 20,
                   ),
@@ -107,7 +105,7 @@ class _ConfirmationResultPageState extends State<ConfirmationResultPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       const GoBackButton(),
-                      const SignInButton(login: Login.confirmation,),
+                      SignInButton(login: Login.confirmation,cubit:context.read<LoginCubit>),
                     ],
                   ),
                 ],

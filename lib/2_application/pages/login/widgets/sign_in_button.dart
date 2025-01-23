@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/2_application/core/models/login.dart';
-import 'package:todo_app/2_application/pages/login/bloc/cubit/login_cubit.dart';
 
 class SignInButton extends StatelessWidget {
-  const SignInButton({super.key,required this.login});
+  const SignInButton({super.key,required this.login,required this.cubit});
   final Login login;
+  final Function cubit;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isValid = context.select((LoginCubit cubit) => cubit.state.isValid);
+    //final isValid = context.select((LoginCubit cubit) => cubit.state.isValid);
+    final isValid = cubit().state.isValid;
+    //final cubit = context.select((LoginCubit cubit) => cubit);
 
     return ElevatedButton(
       style: ButtonStyle(
@@ -19,13 +20,13 @@ class SignInButton extends StatelessWidget {
         // print(login.name);
         switch (login.name)  {
           case 'mail':
-            await context.read<LoginCubit>().signInWithEmailAndPassword();
+            await cubit().signInWithEmailAndPassword();
             return;
           case 'phone':
-            await context.read<LoginCubit>().logInWithPhoneNumber();
+            await cubit().logInWithPhoneNumber();
             return;
           default:
-             await context.read<LoginCubit>().confirmationCode();
+            await cubit().confirmationCode();
         }
       }
           : null,

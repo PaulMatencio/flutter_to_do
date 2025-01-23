@@ -1,8 +1,3 @@
-
-
-
-
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,18 +5,16 @@ import 'package:formz/formz.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/2_application/core/models/login.dart';
 import 'package:todo_app/2_application/core/page_config.dart';
+import 'package:todo_app/2_application/core/widgets/email_input.dart';
 import 'package:todo_app/2_application/core/widgets/failure_dialog.dart';
 import 'package:todo_app/2_application/core/widgets/go_back_button.dart';
-import 'package:todo_app/2_application/pages/dashboard/dashboard_page.dart';
+import 'package:todo_app/2_application/core/widgets/password_input.dart';
 import 'package:todo_app/2_application/pages/login/bloc/cubit/login_cubit.dart';
 import 'package:todo_app/2_application/pages/login/login_with_phone_number_page.dart';
-import 'package:todo_app/2_application/pages/login/widgets/email_input.dart';
-import 'package:todo_app/2_application/pages/login/widgets/password_input.dart';
 import 'package:todo_app/2_application/pages/login/widgets/sign_in_button.dart';
 import 'package:todo_app/2_application/pages/overview/overview_page.dart';
 import 'package:todo_app/2_application/pages/register/register_page.dart';
 import '../home/home_page.dart';
-
 
 class LoginWithEmailAndPasswordPage extends StatefulWidget {
   const LoginWithEmailAndPasswordPage({super.key});
@@ -36,13 +29,15 @@ class LoginWithEmailAndPasswordPage extends StatefulWidget {
   );
 
   @override
-  State<LoginWithEmailAndPasswordPage> createState() => _LoginWithEmailAndPasswordPageState();
+  State<LoginWithEmailAndPasswordPage> createState() =>
+      _LoginWithEmailAndPasswordPageState();
 }
 
 ///
 ///
 ///
-class _LoginWithEmailAndPasswordPageState extends State<LoginWithEmailAndPasswordPage> {
+class _LoginWithEmailAndPasswordPageState
+    extends State<LoginWithEmailAndPasswordPage> {
   final _emailFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
 
@@ -76,6 +71,7 @@ class _LoginWithEmailAndPasswordPageState extends State<LoginWithEmailAndPasswor
     ///   once state change
     ///
     final theme = Theme.of(context);
+
     return BlocListener<LoginCubit, LoginCubitState>(
       listener: (BuildContext context, LoginCubitState state) {
         if (state.status.isFailure) {
@@ -101,8 +97,10 @@ class _LoginWithEmailAndPasswordPageState extends State<LoginWithEmailAndPasswor
             ..showSnackBar(
               const SnackBar(content: Text('Sign in successfully')),
             );
-          context.goNamed(HomePage.pageConfig.name,
-              pathParameters: {'tab': OverviewPage.pageConfig.name});
+          state.emailVerified
+              ? context.goNamed(HomePage.pageConfig.name,
+                  pathParameters: {'tab': OverviewPage.pageConfig.name})
+              : context.pushNamed('profile');
         }
       },
       child: Align(
@@ -113,30 +111,36 @@ class _LoginWithEmailAndPasswordPageState extends State<LoginWithEmailAndPasswor
           color: theme.colorScheme.onError,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-                child: SingleChildScrollView(
-                  child: Column(
+            child: SingleChildScrollView(
+              child: BlocBuilder<LoginCubit, LoginCubitState>(
+                builder: (context, state) {
+                  final cubit = context.read<LoginCubit>;
+                  return Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Text(context.tr('no_account'),  style: theme.textTheme.titleMedium),
+                      Text(context.tr('no_account'),
+                          style: theme.textTheme.titleMedium),
                       const SizedBox(
                         height: 10,
                       ),
                       ElevatedButton(
                         onPressed: () =>
                             context.pushNamed(RegisterPage.pageConfig.name),
-                        style:
-                        ButtonStyle(backgroundColor: WidgetStatePropertyAll(theme.colorScheme.onPrimary)),
+                        style: ButtonStyle(
+                            backgroundColor: WidgetStatePropertyAll(
+                                theme.colorScheme.onPrimary)),
                         child: Text(context.tr('register'),
                             style: theme.textTheme.titleMedium),
                       ),
                       const SizedBox(
                         height: 40,
                       ),
-                      EmailInput(focusNode: _emailFocusNode),
+                      EmailInput(focusNode: _emailFocusNode, cubit: cubit),
                       const SizedBox(
                         height: 20,
                       ),
-                      PasswordInput(focusNode: _passwordFocusNode),
+                      PasswordInput(
+                          focusNode: _passwordFocusNode, cubit: cubit),
                       const SizedBox(
                         height: 20,
                       ),
@@ -144,26 +148,29 @@ class _LoginWithEmailAndPasswordPageState extends State<LoginWithEmailAndPasswor
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           const GoBackButton(),
-                          const SignInButton(login: Login.mail,),
+                          SignInButton(login: Login.mail, cubit: cubit),
                         ],
                       ),
                       const SizedBox(
                         height: 20,
                       ),
-                       ElevatedButton(
-                          onPressed: () => context.pushNamed(LoginWithPhoneNumberPage.pageConfig.name),
-                          style:
-                          ButtonStyle(backgroundColor: WidgetStatePropertyAll(theme.colorScheme.onPrimary)),
-                          child: Text(context.tr('login_with_phone_number'),
-                              style: theme.textTheme.titleSmall),
-                        ),
-                  
+                      ElevatedButton(
+                        onPressed: () => context.pushNamed(
+                            LoginWithPhoneNumberPage.pageConfig.name),
+                        style: ButtonStyle(
+                            backgroundColor: WidgetStatePropertyAll(
+                                theme.colorScheme.onPrimary)),
+                        child: Text(context.tr('login_with_phone_number'),
+                            style: theme.textTheme.titleSmall),
+                      ),
                     ],
-                  ),
-                ),
+                  );
+                },
               ),
             ),
           ),
+        ),
+      ),
     );
   }
 }

@@ -136,14 +136,22 @@ final routes = GoRouter(
         builder: (BuildContext context, GoRouterState state) {
           return ProfileScreen(
             appBar: AppBar(
-              actions: [const GoBackButton()],
+              actions: [
+                // const GoBackButton(),
+                ElevatedButton(onPressed: () =>
+                    context.goNamed(HomePage.pageConfig.name,
+                        pathParameters: {'tab': OverviewPage.pageConfig.name})
+                    , child: Text('OverView'))
+              ],
             ),
             actions: [
+              /*
               SignedOutAction((context) {
-                // context.goNamed('login');
                 context.goNamed(HomePage.pageConfig.name,
                     pathParameters: {'tab': OverviewPage.pageConfig.name});
               }),
+
+               */
             ],
           );
         }),

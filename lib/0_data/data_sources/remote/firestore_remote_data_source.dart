@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:todo_app/0_data/data_sources/interfaces/todo_remote_data_source_interface.dart';
 import 'package:todo_app/0_data/exceptions/firebase_firestore.dart';
 import 'package:todo_app/0_data/models/todo_collection_model.dart';
@@ -209,16 +210,17 @@ class FireStoreRemoteDatasource implements ToDoRemoteDataSourceInterface {
     required String collectionId,
     required ToDoEntryModel entryModel,
   }) async {
-    await FirebaseFirestore.instance
+    await db
         .collection(userId)
         .doc(collectionId)
         .collection('entries')
         .doc(entryModel.id)
-        .set(entryModel.toJson(), SetOptions(merge: true));
+        .set(entryModel.toJson(), SetOptions(merge: true))
+    .then((value)=> true)
+    .catchError((error)  =>
+    throw FirebaseFireStoreException(stackTrace: error.toString()));
     return entryModel;
   }
-
-
 
 
 }

@@ -8,12 +8,11 @@ import 'package:todo_app/2_application/core/models/login.dart';
 import 'package:todo_app/2_application/core/page_config.dart';
 import 'package:todo_app/2_application/core/widgets/failure_dialog.dart';
 import 'package:todo_app/2_application/core/widgets/go_back_button.dart';
-import 'package:todo_app/2_application/pages/home/home_page.dart';
+import 'package:todo_app/2_application/core/widgets/phone_number_input.dart';
 import 'package:todo_app/2_application/pages/login/bloc/cubit/login_cubit.dart';
 import 'package:todo_app/2_application/pages/login/confirmation_result_page.dart';
-import 'package:todo_app/2_application/pages/login/widgets/phone_number_input.dart';
 import 'package:todo_app/2_application/pages/login/widgets/sign_in_button.dart';
-import 'package:todo_app/2_application/pages/overview/overview_page.dart';
+
 
 
 class LoginWithPhoneNumberPage extends StatefulWidget {
@@ -53,6 +52,7 @@ class _LoginWithPhoneNumberPageState extends State<LoginWithPhoneNumberPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final cubit = context.read<LoginCubit>;
     return BlocListener<LoginCubit, LoginCubitState>(
         listener: (BuildContext context, LoginCubitState state) {
 
@@ -81,17 +81,7 @@ class _LoginWithPhoneNumberPageState extends State<LoginWithPhoneNumberPage> {
               );
               context.pushNamed(ConfirmationResultPage.pageConfig.name);
           }
-          /*
-          if (state.status.isSuccess) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                const SnackBar(content: Text('Sign in successfully')),
-              );
-            context.goNamed(HomePage.pageConfig.name,
-                pathParameters: {'tab': OverviewPage.pageConfig.name});
-          }
-           */
+
         },
         child: Align(
           //alignment: const Alignment(0, -3 / 4),
@@ -107,7 +97,7 @@ class _LoginWithPhoneNumberPageState extends State<LoginWithPhoneNumberPage> {
                   const SizedBox(
                     height: 40,
                   ),
-                  PhoneNumberInput(focusNode: _phoneNumberFocusNode),
+                 PhoneNumberInput(focusNode: _phoneNumberFocusNode,cubit: cubit),
                   const SizedBox(
                     height: 20,
                   ),
@@ -115,7 +105,7 @@ class _LoginWithPhoneNumberPageState extends State<LoginWithPhoneNumberPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       const GoBackButton(),
-                      const SignInButton(login: Login.phone,),
+                      SignInButton(login: Login.phone,cubit:cubit,),
                     ],
                   ),
                 ],

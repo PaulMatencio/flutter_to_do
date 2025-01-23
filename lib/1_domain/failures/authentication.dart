@@ -35,3 +35,10 @@ class VerificationFailure  extends Failure with EquatableMixin  {
   @override
   List<Object?> get props => [stackTrace];
 }
+
+class CreateUserProfileFailure  extends Failure with EquatableMixin  {
+  CreateUserProfileFailure({this.stackTrace});
+  final String? stackTrace;
+  @override
+  List<Object?> get props => [stackTrace];
+}

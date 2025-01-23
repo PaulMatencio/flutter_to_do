@@ -1,21 +1,21 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/2_application/core/page_config.dart';
-import 'package:todo_app/2_application/core/widgets/confirmed_password_input.dart';
-import 'package:todo_app/2_application/core/widgets/email_input.dart';
 import 'package:todo_app/2_application/core/widgets/go_back_button.dart';
-import 'package:todo_app/2_application/core/widgets/password_input.dart';
+import 'package:todo_app/2_application/core/widgets/phone_number_input.dart';
+import 'package:todo_app/2_application/pages/create_user_profile/bloc/cubit/create_user_profile_cubit.dart';
+import 'package:todo_app/2_application/pages/create_user_profile/widgets/display_name.dart';
+import 'package:todo_app/2_application/pages/create_user_profile/widgets/email_input.dart';
 import 'package:todo_app/2_application/pages/home/home_page.dart';
 import 'package:todo_app/2_application/core/widgets/failure_dialog.dart';
 import 'package:todo_app/2_application/pages/dashboard/dashboard_page.dart';
-import 'package:todo_app/2_application/pages/register/bloc/cubit/register_cubit.dart';
 
-
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+class CreateUserProfilePage extends StatefulWidget {
+  const CreateUserProfilePage({super.key});
 
   ///
   ///  page config
@@ -23,40 +23,45 @@ class RegisterPage extends StatefulWidget {
   static const pageConfig = PageConfig(
     icon: Icons.details_rounded,
     name: 'register',
-    child: RegisterPage(),
+    child: CreateUserProfilePage(),
   );
-
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<CreateUserProfilePage> createState() => _CreateUserProfilePageState();
 }
 
 ///
 ///
 ///
-class _RegisterPageState extends State<RegisterPage> {
+class _CreateUserProfilePageState extends State<CreateUserProfilePage> {
   final _emailFocusNode = FocusNode();
-  final _passwordFocusNode = FocusNode();
-  final _confirmedPasswordFocusNode = FocusNode();
   final _displayNameFocusNode = FocusNode();
+  final _phoneNumberFocusNode = FocusNode();
+
+  bool get isLoggedIn => FirebaseAuth.instance.currentUser != null;
+  String? get userId => FirebaseAuth.instance.currentUser?.uid;
+  String? get email => FirebaseAuth.instance.currentUser?.email;
 
   @override
   void initState() {
     super.initState();
+    /*
     _emailFocusNode.addListener(() {
       if (!_emailFocusNode.hasFocus) {
-        context.read<RegisterCubit>().emailUnfocused(null);
+        context.read<CreateUserProfileCubit>().emailUnfocused(null);
         //  FocusScope.of(context).requestFocus(_passwordFocusNode);
       }
     });
-    _passwordFocusNode.addListener(() {
-      if (!_passwordFocusNode.hasFocus) {
-        context.read<RegisterCubit>().passwordUnfocused();
-        // FocusScope.of(context).requestFocus(_confirmedPasswordFocusNode);
+     */
+
+    _displayNameFocusNode.addListener(() {
+      if (!_displayNameFocusNode.hasFocus) {
+        context.read<CreateUserProfileCubit>().displayNameUnfocused();
       }
     });
-    _confirmedPasswordFocusNode.addListener(() {
-      if (!_confirmedPasswordFocusNode.hasFocus) {
-        context.read<RegisterCubit>().confirmedPasswordUnfocused();
+
+    _phoneNumberFocusNode.addListener(() {
+      if (!_phoneNumberFocusNode.hasFocus) {
+        context.read<CreateUserProfileCubit>().phoneNumberUnfocused();
       }
     });
   }
@@ -64,8 +69,6 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   void dispose() {
     _emailFocusNode.dispose();
-    _passwordFocusNode.dispose();
-    _confirmedPasswordFocusNode.dispose();
     _displayNameFocusNode.dispose();
     super.dispose();
   }
@@ -77,14 +80,14 @@ class _RegisterPageState extends State<RegisterPage> {
     ///   once state change
     ///
     final theme = Theme.of(context);
-    return BlocListener<RegisterCubit, RegisterCubitState>(
-      listener: (BuildContext context, RegisterCubitState state) {
+    return BlocListener<CreateUserProfileCubit, CreateUserProfileCubitState>(
+      listener: (BuildContext context, CreateUserProfileCubitState state) {
         if (state.status.isFailure) {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
           showDialog<void>(
             context: context,
-            builder: (_) =>
-                FailureDialog(message: state.errorMessage ?? state.signUpError),
+            builder: (_) => FailureDialog(
+                message: state.errorMessage ?? state.createUserprofileError),
           );
         }
 
@@ -102,15 +105,14 @@ class _RegisterPageState extends State<RegisterPage> {
             ..showSnackBar(
               SnackBar(content: Text(context.tr('successful_signup'))),
             );
-          //context.goNamed(HomePage.pageConfig.name,
-          //    pathParameters: {'tab': DashboardPage.pageConfig.name});
-          context.goNamed('profile');
+          context.goNamed(HomePage.pageConfig.name,
+              pathParameters: {'tab': DashboardPage.pageConfig.name});
         }
       },
       child: Align(
         //alignment: const Alignment(0, -3 / 4),
         alignment: Alignment.center,
-        child: BlocBuilder<RegisterCubit, RegisterCubitState>(
+        child: BlocBuilder<CreateUserProfileCubit, CreateUserProfileCubitState>(
           builder: (context, state) {
             return Container(
               width: 450,
@@ -120,15 +122,15 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    EmailInput(focusNode: _emailFocusNode,cubit:context.read<RegisterCubit>),
+                    EmailInput(focusNode: _emailFocusNode),
                     const SizedBox(
                       height: 20,
                     ),
-                    PasswordInput(focusNode: _passwordFocusNode,cubit: context.read<RegisterCubit>),
+                    DisplayNameInput(focusNode: _displayNameFocusNode),
                     const SizedBox(
                       height: 20,
                     ),
-                    ConfirmedPasswordInput(focusNode: _confirmedPasswordFocusNode, cubit: context.read<RegisterCubit>),
+                    PhoneNumberInput(focusNode: _phoneNumberFocusNode,cubit:context.read<CreateUserProfileCubit>),
                     const SizedBox(
                       height: 20,
                     ),
@@ -136,13 +138,13 @@ class _RegisterPageState extends State<RegisterPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         const GoBackButton(),
-                        //const SignUpButton(),
                         ElevatedButton(
                           onPressed: state.isValid
-                              ? () =>
-                                  context
-                                      .read<RegisterCubit>()
-                                      .signUpWithEmailAndPassword()
+                              ? () async {
+                                  await context
+                                      .read<CreateUserProfileCubit>()
+                                      .createUserProfile();
+                                }
                               : null,
                           child: Text('Sign Up',
                               style: Theme.of(context).textTheme.titleMedium),
