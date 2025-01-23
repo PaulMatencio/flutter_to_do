@@ -112,6 +112,7 @@ class _RegisterPageState extends State<RegisterPage> {
         alignment: Alignment.center,
         child: BlocBuilder<RegisterCubit, RegisterCubitState>(
           builder: (context, state) {
+            final cubit = context.read<RegisterCubit>;
             return Container(
               width: 450,
               color: theme.colorScheme.onError,
@@ -120,15 +121,15 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    EmailInput(focusNode: _emailFocusNode,cubit:context.read<RegisterCubit>),
+                    EmailInput(focusNode: _emailFocusNode,cubit:cubit),
                     const SizedBox(
                       height: 20,
                     ),
-                    PasswordInput(focusNode: _passwordFocusNode,cubit: context.read<RegisterCubit>),
+                    PasswordInput(focusNode: _passwordFocusNode,cubit: cubit),
                     const SizedBox(
                       height: 20,
                     ),
-                    ConfirmedPasswordInput(focusNode: _confirmedPasswordFocusNode, cubit: context.read<RegisterCubit>),
+                    ConfirmedPasswordInput(focusNode: _confirmedPasswordFocusNode, cubit: cubit),
                     const SizedBox(
                       height: 20,
                     ),
@@ -140,8 +141,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ElevatedButton(
                           onPressed: state.isValid
                               ? () =>
-                                  context
-                                      .read<RegisterCubit>()
+                                  cubit()
                                       .signUpWithEmailAndPassword()
                               : null,
                           child: Text('Sign Up',
