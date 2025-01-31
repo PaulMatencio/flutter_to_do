@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:todo_app/1_domain/failures/failures.dart';
@@ -18,7 +19,9 @@ class LoginCubit extends Cubit<LoginCubitState> {
 
       /// repository sigInWithPhoneNumber
       required this.verifyPhoneNumber,
-      required this.verificationCode})
+      required this.verificationCode,
+        required this.resetPassword
+      })
       : super(const LoginCubitState());
 
   final LoginWithEmailAndPassword loginWithEmailAndPassword;
@@ -26,6 +29,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
   final LoginWithPhoneNumber signInWithPhoneNumber;
   final VerifyPhoneNumber verifyPhoneNumber;
   final VerificationCode verificationCode;
+  final  ResetPassword  resetPassword;
 
   ///
   ///  email
@@ -33,10 +37,11 @@ class LoginCubit extends Cubit<LoginCubitState> {
 
   void emailChanged(Email email, String value) {
     final email = Email.dirty(value);
+   //  debugPrint('email valid ? ${email.isValid}');
     emit(
       state.copyWith(
         email: email.isValid ? email : const Email.pure(),
-        isValid: Formz.validate([email, state.password]),
+        isValid: Formz.validate([email]),
         status: FormzSubmissionStatus.initial,
       ),
     );
@@ -47,7 +52,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
     emit(
       state.copyWith(
         email: email,
-        isValid: Formz.validate([email, state.password]),
+        isValid: Formz.validate([email]),
         status: FormzSubmissionStatus.initial,
       ),
     );
@@ -162,6 +167,42 @@ class LoginCubit extends Cubit<LoginCubitState> {
                   ));
 
               }
+      ));
+    } on Exception catch (e) {
+      emit(
+        state.copyWith(
+          errorMessage: e.toString(),
+          status: FormzSubmissionStatus.failure,
+        ),
+      );
+    } catch (_) {
+      emit(state.copyWith(status: FormzSubmissionStatus.failure));
+    }
+  }
+
+  ///
+  ///
+  ///  reset email password
+  ///
+
+  Future<void> sendResetPassword() async {
+    if (!state.isValid) return;
+    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+    try {
+      await resetPassword
+          .call(EmailParam(
+          email: state.email))
+          .then((result) => result.fold(
+              (failure) => emit(state.copyWith(
+              errorMessage: _mapFailureToMessage(failure),
+              status: FormzSubmissionStatus.failure)),
+              (right) {
+            emit(state.copyWith(
+                status: FormzSubmissionStatus.success,
+
+            ));
+
+          }
       ));
     } on Exception catch (e) {
       emit(
@@ -302,12 +343,10 @@ class LoginCubit extends Cubit<LoginCubitState> {
 
   String _mapFailureToMessage(Failure failure) {
     switch (failure) {
-      case final SignInWithEmailAndPasswordFailure e:
-        return e.stackTrace ?? 'Sign In Error ';
-      case final SignUpWithEmailAndPasswordFailure e:
-        return e.stackTrace ?? 'Sign Up Error ';
+      case final AuthenticationFailure e:
+        return e.stackTrace ?? 'Authentication Error ';
       default:
-        return 'Firebase error';
+        return 'Firebase authentication error';
     }
   }
 }

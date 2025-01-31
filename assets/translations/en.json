@@ -8,6 +8,7 @@
   "cancel": "Cancel",
   "continue": "Continue",
   "delete_confirmation_message": "Are you sure you want to delete",
+  "delete_account_confirmation_message": "Delete an account will  delete all its data. Are you sure you want to delete",
   "overview_add_collection": "Add Collection",
 
   "collection_title": "Create Collection",
@@ -46,10 +47,12 @@
   "no_account": "Don't have an account?",
   "register": "Create an account",
   "login_page_title": "Login Page ",
+  "login_page": "Login screen",
   "register_page_title": "Register Page",
-  "login_with_phone_page_title": "Login with phone",
+  "login_with_phone": "Login with phone",
   "login_with_phone_number": "Login with your phone number",
   "successful sign_up": "Account is successfully created",
+  "update_user_ok": "Account  is successfully update",
 
   "dashboard_tasks_done": "#tasks done",
   "dashboard_tasks_not_done": "#tasks not done"

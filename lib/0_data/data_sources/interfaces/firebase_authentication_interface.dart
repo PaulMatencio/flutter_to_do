@@ -13,9 +13,15 @@ abstract class FirebaseAuthenticationInterface {
   Future<User> signInWithEmailAndPassword(
       {required String email, required String password});
 
+  Future<void> updateUserProfile(
+      {required UserModel userModel});
+
+  Future<void> sendEmailVerification({required User  user}) ;
+
   Future<void> signOut();
 
   Future<void> deleteUser();
+
 
   Future<ConfirmationResult> signInWithPhoneNumber(
       {required String phoneNumber});

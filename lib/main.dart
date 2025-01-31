@@ -102,17 +102,17 @@ Future<void> main() async {
   //!  final localDataSource =  MemoryLocalDataSource() ;
 
   ///
-  ///   init hive database
+  ///   init hive local database
   ///
   final localDataSource = HiveLocalDataSource();
   await localDataSource.init();
-
   ///
-  ///    init fireStore  database
-  ///
+  ///    init fireStore remote  database
   ///
   final remoteDataSource = FireStoreRemoteDatasource();
   await remoteDataSource.init();
+
+  final  todoRepository = ToDoRepositoryHybrid(remoteDataSource: remoteDataSource, localDataSource: localDataSource);
 
   runApp(EasyLocalization(
     useOnlyLangCode: true,
@@ -120,12 +120,10 @@ Future<void> main() async {
     path: translationsAssets,
     startLocale: Locale('en', 'US'),
     fallbackLocale: const Locale('fr', 'FR'),
+
     child: RepositoryProvider<ToDoRepository>(
         create: (BuildContext context) {
-          return ToDoRepositoryHybrid(
-            remoteDataSource: remoteDataSource,
-            localDataSource: localDataSource
-          );
+          return todoRepository;
         },
         child: ChangeNotifierProvider(
             create: (context) => ThemeService(),
@@ -133,6 +131,7 @@ Future<void> main() async {
                 create: (context) => authCubit,
                 child: BasicApp(
                   firebaseAuth: firebaseAuth,
+                  todoRepository: todoRepository
                 )))),
   ));
 

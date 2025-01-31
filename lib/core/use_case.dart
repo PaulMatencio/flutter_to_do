@@ -73,16 +73,28 @@ class EmailAndPassWordParams extends Params {
   EmailAndPassWordParams({
     required this.email,
     required this.password,
-    this.displayName,
+    //this.displayName,
   }) : super();
 
   final Email email;
   final Password password;
-  final DisplayName  ? displayName;
+  //final DisplayName  ? displayName;
 
   @override
   List<Object> get props => [email, password];
 }
+
+class EmailParam extends Params {
+  EmailParam({
+    required this.email,
+  }) : super();
+
+  final Email email;
+
+  @override
+  List<Object> get props => [email];
+}
+
 
 class UserParam extends Params {
   UserParam({
@@ -91,6 +103,17 @@ class UserParam extends Params {
   final UserEntity user;
   @override
   List<Object> get props => [user];
+}
+
+class UpdateUserParam extends Params {
+  UpdateUserParam({
+    required this.displayName,
+    required this.phoneNumber,
+  }) : super();
+  final String displayName;
+  final  String phoneNumber;
+  @override
+  List<Object> get props => [displayName];
 }
 
 

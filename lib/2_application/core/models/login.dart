@@ -1,3 +1,3 @@
 
 
-enum Login  {mail,phone,confirmation}
+enum Login  {mail,phone,reset,confirmation}

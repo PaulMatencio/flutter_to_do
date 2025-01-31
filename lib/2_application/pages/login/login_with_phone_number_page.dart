@@ -1,5 +1,6 @@
 
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -94,6 +95,11 @@ class _LoginWithPhoneNumberPageState extends State<LoginWithPhoneNumberPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(context.tr('login_with_phone'),
+                      style: theme.textTheme.titleMedium),
                   const SizedBox(
                     height: 40,
                   ),

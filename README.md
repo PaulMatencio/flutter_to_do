@@ -199,3 +199,40 @@ service cloud.firestore {
    - Add  tests
    - Upgrade flutter to version 3.24.5 
    - Todo application  is working on both Mobile & Web 
+
+###  Update  January 31, 2025
+
+    -  Update Login page
+        - Update Create Account button  ( register)
+        - Update Login with phone number button
+        - Add a  Send  password rest email  button ( reset password)
+        - Login pagge fields
+              - email
+              - password
+
+    -  Update the register page
+         Register pae field
+              - email
+              - password
+              - confirmed password
+
+    -  Add  a reset password screen
+         Regset password fields
+         -  email field
+
+
+    -  Replace the auth-ui profile screen by a   an update-profile  screen
+         - Send verificaion email button( if the email is not verified)
+         - logout button
+         - delete account button (*)
+         Update profile fields
+               - email
+               - display name
+               - photo url 
+
+    (*)
+    - Delete an account 
+        - The  user must be  recently logged in ( If not must it must logout/loin)
+        - Delete all of his  todo  collections  and everything related to these collections
+        - Delete its firebase account 
+        

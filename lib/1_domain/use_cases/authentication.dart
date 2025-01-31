@@ -1,5 +1,6 @@
 import 'package:either_dart/either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:todo_app/1_domain/entities/auth_user.dart';
 import 'package:todo_app/1_domain/repositories/authentication_repository.dart';
 import 'package:todo_app/core/use_case.dart';
@@ -21,10 +22,33 @@ class RegisterWithEmailAndPassword
         (user) => Right(user) ,
       );
     } on Exception catch (e) {
-      return Left(ServerFailure(stackTrace: e.toString()));
+      return Left(FirebaseAuthFailure(stackTrace: e.toString()));
     }
   }
 }
+
+class UpdateUserProfile
+    implements UseCase<bool, UserParam> {
+  const UpdateUserProfile({required this.authenticationRepository});
+  final AuthenticationRepository authenticationRepository;
+
+  @override
+  Future<Either<Failure, bool>> call(
+      UserParam params) async {
+      debugPrint('Display name : ${params.user.displayName}');
+    try {
+      final result = await authenticationRepository.updateUserProfile(
+          userEntity: params.user);
+      return result.fold(
+            (failure) => Left(failure),
+            (user) => Right(user) ,
+      );
+    } on Exception catch (e) {
+      return Left(FirebaseAuthFailure(stackTrace: e.toString()));
+    }
+  }
+}
+
 
 class CreateUserProfile
     implements UseCase<bool, UserParam> {
@@ -42,13 +66,16 @@ class CreateUserProfile
             (user) => Right(user) ,
       );
     } on Exception catch (e) {
-      return Left(ServerFailure(stackTrace: e.toString()));
+      return Left(FirebaseAuthFailure(stackTrace: e.toString()));
     }
   }
 }
 
-class DeleteUser implements UseCase<bool, NoParams> {
-  const DeleteUser({required this.authenticationRepository});
+///
+///  delete firebase user
+///
+class DeleteAccount implements UseCase<bool, NoParams> {
+  const DeleteAccount({required this.authenticationRepository});
   final AuthenticationRepository authenticationRepository;
 
   @override
@@ -60,10 +87,57 @@ class DeleteUser implements UseCase<bool, NoParams> {
         (right) => Right(right),
       );
     } on Exception catch (e) {
-      return Left(ServerFailure(stackTrace: e.toString()));
+      return Left(FirebaseAuthFailure(stackTrace: e.toString()));
     }
   }
 }
+
+///
+///
+///   Send email to reset password
+///
+class ResetPassword implements UseCase<bool, EmailParam> {
+  const ResetPassword({required this.authenticationRepository});
+  final AuthenticationRepository authenticationRepository;
+
+  @override
+  Future<Either<Failure, bool>> call(EmailParam params) async {
+    try {
+      final result = await authenticationRepository.resetPassword(email:params.email.value);
+      return result.fold(
+            (failure) => Left(failure),
+            (right) => Right(right),
+      );
+    } on Exception catch (e) {
+      return Left(FirebaseAuthFailure(stackTrace: e.toString()));
+    }
+  }
+}
+
+
+
+///
+/// Send email verification link
+///
+
+class SendEmailVerification implements UseCase<bool, NoParams> {
+  const SendEmailVerification({required this.authenticationRepository});
+  final AuthenticationRepository authenticationRepository;
+
+  @override
+  Future<Either<Failure, bool>> call(NoParams params) async {
+    try {
+      final result = await authenticationRepository.sendEmailVerification();
+      return result.fold(
+            (failure) => Left(failure),
+            (right) => Right(right),
+      );
+    } on Exception catch (e) {
+      return Left(FirebaseAuthFailure(stackTrace: e.toString()));
+    }
+  }
+}
+
 
 class LoginWithEmailAndPassword
     implements UseCase<UserEntity, EmailAndPassWordParams> {
@@ -84,7 +158,7 @@ class LoginWithEmailAndPassword
         (right) => Right(right),
       );
     } on Exception catch (e) {
-      return Left(ServerFailure(stackTrace: e.toString()));
+      return Left(FirebaseAuthFailure(stackTrace: e.toString()));
     }
   }
 }
@@ -111,7 +185,7 @@ class LoginWithPhoneNumber
         (right) => Right(right),
       );
     } on Exception catch (e) {
-      return Left(ServerFailure(stackTrace: e.toString()));
+      return Left(FirebaseAuthFailure(stackTrace: e.toString()));
     }
   }
 }
@@ -131,7 +205,7 @@ class VerificationCode
 
       return result.fold((left) => Left(left), (right) => Right(right));
     } on Exception catch (e) {
-      return Left(ServerFailure(stackTrace: e.toString()));
+      return Left(FirebaseAuthFailure(stackTrace: e.toString()));
     }
   }
 }
@@ -160,7 +234,7 @@ class VerifyPhoneNumber implements UseCase<bool, PhoneNumberParam> {
         (right) => Right(right),
       );
     } on Exception catch (e) {
-      return Left(ServerFailure(stackTrace: e.toString()));
+      return Left(FirebaseAuthFailure(stackTrace: e.toString()));
     }
   }
 }
@@ -178,7 +252,7 @@ class SignOut implements UseCase<bool, NoParams> {
         (right) => Right(right),
       );
     } on Exception catch (e) {
-      return Left(ServerFailure(stackTrace: e.toString()));
+      return Left(FirebaseAuthFailure(stackTrace: e.toString()));
     }
   }
 }

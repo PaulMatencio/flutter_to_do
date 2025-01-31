@@ -32,11 +32,42 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
           email: email, password: password);
 
       return Right(userToUserEntity(result));
-    } on SignUpWithEmailAndPasswordException catch (e) {
+    } on AuthenticationException catch (e) {
       debugPrint(e.stackTrace);
-      return Left(SignUpWithEmailAndPasswordFailure(stackTrace: e.stackTrace));
+      return Left(AuthenticationFailure(stackTrace: e.stackTrace));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> updateUserProfile({required userEntity}) async {
+    // TODO: implement updateUserProfile
+    try {
+      await authentication.updateUserProfile(userModel: UserModel.fromUserEntity(userEntity));
+      return Right(true);
+    } on AuthenticationException catch (e) {
+    debugPrint(e.stackTrace);
+    return Left(AuthenticationFailure(stackTrace: e.stackTrace));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> sendEmailVerification() async {
+    // TODO: implement updateUserProfile
+    final  user = authentication.auth.currentUser;
+    if (user != null) {
+      try {
+        await authentication.sendEmailVerification(user:user);
+        return Right(true);
+      } on AuthenticationException catch (e) {
+        debugPrint(e.stackTrace);
+        return Left(AuthenticationFailure(stackTrace: e.stackTrace));
+      }
+    }  else {
+      return Left(AuthenticationFailure(stackTrace: 'user must be logged in first'));
+    }
+
+  }
+
 
   @override
   Future<Either<Failure, UserEntity>> signInWithEmailAndPassword(
@@ -45,10 +76,25 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
       final user = await authentication.signInWithEmailAndPassword(
           email: email, password: password);
       return Right(userToUserEntity(user));
-    } on SignInWithEmailAndPasswordException catch (e) {
-      return Left(SignInWithEmailAndPasswordFailure(stackTrace: e.stackTrace));
+    } on AuthenticationException catch (e) {
+      return Left(AuthenticationFailure(stackTrace: e.stackTrace));
     }
   }
+
+
+
+  @override
+  Future<Either<Failure, bool>> resetPassword(
+      {required String email}) async {
+    try {
+         await authentication.resetPassword(
+          email: email);
+      return Right(true);
+    } on AuthenticationException catch (e) {
+      return Left(AuthenticationFailure(stackTrace: e.stackTrace));
+    }
+  }
+
 
   @override
   Future<Either<Failure, ConfirmationResult>> signInWithPhoneNumber(
@@ -58,11 +104,12 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
       await authentication.signInWithPhoneNumber(phoneNumber: phoneNumber);
       //  print('Result .... $confirmationResult');
       return Right(confirmationResult);
-    } on SignInWithEmailAndPasswordException catch (e) {
+    } on AuthenticationException catch (e) {
       debugPrint(e.stackTrace);
-      return Left(SignInWithEmailAndPasswordFailure(stackTrace: e.stackTrace));
+      return Left(AuthenticationFailure(stackTrace: e.stackTrace));
     }
   }
+
 
   @override
   Future<Either<Failure, UserCredential>> confirmationCode(
@@ -70,9 +117,9 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
     try {
       final result = await confirmationResult.confirm(verificationCode);
       return Right(result);
-    } on SignInWithEmailAndPasswordException catch (e) {
+    } on AuthenticationException catch (e) {
       debugPrint(e.stackTrace);
-      return Left(SignInWithEmailAndPasswordFailure(stackTrace: e.stackTrace));
+      return Left(AuthenticationFailure(stackTrace: e.stackTrace));
     }
   }
 
@@ -98,8 +145,8 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
       );
 
       return Right(true);
-    } on SignInWithEmailAndPasswordException catch (e) {
-      return Left(SignInWithPhoneNumberFailure(stackTrace: e.stackTrace));
+    } on AuthenticationException catch (e) {
+      return Left(AuthenticationFailure(stackTrace: e.stackTrace));
     }
   }
 
@@ -117,8 +164,8 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
     try {
       await authentication.signOut();
       return Right(true);
-    } on SignOutException catch (e) {
-      return Left(SignOutFailure(stackTrace: e.stackTrace));
+    } on AuthenticationException catch (e) {
+      return Left(AuthenticationFailure(stackTrace: e.stackTrace));
     }
   }
 
@@ -127,8 +174,8 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
     try {
       await authentication.deleteUser();
       return Right(true);
-    } on DeleteUserException catch (e) {
-      return Left(GeneralFailure(stackTrace: e.stackTrace));
+    } on AuthenticationException catch (e) {
+      return Left(AuthenticationFailure(stackTrace: e.stackTrace));
     }
   }
   ///

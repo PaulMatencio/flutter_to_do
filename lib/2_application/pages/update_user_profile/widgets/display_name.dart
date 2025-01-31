@@ -1,21 +1,24 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_app/2_application/pages/create_user_profile/bloc/cubit/create_user_profile_cubit.dart';
-import 'package:todo_app/2_application/pages/register/bloc/cubit/register_cubit.dart';
+import 'package:todo_app/2_application/pages/update_user_profile/bloc/cubit/update_user_profile_cubit.dart';
+
 
 class DisplayNameInput extends StatelessWidget {
   const DisplayNameInput({required this.focusNode, super.key});
 
   final FocusNode focusNode;
-
+  String? get displayName => FirebaseAuth.instance.currentUser?.displayName;
   @override
   Widget build(BuildContext context) {
     /// BlocBuilder is using  a dependency injection widget so a
     ///  single instance of bloc can be provide to multiple widgets
     ///   within a subtree
-    return BlocBuilder<CreateUserProfileCubit, CreateUserProfileCubitState>(
+
+    return BlocBuilder<UpdateUserProfileCubit, UpdateUserProfileCubitState>(
       builder: (context, state) {
         return TextFormField(
+          initialValue: displayName ?? '',
           focusNode: focusNode,
           decoration: InputDecoration(
             icon: const Icon(Icons.email),
@@ -33,7 +36,7 @@ class DisplayNameInput extends StatelessWidget {
           ),
           //keyboardType: TextInputType.emailAddress,
           onChanged: (value) {
-            context.read<CreateUserProfileCubit>().displayNameChanged(state.displayName,value);
+            context.read<UpdateUserProfileCubit>().displayNameChanged(state.displayName,value);
           },
           textInputAction: TextInputAction.next,
         );

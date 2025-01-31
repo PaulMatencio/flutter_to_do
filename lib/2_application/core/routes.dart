@@ -13,10 +13,12 @@ import 'package:todo_app/2_application/pages/home/home_page.dart';
 import 'package:todo_app/2_application/pages/login/confirmation_result_page.dart';
 import 'package:todo_app/2_application/pages/login/login_with_email_and_password_page.dart';
 import 'package:todo_app/2_application/pages/login/login_with_phone_number_page.dart';
+import 'package:todo_app/2_application/pages/login/send_password_reset.dart';
 import 'package:todo_app/2_application/pages/modify_todo_entry/modify_todo_entry_page.dart';
 import 'package:todo_app/2_application/pages/overview/overview_page.dart';
 import 'package:todo_app/2_application/pages/register/register_page.dart';
 import 'package:todo_app/2_application/pages/settings/settings_page.dart';
+import 'package:todo_app/2_application/pages/update_user_profile/update_user_profile_page.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -36,14 +38,19 @@ final routes = GoRouter(
           final theme = Theme.of(context);
           context.setLocale(Locale('en', 'US'));
           return Scaffold(
+            /*
               appBar: AppBar(
                 title: Text(context.tr('login_page_title'), style: theme.textTheme.titleMedium),
                 actions: [const GoBackButton()],
               ),
+
+             */
               body: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: LoginWithEmailAndPasswordPage(),
               ));
+
+
         }),
     GoRoute(
         name: 'login_phone',
@@ -51,11 +58,14 @@ final routes = GoRouter(
         builder: (context, state) {
           final theme = Theme.of(context);
           return Scaffold(
+              /*
               appBar: AppBar(
                 title: Text(context.tr('login_with_phone'),
                     style: theme.textTheme.titleMedium),
                 actions: [const GoBackButton()],
               ),
+
+               */
               body: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: LoginWithPhoneNumberPage(),
@@ -78,16 +88,20 @@ final routes = GoRouter(
         builder: (context, state) {
           final theme = Theme.of(context);
           return Scaffold(
+              /*
               appBar: AppBar(
                 title:
                     Text(context.tr('register_page_title'), style: theme.textTheme.titleMedium),
                 actions: [const GoBackButton()],
               ),
+
+               */
               body: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: RegisterPage(),
               ));
         }),
+    /*
     GoRoute(
 
         /// login with Firebase Auth_ui  ( not used)
@@ -128,11 +142,55 @@ final routes = GoRouter(
             ],
           );
         }),
-    GoRoute(
 
-        ///   profile page of firebase auth_ui
+     */
+    GoRoute(
+      ///   update   user profile page
         name: 'profile',
         path: '/profile',
+        builder: (BuildContext context, GoRouterState state) {
+          //final theme = Theme.of(context);
+          return Scaffold(
+            /*
+            appBar: AppBar(
+              title:
+              Text(context.tr('update_profile'), style: theme.textTheme.titleMedium),
+              backgroundColor: theme.colorScheme.primaryContainer,
+              leading: GoBackButton(),
+            ),
+
+             */
+            body: SafeArea(
+              child: UpdateUserProfilePage.pageConfig.child,
+            ),
+          );
+        }),
+    GoRoute(
+      ///   update   user profile page
+        name: 'reset_password',
+        path: '/reset_password',
+        builder: (BuildContext context, GoRouterState state) {
+          final theme = Theme.of(context);
+          return Scaffold(
+            /*
+            appBar: AppBar(
+              title:
+              Text(context.tr('Reset_password'), style: theme.textTheme.titleMedium),
+              backgroundColor: theme.colorScheme.primaryContainer,
+              leading: GoBackButton(),
+            ),
+             */
+            body: SafeArea(
+              child:ResetPasswordPage.pageConfig.child,
+            ),
+          );
+        }),
+
+    /*
+    GoRoute(
+        ///   profile page of firebase auth_ui
+        name: 'profile1',
+        path: '/profile1',
         builder: (BuildContext context, GoRouterState state) {
           return ProfileScreen(
             appBar: AppBar(
@@ -155,6 +213,8 @@ final routes = GoRouter(
             ],
           );
         }),
+
+     */
     GoRoute(
       name: SettingsPage.pageConfig.name,
       path: '$_basePath/${SettingsPage.pageConfig.name}',

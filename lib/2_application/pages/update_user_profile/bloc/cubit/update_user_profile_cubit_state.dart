@@ -1,16 +1,16 @@
 
-part of 'create_user_profile_cubit.dart';
+part of 'update_user_profile_cubit.dart';
 
-final class CreateUserProfileCubitState extends Equatable {
-  const CreateUserProfileCubitState({
+final class UpdateUserProfileCubitState extends Equatable {
+  const UpdateUserProfileCubitState({
     this.email = const Email.pure(),
     this.isEmailVerified = false,
     this.phoneNumber = const PhoneNumber.pure(),
     this.displayName = const DisplayName.pure(),
-    this.photoURL = '',
+    this.photoUrl = const PhotoUrl.pure(),
     this.status = FormzSubmissionStatus.initial,
     this.isValid = false,
-    this.createUserprofileError = 'Create User Profile  error',
+    this.updateUserprofileError = 'Update User Profile  error',
     this.errorMessage,
   });
 
@@ -19,28 +19,29 @@ final class CreateUserProfileCubitState extends Equatable {
   final bool isEmailVerified;
   final DisplayName displayName;
   final PhoneNumber phoneNumber;
-  final String photoURL;
+  final PhotoUrl  photoUrl;
   final FormzSubmissionStatus status;
-  final String createUserprofileError;
+  final String updateUserprofileError;
   final bool isValid;
   final String? errorMessage;
 
-  CreateUserProfileCubitState copyWith({
+  UpdateUserProfileCubitState copyWith({
     Email? email,
     bool? isEmailVerified,
     DisplayName? displayName,
     PhoneNumber? phoneNumber,
+    PhotoUrl? photoUrl,
     String ? photoURL,
     FormzSubmissionStatus? status,
     bool? isValid,
     String? errorMessage,
   }) {
-    return CreateUserProfileCubitState(
+    return UpdateUserProfileCubitState(
       email: email ?? this.email,
       isEmailVerified: isEmailVerified?? this.isEmailVerified,
       displayName: displayName?? this.displayName,
       phoneNumber: phoneNumber?? this.phoneNumber,
-      photoURL: photoURL?? this.photoURL,
+      photoUrl: photoUrl?? this.photoUrl,
       status: status ?? this.status,
       isValid: isValid ?? this.isValid,
       errorMessage: errorMessage ?? this.errorMessage,
@@ -48,6 +49,6 @@ final class CreateUserProfileCubitState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [email,displayName,status, isValid, errorMessage];
+  List<Object?> get props => [email,displayName,photoUrl, status, isValid, errorMessage];
 
 }

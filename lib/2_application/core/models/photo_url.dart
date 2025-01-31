@@ -6,9 +6,9 @@ enum PhotoUrlValidationError {
   invalid
 }
 
-class DisplayName extends FormzInput<String, PhotoUrlValidationError> {
-  const DisplayName.pure() : super.pure('');
-  const DisplayName.dirty([super.value = '']) : super.dirty();
+class  PhotoUrl extends FormzInput<String, PhotoUrlValidationError> {
+  const PhotoUrl.pure() : super.pure('');
+  const PhotoUrl.dirty([super.value = '']) : super.dirty();
 
   static final RegExp _fullNameRegExp = RegExp(
       r'(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z]{2,}(\.[a-zA-Z]{2,})(\.[a-zA-Z]{2,})?\/[a-zA-Z0-9]{2,}|((https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z]{2,}(\.[a-zA-Z]{2,})(\.[a-zA-Z]{2,})?)|(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z0-9]{2,}\.[a-zA-Z0-9]{2,}\.[a-zA-Z0-9]{2,}(\.[a-zA-Z0-9]{2,})?'

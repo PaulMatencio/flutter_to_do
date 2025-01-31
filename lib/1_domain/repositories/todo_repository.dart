@@ -17,6 +17,7 @@ abstract class ToDoRepository {
   Future<Either<Failure, List<EntryId>>> deleteToDoEntries(CollectionId collectionId);
   Future<Either<Failure, bool>> createToDoCollection(ToDoCollection todoCollection);
   Future<Either<Failure, bool>> deleteToDoCollection(CollectionId collectionId);
+  Future<Either<Failure, bool>> deleteUserCollections();
   Future<Either<Failure, bool>> createToDoEntry({required CollectionId collectionId, required ToDoEntry toDoEntry});
   Future<Either<Failure, bool>> modifyToDoEntry({required CollectionId collectionId, required ToDoEntry toDoEntry});
   Future<Either<Failure,ToDoDashboard>> createToDoDashboard();

@@ -8,14 +8,13 @@ import 'package:todo_app/0_data/data_sources/interfaces/firebase_authentication_
 import 'package:todo_app/0_data/exceptions/authentication.dart';
 import 'package:todo_app/0_data/exceptions/firebase_firestore.dart';
 import 'package:todo_app/0_data/models/user_model.dart';
-import 'package:todo_app/1_domain/entities/auth_user.dart';
+
 import 'package:todo_app/firebase_options.dart';
 
 class FirebaseAuthentication implements FirebaseAuthenticationInterface {
   bool isInitialized = false;
   late FirebaseApp app;
   late FirebaseAuth auth;
-
 
   ///
   /// The AuthenticationRepository exposes a Stream<UserModel> which we can subscribe to in order to be notified of when a User changes.
@@ -48,17 +47,17 @@ class FirebaseAuthentication implements FirebaseAuthenticationInterface {
     });
   }
 
-
   Future<void> init() async {
     if (!isInitialized) {
       app = await Firebase.initializeApp(
           options: DefaultFirebaseOptions.currentPlatform);
+
       auth = FirebaseAuth.instanceFor(app: app);
       FirebaseFirestore.instance.settings = const Settings(
         persistenceEnabled: true,
       );
-      ///  initialize  Cloud FireStore
 
+      ///  initialize  Cloud FireStore
 
       isInitialized = true;
     } else {
@@ -76,7 +75,7 @@ class FirebaseAuthentication implements FirebaseAuthenticationInterface {
       return Future.value(user);
     } on FirebaseAuthException catch (e) {
       // debugPrint(e.code);
-      throw SignUpWithEmailAndPasswordException(stackTrace: e.code);
+      throw AuthenticationException(stackTrace: e.code);
     }
   }
 
@@ -84,21 +83,40 @@ class FirebaseAuthentication implements FirebaseAuthenticationInterface {
   Future<User> signInWithEmailAndPassword(
       {required String email, required String password}) async {
     try {
-      return
-        await auth
+      return await auth
           .signInWithEmailAndPassword(email: email, password: password)
-          .then((userCredential) => userCredential.user).then ((user) => Future.value(user));
-      /*
-      if (user!.emailVerified){
-        return Future.value(user);
-      } else {
-        throw SignInWithEmailAndPasswordException(stackTrace: 'the email is not verified. Use the profile button to verify');
-      }
-       */
-
+          .then((userCredential) => userCredential.user)
+          .then((user) => Future.value(user));
     } on FirebaseAuthException catch (e) {
       //debugPrint(e.code);
-      throw SignInWithEmailAndPasswordException(stackTrace: e.code);
+      throw AuthenticationException(stackTrace: e.code);
+    }
+  }
+
+  @override
+  Future<void> updateUserProfile({required UserModel userModel}) async {
+    final user = auth.currentUser;
+    if (user != null) {
+      try {
+        await auth.currentUser!.updateProfile(
+          displayName: userModel.displayName,
+          photoURL: userModel.photoURL,
+        );
+      } on FirebaseAuthException catch (e) {
+        throw AuthenticationException(stackTrace: e.code);
+      }
+    }
+  }
+
+  @override
+  Future<void> sendEmailVerification({required User user}) async {
+    /// user is not null
+    if (!user.emailVerified) {
+      try {
+        await user.sendEmailVerification();
+      } on FirebaseAuthException catch (e) {
+        throw AuthenticationException(stackTrace: e.code);
+      }
     }
   }
 
@@ -113,12 +131,12 @@ class FirebaseAuthentication implements FirebaseAuthenticationInterface {
     await auth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
       timeout: timeout ?? const Duration(seconds: 60),
-      verificationCompleted: (PhoneAuthCredential credential)=> verificationCompleted(credential),
+      verificationCompleted: (PhoneAuthCredential credential) =>
+          verificationCompleted(credential),
       verificationFailed: (FirebaseAuthException e) => verificationFailed(e),
-      codeSent: (String verificationId, int? resendToken)=> codeSent(verificationId,resendToken),
-      codeAutoRetrievalTimeout: (String verificationId) {
-
-      },
+      codeSent: (String verificationId, int? resendToken) =>
+          codeSent(verificationId, resendToken),
+      codeAutoRetrievalTimeout: (String verificationId) {},
     );
   }
 
@@ -127,15 +145,16 @@ class FirebaseAuthentication implements FirebaseAuthenticationInterface {
   }
 
   void verificationFailed(FirebaseAuthException e) {
-    throw VerificationException(stackTrace: e.code);
+    throw AuthenticationException(stackTrace: e.code);
   }
+
   ///   todo for Android
-  void codeSent( String verificationId , int ? resendToken) async {
+  void codeSent(String verificationId, int? resendToken) async {
     String smsCode = 'xxxx';
     // Create a PhoneAuthCredential with the code
-    PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: verificationId, smsCode: smsCode);
     await auth.signInWithCredential(credential);
-
   }
 
   ///
@@ -150,23 +169,24 @@ class FirebaseAuthentication implements FirebaseAuthenticationInterface {
       return confirmationResult;
     } on FirebaseAuthException catch (e) {
       debugPrint(e.code);
-      throw SignUpWithPhoneNumberException(stackTrace: e.code);
+      throw AuthenticationException(stackTrace: e.code);
     }
   }
 
   @override
-  Future<UserCredential>  confirmationCode({required String verificationCode, required ConfirmationResult confirmationResult}) async {
+  Future<UserCredential> confirmationCode(
+      {required String verificationCode,
+      required ConfirmationResult confirmationResult}) async {
     // TODO: implement confirmationCode
     UserCredential userCredential;
     try {
-     userCredential= await confirmationResult.confirm(verificationCode);
-    }  on FirebaseAuthException catch (e) {
+      userCredential = await confirmationResult.confirm(verificationCode);
+    } on FirebaseAuthException catch (e) {
       debugPrint(e.code);
-      throw SignUpWithPhoneNumberException(stackTrace: e.code);
+      throw AuthenticationException(stackTrace: e.code);
     }
     return userCredential;
   }
-
 
   ///
   /// logout
@@ -176,7 +196,7 @@ class FirebaseAuthentication implements FirebaseAuthenticationInterface {
     try {
       await auth.signOut();
     } on FirebaseAuthException catch (e) {
-      throw SignOutException(stackTrace: e.code);
+      throw AuthenticationException(stackTrace: e.code);
     }
   }
 
@@ -187,46 +207,41 @@ class FirebaseAuthentication implements FirebaseAuthenticationInterface {
   ///
   ///
 
-
   @override
   Future<void> createUserProfile({required UserModel user}) async {
-    print('Create Profile');
-    print(user.toJson());
     await FirebaseFirestore.instance
         .collection('users')
         .doc(user.uid)
         .set(user.toJson())
-        .then( (value) =>true)
+        .then((value) => true)
         .catchError((error) =>
-    throw FirebaseFireStoreException(stackTrace: error.toString()));
-
+            throw FirebaseFireStoreException(stackTrace: error.toString()));
   }
 
   ///
   ///   password reset
+  ///   Send Password reset email
   ///
   @override
   Future<void> resetPassword({required String email}) async {
     try {
       await auth.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
-      throw ResetPasswordException(stackTrace: e.code);
+      throw AuthenticationException(stackTrace: e.code);
     }
   }
-
-
 
   ///
   /// delete account
   ///
   @override
   Future<void> deleteUser() async {
+    debugPrint('delete user ${auth.currentUser}');
     try {
-      await auth.currentUser?.delete();
+      await auth.currentUser!.delete();
     } on FirebaseAuthException catch (e) {
-      throw DeleteUserException(stackTrace: e.code);
+      // debugPrint(e.code);
+      throw AuthenticationException(stackTrace: e.toString());
     }
   }
-
-
 }

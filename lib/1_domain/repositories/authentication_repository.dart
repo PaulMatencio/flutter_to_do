@@ -7,11 +7,20 @@ abstract class AuthenticationRepository {
   Future<Either<Failure, UserEntity>> signUpWithEmailAndPassword(
       {required String email, required String password});
 
+  Future<Either<Failure, bool>> resetPassword(
+      {required String email});
+
   Future<Either<Failure, bool>> createUserProfile(
       {required UserEntity user});
 
   Future<Either<Failure, UserEntity>> signInWithEmailAndPassword(
       {required String email, required String password});
+
+  Future<Either<Failure, bool>> updateUserProfile(
+      {required userEntity});
+
+
+  Future<Either<Failure, bool>> sendEmailVerification();
 
   Future<Either<Failure, bool>> signOut();
 

@@ -11,7 +11,6 @@ class SignInButton extends StatelessWidget {
     //final isValid = context.select((LoginCubit cubit) => cubit.state.isValid);
     final isValid = cubit().state.isValid;
     //final cubit = context.select((LoginCubit cubit) => cubit);
-
     return ElevatedButton(
       style: ButtonStyle(
           backgroundColor: WidgetStatePropertyAll(theme.colorScheme.onPrimary)),
@@ -24,6 +23,10 @@ class SignInButton extends StatelessWidget {
             return;
           case 'phone':
             await cubit().logInWithPhoneNumber();
+            return;
+          case 'reset':
+
+            await cubit().sendResetPassword();
             return;
           default:
             await cubit().confirmationCode();

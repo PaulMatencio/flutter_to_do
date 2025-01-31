@@ -2,12 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 
-class EmailInput extends StatelessWidget {
-  const EmailInput({required this.focusNode, required this.cubit, this.readOnly,super.key});
+class PhotoUrlInput extends StatelessWidget {
+  const PhotoUrlInput({required this.focusNode, required this.cubit,super.key});
   final FocusNode focusNode;
   final Function cubit;
-  final bool ?  readOnly;
-  String? get email=> FirebaseAuth.instance.currentUser?.email;
+
+  String? get photoUrl=> FirebaseAuth.instance.currentUser?.photoURL;
   @override
   Widget build(BuildContext context) {
     /// BlocBuilder is using  a dependency injection widget so a
@@ -17,26 +17,24 @@ class EmailInput extends StatelessWidget {
 
 //final cubit = context.select((LoginCubit cubit) => cubit);
     return TextFormField(
-      initialValue:email ??'',
-      readOnly: readOnly?? false,
+      initialValue: photoUrl??'',
       focusNode: focusNode,
       decoration: InputDecoration(
-        icon: const Icon(Icons.email),
+        icon: const Icon(Icons.photo),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(width: 1.0, color: theme.colorScheme.primary),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(width: 1.0, color: theme.colorScheme.primary),
         ),
-        labelText: 'Email',
-        helperText: 'A complete, valid email e.g. paul@gmail.com',
-        errorText: cubit().state.email.displayError != null
-            ? 'Please ensure the email entered is valid'
+        labelText: 'Photo Url',
+        helperText: 'Valid Url ',
+        errorText: cubit().state.photoUrl.displayError != null
+            ? 'Please ensure the Url  entered is valid'
             : null,
       ),
-      keyboardType: TextInputType.emailAddress,
       onChanged: (value) {
-        cubit().emailChanged(cubit().state.email, value);
+        cubit().photoUrlChanged(cubit().state.photoUrl, value);
       },
       textInputAction: TextInputAction.next,
     );

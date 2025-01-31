@@ -63,6 +63,7 @@ final class LoginCubitState extends Equatable {
         passwordVisible,
         phoneNumber,
         confirmationResult,
+        confirmationCode,
         status,
         isValid,
         errorMessage

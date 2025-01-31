@@ -1,36 +1,9 @@
 
 part of 'failures.dart';
 
-class SignUpWithEmailAndPasswordFailure  extends Failure with EquatableMixin  {
-     SignUpWithEmailAndPasswordFailure({this.stackTrace});
-     final String? stackTrace;
-     @override
-     List<Object?> get props => [stackTrace];
-}
 
-class SignInWithEmailAndPasswordFailure  extends Failure with EquatableMixin  {
-  SignInWithEmailAndPasswordFailure({this.stackTrace});
-  final String? stackTrace;
-  @override
-  List<Object?> get props => [stackTrace];
-}
-
-class SignInWithPhoneNumberFailure  extends Failure with EquatableMixin  {
-  SignInWithPhoneNumberFailure({this.stackTrace});
-  final String? stackTrace;
-  @override
-  List<Object?> get props => [stackTrace];
-}
-
-class SignOutFailure  extends Failure with EquatableMixin  {
-  SignOutFailure({this.stackTrace});
-  final String? stackTrace;
-  @override
-  List<Object?> get props => [stackTrace];
-}
-
-class VerificationFailure  extends Failure with EquatableMixin  {
-  VerificationFailure({this.stackTrace});
+class AuthenticationFailure  extends Failure with EquatableMixin  {
+  AuthenticationFailure({this.stackTrace});
   final String? stackTrace;
   @override
   List<Object?> get props => [stackTrace];
@@ -38,6 +11,22 @@ class VerificationFailure  extends Failure with EquatableMixin  {
 
 class CreateUserProfileFailure  extends Failure with EquatableMixin  {
   CreateUserProfileFailure({this.stackTrace});
+  final String? stackTrace;
+  @override
+  List<Object?> get props => [stackTrace];
+}
+
+
+class DeleteUserProfileFailure  extends Failure with EquatableMixin  {
+  DeleteUserProfileFailure({this.stackTrace});
+  final String? stackTrace;
+  @override
+  List<Object?> get props => [stackTrace];
+}
+
+
+class FirebaseAuthFailure  extends Failure with EquatableMixin  {
+  FirebaseAuthFailure({this.stackTrace});
   final String? stackTrace;
   @override
   List<Object?> get props => [stackTrace];

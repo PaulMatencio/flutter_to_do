@@ -129,7 +129,6 @@ class ToDoRepositoryHybrid implements ToDoRepository {
         }
       }
     } else {
-      // return Left(GeneralFailure(stackTrace: 'please login first'));
       try {
         final collectionModelId = collectionId.value;
         await localDataSource
@@ -228,6 +227,30 @@ class ToDoRepositoryHybrid implements ToDoRepository {
       }
     }
   }
+
+
+
+  @override
+  Future<Either<Failure, bool>> deleteUserCollections() async {
+    if (isLoggedIn) {
+      try {
+        return await remoteDataSource.deleteUserCollections(userId: userId!).then((result)=> Right(result));
+
+      } on Exception catch (e) {
+        switch (e) {
+          case final FirebaseFireStoreException  e:
+            return Left(GeneralFailure(stackTrace: e.stackTrace));
+          case final CacheException e:
+            return Left(CacheFailure(stackTrace: e.stackTrace));
+          default:
+            return Left(ServerFailure(stackTrace: e.toString()));
+        }
+      }
+    }  else {
+      return Left(GeneralFailure(stackTrace: 'User is not logged in'));
+    }
+  }
+
 
   ///
   ///   createToDoEntry

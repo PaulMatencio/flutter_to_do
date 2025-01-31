@@ -37,7 +37,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
   final _confirmedPasswordFocusNode = FocusNode();
-  final _displayNameFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -66,7 +65,6 @@ class _RegisterPageState extends State<RegisterPage> {
     _emailFocusNode.dispose();
     _passwordFocusNode.dispose();
     _confirmedPasswordFocusNode.dispose();
-    _displayNameFocusNode.dispose();
     super.dispose();
   }
 
@@ -121,10 +119,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    EmailInput(focusNode: _emailFocusNode,cubit:cubit),
+                    Text(context.tr('register_page_title'), style: theme.textTheme.titleMedium),
                     const SizedBox(
                       height: 20,
                     ),
+                    EmailInput(focusNode: _emailFocusNode,cubit:cubit),
+
                     PasswordInput(focusNode: _passwordFocusNode,cubit: cubit),
                     const SizedBox(
                       height: 20,
@@ -144,8 +144,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                   cubit()
                                       .signUpWithEmailAndPassword()
                               : null,
-                          child: Text('Sign Up',
-                              style: Theme.of(context).textTheme.titleMedium),
+                          child: Tooltip(
+                            message: 'Press to create an account',
+                            child: Text('Sign Up',
+                                style: Theme.of(context).textTheme.titleMedium),
+                          ),
                         )
                       ],
                     ),

@@ -121,6 +121,14 @@ class ToDoRepositoryLocal implements ToDoRepository {
     }
   }
 
+  @override
+  Future<Either<Failure, bool>> deleteUserCollections() {
+    // TODO: implement deleteUserCollections
+    throw UnimplementedError();
+  }
+
+
+
   ///
   ///   createToDoEntry
   ///   create an entry  for a  create_todo_entry form

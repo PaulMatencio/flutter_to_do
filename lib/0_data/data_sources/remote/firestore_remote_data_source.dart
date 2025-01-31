@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:todo_app/0_data/data_sources/interfaces/todo_remote_data_source_interface.dart';
 import 'package:todo_app/0_data/exceptions/firebase_firestore.dart';
 import 'package:todo_app/0_data/models/todo_collection_model.dart';
@@ -126,10 +126,77 @@ class FireStoreRemoteDatasource implements ToDoRemoteDataSourceInterface {
     try {
       await db.collection(userId).doc(collectionId).delete();
       return true;
+    }  catch (e) {
+      throw FirebaseFireStoreException(stackTrace: e.toString());
+    }
+  }
+
+
+  //!  The problem  for deleteUserCollections(
+  /// No Direct Delete: FireStore doesn't have a single command to delete an entire collection.
+  /// You must delete each document within the collection individually.
+  /// SubCollections: If your collection contains subCollections, you also need to recursively delete those as well.
+  ///
+  //! The Strategy
+  ///
+  /// 1) Query the Collection: Get all documents within the collection.
+  /// 2) Delete Each Document: Iterate through the documents and delete them.
+  /// 3) Recurse for SubCollections: For each document, check if it has subCollections.
+  ///    If so, call the same deletion function on those subCollection
+  ///
+
+  @override
+  Future<bool> deleteUserCollections({required String userId})  async{
+    debugPrint('deleting  $userId  collection');
+    try{
+      await deleteEverything(userId);
+      return true;
     } on Exception catch (e) {
       throw FirebaseFireStoreException(stackTrace: e.toString());
     }
   }
+
+  Future<void> deleteEverything(String startingCollection) async {
+    await deleteCollection(startingCollection);
+  }
+
+  Future<void> deleteCollection(String collectionPath) async {
+    QuerySnapshot collectionSnapshot = await db.collection(collectionPath).get();
+    for (final doc in collectionSnapshot.docs) {
+      final docRef  =  doc.reference;
+      debugPrint('id: ${docRef.id}  path:${docRef.path}');
+      try {
+        ///  delete  sub collections  recursively
+        await deleteSubCollections(docRef);
+        ///  delete the document  itself
+        await docRef.delete();
+      }  catch(e) {
+        throw FirebaseFireStoreException(stackTrace: e.toString());
+      }
+      debugPrint('Deleted document: ${doc.id} from $collectionPath');
+    }
+    debugPrint('Deleted collection: $collectionPath');
+  }
+  Future<void> deleteSubCollections(DocumentReference docRef) async {
+    final  collectionRef = docRef.collection('entries');
+    QuerySnapshot subCollectionsSnapshot = await collectionRef.get();
+    for (final subCollectionDoc in subCollectionsSnapshot.docs) {
+      debugPrint('delete document   ${docRef.path}/entries/${subCollectionDoc.id}');
+      try {
+       // await deleteCollection('${docRef.path}/entries/${subCollectionDoc.id}');
+        await  subCollectionDoc.reference.delete();
+      } catch (e) {
+        debugPrint(e.toString());
+        throw FirebaseFireStoreException(stackTrace: e.toString());
+      }
+    }
+    if (collectionRef.path.isNotEmpty) {
+        debugPrint('delete ${collectionRef.path}');
+        await deleteCollection(collectionRef.path);
+    }
+  }
+
+
 
   @override
   Future<bool> deleteToDoEntry(
@@ -221,6 +288,9 @@ class FireStoreRemoteDatasource implements ToDoRemoteDataSourceInterface {
     throw FirebaseFireStoreException(stackTrace: error.toString()));
     return entryModel;
   }
+
+
+
 
 
 }

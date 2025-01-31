@@ -170,6 +170,14 @@ class ToDoRepositoryMock implements ToDoRepository {
     throw UnimplementedError();
   }
 
+
+  @override
+  Future<Either<Failure, bool>> deleteUserCollections() {
+    // TODO: implement deleteUserCollections
+    throw UnimplementedError();
+  }
+
+
   @override
   Future<Either<Failure, bool>> createToDoEntry({required CollectionId collectionId, required ToDoEntry toDoEntry}) {
     //   add  an ToDoEntry

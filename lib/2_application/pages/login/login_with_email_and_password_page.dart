@@ -118,6 +118,11 @@ class _LoginWithEmailAndPasswordPageState
                   return Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
+                      Text(context.tr('login_page'),
+                          style: theme.textTheme.titleMedium),
+                      const SizedBox(
+                        height: 30,
+                      ),
                       Text(context.tr('no_account'),
                           style: theme.textTheme.titleMedium),
                       const SizedBox(
@@ -130,29 +135,10 @@ class _LoginWithEmailAndPasswordPageState
                             backgroundColor: WidgetStatePropertyAll(
                                 theme.colorScheme.onPrimary)),
                         child: Text(context.tr('register'),
-                            style: theme.textTheme.titleMedium),
+                            style: theme.textTheme.displaySmall),
                       ),
                       const SizedBox(
-                        height: 40,
-                      ),
-                      EmailInput(focusNode: _emailFocusNode, cubit: cubit),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      PasswordInput(
-                          focusNode: _passwordFocusNode, cubit: cubit),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          const GoBackButton(),
-                          SignInButton(login: Login.mail, cubit: cubit),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20,
+                        height: 5,
                       ),
                       ElevatedButton(
                         onPressed: () => context.pushNamed(
@@ -161,7 +147,39 @@ class _LoginWithEmailAndPasswordPageState
                             backgroundColor: WidgetStatePropertyAll(
                                 theme.colorScheme.onPrimary)),
                         child: Text(context.tr('login_with_phone_number'),
-                            style: theme.textTheme.titleSmall),
+                            style: theme.textTheme.displaySmall),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      EmailInput(focusNode: _emailFocusNode, cubit: cubit),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      PasswordInput(
+                          focusNode: _passwordFocusNode, cubit: cubit),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextButton(
+                        onPressed: () => {
+                          context.pushNamed('reset_password')
+                          //  context.read<LoginCubit>().sendResetPassword()
+                        },
+                        child: Text('Forget password? click here to reset ',
+                            style: theme.textTheme.displaySmall),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          const GoBackButton(),
+                          Tooltip(
+                              message : 'Press here to Login',
+                              child: SignInButton(login: Login.mail, cubit: cubit)),
+                        ],
                       ),
                     ],
                   );
