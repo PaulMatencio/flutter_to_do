@@ -231,8 +231,8 @@ service cloud.firestore {
                - photo url 
 
     (*)
-    - Delete an account 
-        - The  user must be  recently logged in ( If not must it must logout/loin)
-        - Delete all of his  todo  collections  and everything related to these collections
+    - Delete an user's account  (not reccommnded because this operation is not atomic)
+        - It is sensitive operation, therefore the user must be  recently logged in ( If not, the user must logout and re-login)
+        - Delete all the todo  collections of this  userid   and recursively everything related to these collections(cf. todo  entries and subcollections)
         - Delete its firebase account 
         

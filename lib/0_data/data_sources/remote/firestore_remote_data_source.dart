@@ -142,7 +142,8 @@ class FireStoreRemoteDatasource implements ToDoRemoteDataSourceInterface {
   /// 1) Query the Collection: Get all documents within the collection.
   /// 2) Delete Each Document: Iterate through the documents and delete them.
   /// 3) Recurse for SubCollections: For each document, check if it has subCollections.
-  ///    If so, call the same deletion function on those subCollection
+  ///    A subCollection is  a map (cf.  entries) , iterate through the map and delete the items first
+  ///    Then  call the same deletion function on those subCollection
   ///
 
   @override
@@ -164,7 +165,7 @@ class FireStoreRemoteDatasource implements ToDoRemoteDataSourceInterface {
     QuerySnapshot collectionSnapshot = await db.collection(collectionPath).get();
     for (final doc in collectionSnapshot.docs) {
       final docRef  =  doc.reference;
-      debugPrint('id: ${docRef.id}  path:${docRef.path}');
+     // debugPrint('id: ${docRef.id}  path:${docRef.path}');
       try {
         ///  delete  sub collections  recursively
         await deleteSubCollections(docRef);
@@ -173,25 +174,25 @@ class FireStoreRemoteDatasource implements ToDoRemoteDataSourceInterface {
       }  catch(e) {
         throw FirebaseFireStoreException(stackTrace: e.toString());
       }
-      debugPrint('Deleted document: ${doc.id} from $collectionPath');
+      //debugPrint('Deleted document: ${doc.id} from $collectionPath');
     }
-    debugPrint('Deleted collection: $collectionPath');
+    //debugPrint('Deleted collection: $collectionPath');
   }
   Future<void> deleteSubCollections(DocumentReference docRef) async {
     final  collectionRef = docRef.collection('entries');
     QuerySnapshot subCollectionsSnapshot = await collectionRef.get();
     for (final subCollectionDoc in subCollectionsSnapshot.docs) {
-      debugPrint('delete document   ${docRef.path}/entries/${subCollectionDoc.id}');
+     // debugPrint('delete document   ${docRef.path}/entries/${subCollectionDoc.id}');
       try {
        // await deleteCollection('${docRef.path}/entries/${subCollectionDoc.id}');
         await  subCollectionDoc.reference.delete();
       } catch (e) {
-        debugPrint(e.toString());
+        //debugPrint(e.toString());
         throw FirebaseFireStoreException(stackTrace: e.toString());
       }
     }
     if (collectionRef.path.isNotEmpty) {
-        debugPrint('delete ${collectionRef.path}');
+        //debugPrint('delete ${collectionRef.path}');
         await deleteCollection(collectionRef.path);
     }
   }
